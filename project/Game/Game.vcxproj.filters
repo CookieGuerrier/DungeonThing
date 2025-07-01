@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Fichiers sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Fichiers de ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Fichiers sources\States">
+      <UniqueIdentifier>{df15f2a8-ede0-4a0b-83b1-e5bba12499c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\States">
+      <UniqueIdentifier>{bf9d6e1b-0ebc-44d0-ae89-205f34064388}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Entity">
+      <UniqueIdentifier>{f806022f-f49f-4d7d-80d8-17cc43c85c10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Entity">
+      <UniqueIdentifier>{9de2b4ff-97ae-4766-9ac6-f5a0bdd52fbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\HUD">
+      <UniqueIdentifier>{f465fbed-b6d9-4e3a-aaaa-c6e27a73e927}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\HUD">
+      <UniqueIdentifier>{ec2237d8-6e47-46d6-8193-e0745d7a9735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Misc">
+      <UniqueIdentifier>{72b19154-80b0-422f-87d0-17d2142d1bdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Misc">
+      <UniqueIdentifier>{26197526-3bfb-4212-ab77-f737f5e15bc6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Menu.c">
+      <Filter>Fichiers sources\States</Filter>
+    </ClCompile>
+    <ClCompile Include="main.c">
+      <Filter>Fichiers sources\States</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.c">
+      <Filter>Fichiers sources\States</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.c">
+      <Filter>Fichiers sources\States</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOver.c">
+      <Filter>Fichiers sources\States</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.c">
+      <Filter>Fichiers sources\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="GameHUD.c">
+      <Filter>Fichiers sources\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.c">
+      <Filter>Fichiers sources\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.c">
+      <Filter>Fichiers sources\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.c">
+      <Filter>Fichiers sources\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.c">
+      <Filter>Fichiers sources\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.c">
+      <Filter>Fichiers sources\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Math.c">
+      <Filter>Fichiers sources\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Walls.c">
+      <Filter>Fichiers sources\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects.c">
+      <Filter>Fichiers sources\Entity</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Menu.h">
+      <Filter>Fichiers d%27en-tête\States</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Fichiers d%27en-tête\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Fichiers d%27en-tête\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Fichiers d%27en-tête\States</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOver.h">
+      <Filter>Fichiers d%27en-tête\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Fichiers d%27en-tête\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="GameHUD.h">
+      <Filter>Fichiers d%27en-tête\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Fichiers d%27en-tête\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Fichiers d%27en-tête\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Fichiers d%27en-tête\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Walls.h">
+      <Filter>Fichiers d%27en-tête\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>Fichiers d%27en-tête\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Fichiers d%27en-tête\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Fichiers d%27en-tête\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects.h">
+      <Filter>Fichiers d%27en-tête\Entity</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
