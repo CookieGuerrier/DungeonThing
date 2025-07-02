@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 Enemy enemy[100];
-sfTexture* enemyTexture[1];
+sfTexture* enemyTexture[2];
 sfTexture* shadowTexture;
 int enemyCount;
 

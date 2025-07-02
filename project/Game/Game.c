@@ -67,8 +67,8 @@ void DrawGame(sfRenderWindow* _window)
 	DrawObject(_window, debugMode);
 	DrawWall(_window, debugMode);
 
-	DrawEnemy(_window, debugMode);
 	DrawBullet(_window, debugMode);
+	DrawEnemy(_window, debugMode);
 	DrawPlayer(_window, debugMode);
 
 	SetView(sfFalse, _window);

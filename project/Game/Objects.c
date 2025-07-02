@@ -85,6 +85,9 @@ void AddObject(sfVector2f _pos, float _rot, ObjectType _type)
 			sfSprite_setPosition(obj.shadow, (sfVector2f) { _pos.x, _pos.y - 15 });
 			AddWall((sfVector2f) { _pos.x + 10 - hitbox.width / 2, _pos.y - hitbox.height / 2 + 10 }, 0, (sfVector2f) { hitbox.width - 20, hitbox.height - 25 });
 			obj.wallID = GetWallCount();
+			sfColor col = (sfColor){ 100, 255, 255, 255 };
+			col.r += rand() % 199 + 1;
+			sfSprite_setColor(obj.sprite, col);
 		}
 		else
 		{
