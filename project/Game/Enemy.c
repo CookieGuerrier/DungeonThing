@@ -94,6 +94,8 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 			if (!enemy[i].isDead)
 			{
 				RemoveEnemyCurrent();
+				sfFloatRect hitbox = GetEnemyHitBox(i);
+				AddNugget(hitbox);
 				enemy[i].isDead = sfTrue;
 			}
 			UpdateAnim(_dt, enemy[i].anims[DEATH_E]);

@@ -3,6 +3,7 @@
 
 #include "Common.h"
 #include "Player.h"
+#include "Money.h"
 
 typedef enum TypeEnemy
 {

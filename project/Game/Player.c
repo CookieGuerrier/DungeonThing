@@ -116,6 +116,21 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 	PlayerShoot(_dt);
 	HandThing(pos);
 
+	//Enemy Collision
+	for (int y = 0; y < GetEnemyCount(); y++)
+	{
+		if (IsEnemyAlive(y))
+		{
+			sfFloatRect enemy = GetEnemyHitBox(y);
+			sfFloatRect hitbox = GetPlayerHitbox();
+			if (sfFloatRect_intersects(&enemy, &hitbox, NULL))
+			{
+				LoseLife(1);
+			}
+		}
+	}
+
+	//Enemy Collision
 	for (int y = 0; y < GetEnemyCount(); y++)
 	{
 		if (IsEnemyAlive(y))

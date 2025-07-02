@@ -84,6 +84,9 @@
     <ClCompile Include="Objects.c">
       <Filter>Fichiers sources\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="Money.c">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -130,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="Objects.h">
       <Filter>Fichiers d%27en-tête\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Money.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

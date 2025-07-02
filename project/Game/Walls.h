@@ -22,6 +22,7 @@ void MoveWall(int _ID, sfVector2f _pos);
 
 sfBool BulletCollision(sfFloatRect _hitbox);
 sfBool MoveCollision(sfFloatRect _direction);
+sfBool ObjectCollision(sfVector2f _direction);
 
 int GetWallCount(void);
 

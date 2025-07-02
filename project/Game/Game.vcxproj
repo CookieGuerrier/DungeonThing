@@ -149,6 +149,7 @@
     <ClCompile Include="Map.c" />
     <ClCompile Include="Math.c" />
     <ClCompile Include="Menu.c" />
+    <ClCompile Include="Money.c" />
     <ClCompile Include="Objects.c" />
     <ClCompile Include="Player.c" />
     <ClCompile Include="Walls.c" />
@@ -166,6 +167,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="Money.h" />
     <ClInclude Include="Objects.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Walls.h" />

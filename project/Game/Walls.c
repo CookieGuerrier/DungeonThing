@@ -84,9 +84,9 @@ sfBool BulletCollision(sfFloatRect _hitbox)
 		sfFloatRect collision = sfRectangleShape_getGlobalBounds(wall[i].collider);
 		if (sfFloatRect_intersects(&collision, &hitbox, NULL))
 		{
-			if (wall[i].isBreakable)
+			//if (wall[i].isBreakable)
 			{
-				DeleteWall(i);
+				//DeleteWall(i);
 			}
 			return sfTrue;
 		}
@@ -102,6 +102,20 @@ sfBool MoveCollision(sfFloatRect _direction)
 		sfFloatRect hitbox = _direction;
 		sfFloatRect collision = sfRectangleShape_getGlobalBounds(wall[i].collider);
 		if (sfFloatRect_intersects(&collision, &hitbox, NULL))
+		{
+			return sfTrue;
+		}
+	}
+	return sfFalse;
+}
+
+sfBool ObjectCollision(sfVector2f _direction)
+{
+	for (int i = 0; i < wallCount; i++)
+	{
+		sfVector2f pos = _direction;
+		sfFloatRect collision = sfRectangleShape_getGlobalBounds(wall[i].collider);
+		if (sfFloatRect_contains(&collision, pos.x, pos.y))
 		{
 			return sfTrue;
 		}
