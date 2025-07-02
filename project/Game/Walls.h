@@ -8,6 +8,7 @@
 typedef struct Wall 
 {
 	sfRectangleShape* collider;
+	sfBool isBreakable;
 }Wall;
 
 void LoadWall(void);
@@ -15,7 +16,7 @@ void UpdateWall(float _dt, sfRenderWindow* _window);
 void DrawWall(sfRenderWindow* _window, sfBool _debugMode);
 void CleanupWall(void);
 
-void AddWall(sfVector2f _pos, sfBool _rotate, sfVector2f _size);
+void AddWall(sfVector2f _pos, sfBool _rotate, sfVector2f _size, sfBool _isBreakable);
 void DeleteWall(int _ID);
 void MoveWall(int _ID, sfVector2f _pos);
 

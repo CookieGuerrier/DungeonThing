@@ -83,7 +83,7 @@ void AddObject(sfVector2f _pos, float _rot, ObjectType _type)
 			hitbox = sfSprite_getGlobalBounds(obj.shadow);
 			sfSprite_setOrigin(obj.shadow, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
 			sfSprite_setPosition(obj.shadow, (sfVector2f) { _pos.x, _pos.y - 15 });
-			AddWall((sfVector2f) { _pos.x + 10 - hitbox.width / 2, _pos.y - hitbox.height / 2 + 10 }, 0, (sfVector2f) { hitbox.width - 20, hitbox.height - 25 });
+			AddWall((sfVector2f) { _pos.x + 10 - hitbox.width / 2, _pos.y - hitbox.height / 2 + 10 }, 0, (sfVector2f) { hitbox.width - 20, hitbox.height - 25 }, sfTrue);
 			obj.wallID = GetWallCount();
 			sfColor col = (sfColor){ 100, 255, 255, 255 };
 			col.r += rand() % 199 + 1;
@@ -91,7 +91,7 @@ void AddObject(sfVector2f _pos, float _rot, ObjectType _type)
 		}
 		else
 		{
-			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width, hitbox.height });
+			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width, hitbox.height }, sfFalse);
 			obj.wallID = GetWallCount();
 		}
 

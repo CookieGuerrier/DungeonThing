@@ -18,7 +18,6 @@ typedef struct Object
 	sfSprite* sprite;
 	sfSprite* shadow;
 	int wallID;
-	sfBool breakable;
 	ObjectType type;
 }Object;
 

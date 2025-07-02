@@ -1,17 +1,11 @@
 #include "Walls.h"
 
-Wall* wall = NULL;
+Wall wall[500];
 int wallCount;
 
 void LoadWall(void)
 {
 	wallCount = 0;
-	wall = calloc(1, sizeof(LifePoints));
-	if (!wall)
-	{
-		fprintf(stderr, "Erreur d'allocation memoire pour wallList.\n");
-		return;
-	}
 }
 
 void UpdateWall(float _dt, sfRenderWindow* _window)
@@ -37,43 +31,43 @@ void CleanupWall(void)
 	}
 }
 
-void AddWall(sfVector2f _pos, sfBool _rotate, sfVector2f _size)
+void AddWall(sfVector2f _pos, sfBool _rotate, sfVector2f _size, sfBool _isBreakable)
 {
-	Wall* temp = realloc(wall, (size_t)(wallCount + 1) * sizeof(Wall));
-	if (!temp) {
-		fprintf(stderr, "WallList reallocation failed!\n");
-		return;
-	}
-	wall = temp;
-
-	Wall wall2 = { 0 };
-	wall2.collider = sfRectangleShape_create();
-
-	sfFloatRect hitbox = sfRectangleShape_getGlobalBounds(wall2.collider);
-	sfRectangleShape_setOrigin(wall2.collider, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
-
-	if (_rotate)
+	if (wallCount < 500)
 	{
-		sfRectangleShape_setRotation(wall2.collider, 90);
+		Wall wall2 = { 0 };
+		wall2.collider = sfRectangleShape_create();
+		wall2.isBreakable = _isBreakable;
+
+		sfFloatRect hitbox = sfRectangleShape_getGlobalBounds(wall2.collider);
+		sfRectangleShape_setOrigin(wall2.collider, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
+
+		if (_rotate)
+		{
+			sfRectangleShape_setRotation(wall2.collider, 90);
+		}
+
+		sfRectangleShape_setSize(wall2.collider, _size);
+		sfRectangleShape_setPosition(wall2.collider, _pos);
+		sfRectangleShape_setFillColor(wall2.collider, (sfColor) { 255, 0, 0, 120 });
+
+		wall[wallCount] = wall2;
+		wallCount++;
 	}
-
-	sfRectangleShape_setSize(wall2.collider, _size);
-	sfRectangleShape_setPosition(wall2.collider, _pos);
-	sfRectangleShape_setFillColor(wall2.collider, (sfColor) { 255, 0, 0, 120 });
-
-	wall[wallCount] = wall2;
-	wallCount++;
 }
 
 void DeleteWall(int _ID)
 {
-	Wall* temp = realloc(wall, (size_t)(wallCount - 1) * sizeof(Wall));
-	if (!temp) {
-		fprintf(stderr, "Enemy list reallocation failed!\n");
-		return;
+	sfRectangleShape_destroy(wall[_ID].collider);
+	wall[_ID].collider = NULL;
+
+	for (int i = _ID; i < wallCount - 1; i++)
+	{
+		Wall temp = wall[i];
+		wall[i] = wall[i + 1];
+		wall[i + 1] = temp;
 	}
 
-	wall = temp;
 	wallCount--;
 }
 
@@ -90,6 +84,10 @@ sfBool BulletCollision(sfFloatRect _hitbox)
 		sfFloatRect collision = sfRectangleShape_getGlobalBounds(wall[i].collider);
 		if (sfFloatRect_intersects(&collision, &hitbox, NULL))
 		{
+			if (wall[i].isBreakable)
+			{
+				DeleteWall(i);
+			}
 			return sfTrue;
 		}
 	}
@@ -106,7 +104,6 @@ sfBool MoveCollision(sfFloatRect _direction)
 		if (sfFloatRect_intersects(&collision, &hitbox, NULL))
 		{
 			return sfTrue;
-
 		}
 	}
 	return sfFalse;

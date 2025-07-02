@@ -200,43 +200,43 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 	//Up
 	if (_type == D || _type == LRD || _type == LR || _type == L || _type == R)
 	{
-		AddWall((sfVector2f) { hitbox.left, hitbox.top }, sfFalse, (sfVector2f) { SCREEN_WIDTH, 80 });
+		AddWall((sfVector2f) { hitbox.left, hitbox.top }, sfFalse, (sfVector2f) { SCREEN_WIDTH, 80 }, sfFalse);
 	}
 	else
 	{
-		AddWall((sfVector2f) { hitbox.left, hitbox.top }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 });
-		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH / 2 + 70, hitbox.top }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 });
+		AddWall((sfVector2f) { hitbox.left, hitbox.top }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 }, sfFalse);
+		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH / 2 + 70, hitbox.top }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 }, sfFalse);
 	}
 	//Down
 	if (_type == LR || _type == LRU || _type == L || _type == R || _type == U)
 	{
 
-		AddWall((sfVector2f) { hitbox.left, hitbox.top + SCREEN_HEIGHT - 40 }, sfFalse, (sfVector2f) { SCREEN_WIDTH, 40 });
+		AddWall((sfVector2f) { hitbox.left, hitbox.top + SCREEN_HEIGHT - 40 }, sfFalse, (sfVector2f) { SCREEN_WIDTH, 40 }, sfFalse);
 	}
 	else
 	{
-		AddWall((sfVector2f) { hitbox.left, hitbox.top + SCREEN_HEIGHT - 40 }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 });
-		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH / 2 + 70, hitbox.top + SCREEN_HEIGHT - 40 }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 });
+		AddWall((sfVector2f) { hitbox.left, hitbox.top + SCREEN_HEIGHT - 40 }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 }, sfFalse);
+		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH / 2 + 70, hitbox.top + SCREEN_HEIGHT - 40 }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 }, sfFalse);
 	}
 	//Right
 	if (_type == D || _type == L || _type == U)
 	{
-		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT, 40 });
+		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT, 40 }, sfFalse);
 	}
 	else
 	{
-		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH, hitbox.top + SCREEN_HEIGHT / 2 + 70 }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 });
-		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 });
+		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH, hitbox.top + SCREEN_HEIGHT / 2 + 70 }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 }, sfFalse);
+		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 }, sfFalse);
 	}
 	//Left
 	if (_type == D || _type == R || _type == U)
 	{
-		AddWall((sfVector2f) { hitbox.left + 40, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT, 40 });
+		AddWall((sfVector2f) { hitbox.left + 40, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT, 40 }, sfFalse);
 	}
 	else
 	{
-		AddWall((sfVector2f) { hitbox.left + 40, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 });
-		AddWall((sfVector2f) { hitbox.left + 40, hitbox.top + SCREEN_HEIGHT / 2 + 70 }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 });
+		AddWall((sfVector2f) { hitbox.left + 40, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 }, sfFalse);
+		AddWall((sfVector2f) { hitbox.left + 40, hitbox.top + SCREEN_HEIGHT / 2 + 70 }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 }, sfFalse);
 	}
 
 	//Object
