@@ -13,6 +13,7 @@ void LoadPlayer(void)
 	//Stats
 	player.speed = 500;
 	player.life = 0;
+	player.gold = 0;
 
 	//Sprite
 	player.sprite = sfSprite_create();
@@ -46,9 +47,6 @@ void LoadPlayer(void)
 	hitbox = sfSprite_getGlobalBounds(player.spriteShadow);
 	sfSprite_setOrigin(player.spriteShadow, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
 	sfSprite_setPosition(player.sprite, GetSpawnPoint());
-	
-	//sfVector2f pos = sfSprite_getPosition(player.sprite);
-	//AddEnemy(BULLET, pos, GetCurrentMap() );
 }
 
 void LoadPlayerAnims(void)
@@ -115,20 +113,6 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 	//Function
 	PlayerShoot(_dt);
 	HandThing(pos);
-
-	//Enemy Collision
-	for (int y = 0; y < GetEnemyCount(); y++)
-	{
-		if (IsEnemyAlive(y))
-		{
-			sfFloatRect enemy = GetEnemyHitBox(y);
-			sfFloatRect hitbox = GetPlayerHitbox();
-			if (sfFloatRect_intersects(&enemy, &hitbox, NULL))
-			{
-				LoseLife(1);
-			}
-		}
-	}
 
 	//Enemy Collision
 	for (int y = 0; y < GetEnemyCount(); y++)
@@ -345,6 +329,18 @@ void GainLife(int _life)
 		player.life++;
 		AddLifePoint();
 	}
+}
+
+void LoseGold(int _gold)
+{
+	player.gold -= _gold;
+	UpdateGold(player.gold);
+}
+
+void GainGold(int _gold)
+{
+	player.gold += _gold;
+	UpdateGold(player.gold);
 }
 
 void LoseLife(int _life)

@@ -39,6 +39,7 @@ void UpdateMoney(float _dt, sfRenderWindow* _window)
 		//Collect
 		if (sfFloatRect_intersects(&hitbox, &pHitbox, NULL))
 		{
+			GainGold(1);
 			DeleteNugget(i);
 		}
 	}

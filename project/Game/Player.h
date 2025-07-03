@@ -25,9 +25,10 @@ typedef struct Player
 	Anim** anims;
 
 	int life;
+	int gold;
+
 	sfVector2f velocity;
 	float speed;
-
 	sfBool fireRate;
 	float invFrame;
 	float turnFrame;
@@ -43,10 +44,12 @@ void CleanupPlayer(void);
 void PlayerMove(float _dt, sfRenderWindow* _window, sfKeyCode _key);
 void PlayerShoot(float _dt);
 void HandThing(sfVector2f _pos);
-
-void GainLife(int _life);
-void LoseLife(int _life);
 void PlayerTransition(sfRenderWindow* _window);
+
+void LoseLife(int _life);
+void GainLife(int _life);
+void LoseGold(int _gold);
+void GainGold(int _gold);
 
 int GetHP(void);
 sfVector2f GetPlayerPos(void);
