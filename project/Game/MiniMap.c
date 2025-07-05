@@ -38,6 +38,12 @@ void CleanupMiniMap(void)
 		DeleteMiniMap(i);
 		miniCount++;
 	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		sfTexture_destroy(texture[i]);
+		texture[i] = NULL;
+	}
 }
 
 void AddMiniMap(sfVector2f _position, int _type)

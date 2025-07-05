@@ -1,16 +1,2 @@
-﻿  Bullet.c
-  Enemy.c
-  Game.c
-  GameHUD.c
-  GameOver.c
-  Map.c
-  Menu.c
-  MiniMap.c
-  Money.c
-  Objects.c
-  Player.c
-  Shop.c
-  Walls.c
-  main.c
-  Génération de code en cours...
+﻿  MiniMap.c
   Game.vcxproj -> C:\Users\UTILISATEUR\Documents\GitHub\DungeonThing\project\x64\Debug\Game.exe

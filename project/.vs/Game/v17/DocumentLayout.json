@@ -52,7 +52,7 @@
               "RelativeDocumentMoniker": "Game\\MiniMap.c",
               "ToolTip": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\MiniMap.c",
               "RelativeToolTip": "Game\\MiniMap.c",
-              "ViewState": "AgIAACcAAAAAAAAAAAAAAFQAAAAZAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACsAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2025-07-05T10:19:15.752Z",
               "EditorCaption": ""
@@ -67,8 +67,7 @@
               "RelativeToolTip": "Game\\Game.c",
               "ViewState": "AgIAADkAAAAAAAAAAAAAAE4AAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2025-07-05T11:41:58.968Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-05T11:41:58.968Z"
             },
             {
               "$type": "Document",
@@ -80,8 +79,7 @@
               "RelativeToolTip": "Game\\Camera.c",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2025-07-05T09:58:47.637Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-05T09:58:47.637Z"
             },
             {
               "$type": "Document",
@@ -93,8 +91,7 @@
               "RelativeToolTip": "Game\\GameHUD.c",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2025-07-04T14:45:52.357Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-04T14:45:52.357Z"
             },
             {
               "$type": "Document",
@@ -106,8 +103,7 @@
               "RelativeToolTip": "Game\\Map.c",
               "ViewState": "AgIAACMBAAAAAAAAAAAAAC0BAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2025-07-04T13:58:22.127Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-04T13:58:22.127Z"
             }
           ]
         },
@@ -125,8 +121,7 @@
               "RelativeToolTip": "Game\\Map.h",
               "ViewState": "AgIAABgAAAAAAAAAAAAAAEMAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-07-04T13:59:14.28Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-04T13:59:14.28Z"
             },
             {
               "$type": "Document",
@@ -151,8 +146,7 @@
               "RelativeToolTip": "Game\\Camera.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-07-05T09:59:42.377Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-05T09:59:42.377Z"
             }
           ]
         }
