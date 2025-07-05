@@ -93,8 +93,11 @@
     <ClCompile Include="Money.c">
       <Filter>Fichiers sources\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="MiniMap.c">
+      <Filter>Fichiers sources\Map</Filter>
+    </ClCompile>
     <ClCompile Include="Shop.c">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +150,9 @@
       <Filter>Fichiers d%27en-tête\Entity</Filter>
     </ClInclude>
     <ClInclude Include="Shop.h">
+      <Filter>Fichiers d%27en-tête\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniMap.h">
       <Filter>Fichiers d%27en-tête\Map</Filter>
     </ClInclude>
   </ItemGroup>

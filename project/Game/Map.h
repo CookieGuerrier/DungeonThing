@@ -7,6 +7,7 @@
 #include "Walls.h"
 #include "Objects.h"
 #include "Shop.h"
+#include "MiniMap.h"
 
 typedef enum MapType
 {
@@ -26,8 +27,7 @@ typedef enum ElementType
 	BATTLE,
 	BOSS,
 	SHOP,
-	START,
-	END
+	START
 }ElementType;
 
 typedef enum BattleType

@@ -38,6 +38,7 @@ void UpdateMap(float _dt, sfRenderWindow* _window)
 	if (mapCurrent != GetCurrentMap())
 	{
 		mapCurrent = GetCurrentMap();
+		PositionMini(mapCurrent);
 		if (map[mapCurrent].element == BATTLE)
 		{
 			//Battle start
@@ -287,6 +288,7 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 			AddObject((sfVector2f) { hitbox.left + (60 * i) + 10, hitbox.top + hitbox.height - 60 }, 0, POT);
 		}
 	}
+	AddMiniMap(_pos, temp.element);
 
 	//Type of stuff
 	int ran;
@@ -297,6 +299,7 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		CreateBattle(ran, hitbox);
 		break;
 	case START:
+		PositionMini(mapCount);
 		mapStart = mapCount;
 		break;
 	case SHOP:
@@ -308,6 +311,7 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 	default:
 		break;
 	}
+
 
 	map[mapCount] = temp;
 	mapCount++;

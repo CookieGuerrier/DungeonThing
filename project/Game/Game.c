@@ -10,6 +10,7 @@ void LoadGame(sfRenderWindow* _window)
 
 	LoadEnemy();
 	LoadShop();
+	LoadMiniMap();
 	LoadMap(_window);
 
 	LoadPlayer();
@@ -58,7 +59,8 @@ void UpdateGame(float _dt, sfRenderWindow* _window)
 
 	UpdateBullet(_dt, _window);
 	UpdatePlayer(_dt, _window);
-
+	UpdateMiniMap(_window, _dt);
+	
 	UpdateEnemy(_dt, _window);
 
 	UpdateGameHUD(_dt);
@@ -66,7 +68,7 @@ void UpdateGame(float _dt, sfRenderWindow* _window)
 
 void DrawGame(sfRenderWindow* _window)
 {
-	SetView(sfTrue, _window);
+	SetView(0, _window);
 	DrawMap(_window, debugMode);
 	DrawObject(_window, debugMode);
 	DrawWall(_window, debugMode);
@@ -77,8 +79,11 @@ void DrawGame(sfRenderWindow* _window)
 	DrawBullet(_window, debugMode);
 	DrawPlayer(_window, debugMode);
 
-	SetView(sfFalse, _window);
-	DrawGameHUD(_window, sfTrue);
+	SetView(1, _window);
+	DrawGameHUD(_window, debugMode);
+	
+	SetView(2, _window);
+	DrawMiniMap(_window, debugMode);
 }
 
 void CleanupGame(void)
@@ -92,6 +97,7 @@ void CleanupGame(void)
 	CleanupBullet();
 	CleanupPlayer();
 	CleanupEnemy();
+	CleanupMiniMap();
 
 	CleanupGameHUD();
 }
