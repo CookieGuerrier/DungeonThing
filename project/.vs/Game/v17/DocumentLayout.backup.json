@@ -3,20 +3,40 @@
   "WorkspaceRootPath": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Map.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Map.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Player.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Player.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Player.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Player.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\MiniMap.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\MiniMap.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Bullet.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Bullet.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Map.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Map.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Bullet.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Bullet.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Enemy.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Enemy.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Game.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Game.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\MiniMap.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\MiniMap.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Map.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Map.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\GameHUD.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -25,10 +45,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Camera.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Camera.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Map.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Map.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Camera.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -42,24 +58,76 @@
       "DocumentGroups": [
         {
           "DockedWidth": 253,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
+              "Title": "Player.h",
+              "DocumentMoniker": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Player.h",
+              "RelativeDocumentMoniker": "Game\\Player.h",
+              "ToolTip": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Player.h",
+              "RelativeToolTip": "Game\\Player.h",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAiwC4AAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-07-05T17:05:21.473Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Player.c",
+              "DocumentMoniker": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Player.c",
+              "RelativeDocumentMoniker": "Game\\Player.c",
+              "ToolTip": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Player.c",
+              "RelativeToolTip": "Game\\Player.c",
+              "ViewState": "AgIAAFEBAAAAAAAAAAAiwGoBAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2025-07-05T16:59:47.685Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Bullet.c",
+              "DocumentMoniker": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Bullet.c",
+              "RelativeDocumentMoniker": "Game\\Bullet.c",
+              "ToolTip": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Bullet.c",
+              "RelativeToolTip": "Game\\Bullet.c",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAC8AAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2025-07-05T16:52:50.686Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Enemy.c",
+              "DocumentMoniker": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Enemy.c",
+              "RelativeDocumentMoniker": "Game\\Enemy.c",
+              "ToolTip": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Enemy.c",
+              "RelativeToolTip": "Game\\Enemy.c",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2025-07-05T16:52:13.454Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "MiniMap.c",
               "DocumentMoniker": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\MiniMap.c",
               "RelativeDocumentMoniker": "Game\\MiniMap.c",
               "ToolTip": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\MiniMap.c",
               "RelativeToolTip": "Game\\MiniMap.c",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACsAAAAeAAAAAAAAAA==",
+              "ViewState": "AgIAADkAAAAAAAAAAAAAAFkAAABCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2025-07-05T10:19:15.752Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 8,
               "Title": "Game.c",
               "DocumentMoniker": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Game.c",
               "RelativeDocumentMoniker": "Game\\Game.c",
@@ -71,7 +139,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 10,
               "Title": "Camera.c",
               "DocumentMoniker": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Camera.c",
               "RelativeDocumentMoniker": "Game\\Camera.c",
@@ -83,7 +151,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 9,
               "Title": "GameHUD.c",
               "DocumentMoniker": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\GameHUD.c",
               "RelativeDocumentMoniker": "Game\\GameHUD.c",
@@ -95,50 +163,39 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Map.c",
               "DocumentMoniker": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Map.c",
               "RelativeDocumentMoniker": "Game\\Map.c",
-              "ToolTip": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Map.c",
-              "RelativeToolTip": "Game\\Map.c",
-              "ViewState": "AgIAACMBAAAAAAAAAAAAAC0BAAAXAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Map.c*",
+              "RelativeToolTip": "Game\\Map.c*",
+              "ViewState": "AgIAABMAAAAAAAAAAADgvzsAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2025-07-04T13:58:22.127Z"
+              "WhenOpened": "2025-07-04T13:58:22.127Z",
+              "EditorCaption": ""
             }
           ]
         },
         {
           "DockedWidth": 147,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
               "Title": "Map.h",
               "DocumentMoniker": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Map.h",
               "RelativeDocumentMoniker": "Game\\Map.h",
               "ToolTip": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Map.h",
               "RelativeToolTip": "Game\\Map.h",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAAEMAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAAEQAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-07-04T13:59:14.28Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MiniMap.h",
-              "DocumentMoniker": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\MiniMap.h",
-              "RelativeDocumentMoniker": "Game\\MiniMap.h",
-              "ToolTip": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\MiniMap.h",
-              "RelativeToolTip": "Game\\MiniMap.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAA7AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-07-05T10:19:29.564Z",
+              "WhenOpened": "2025-07-04T13:59:14.28Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 11,
               "Title": "Camera.h",
               "DocumentMoniker": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Camera.h",
               "RelativeDocumentMoniker": "Game\\Camera.h",
@@ -147,6 +204,19 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-07-05T09:59:42.377Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Bullet.h",
+              "DocumentMoniker": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Bullet.h",
+              "RelativeDocumentMoniker": "Game\\Bullet.h",
+              "ToolTip": "C:\\Users\\UTILISATEUR\\Documents\\GitHub\\DungeonThing\\project\\Game\\Bullet.h",
+              "RelativeToolTip": "Game\\Bullet.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-07-05T16:54:32.863Z",
+              "EditorCaption": ""
             }
           ]
         }

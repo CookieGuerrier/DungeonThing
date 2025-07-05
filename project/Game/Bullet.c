@@ -45,7 +45,7 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 			}
 		}
 
-		if (BulletCollision(hitbox))
+		if (BulletCollision(hitbox) || GetBulletMap(hitbox) != GetCurrentMap())
 		{
 			DeleteBullet(i);
 		}

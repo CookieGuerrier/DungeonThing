@@ -43,7 +43,26 @@ void UpdateMap(float _dt, sfRenderWindow* _window)
 		{
 			//Battle start
 			enemyCurrent = GetEnemyMap(mapCurrent);
-			PlayerTransition(_window);
+			sfFloatRect hitbox = sfSprite_getGlobalBounds(map[mapCurrent].sprite);
+
+			if (GetPlayerPos().x < (hitbox.left + 300))
+			{
+				PlayerTransition(2);
+			}
+			else if (GetPlayerPos().x > (hitbox.left + hitbox.width - 300))
+			{
+				PlayerTransition(3);
+			}
+			else if (GetPlayerPos().y > (hitbox.top + 300))
+			{
+				PlayerTransition(1);
+			}
+			else if (GetPlayerPos().y < (hitbox.top + hitbox.height - 300))
+			{
+				PlayerTransition(0);
+			}
+
+
 			if (enemyCurrent > 0)
 			{
 				sfVector2f pos = sfSprite_getPosition(map[mapCurrent].sprite);
@@ -476,6 +495,20 @@ int GetCurrentMap(void)
 	for (int i = 0; i < mapCount; i++)
 	{
 		sfFloatRect pHitbox = GetPlayerHitbox();
+		sfFloatRect hitbox = sfSprite_getGlobalBounds(map[i].sprite);
+		if (sfFloatRect_intersects(&pHitbox, &hitbox, NULL))
+		{
+			return i;
+		}
+	}
+	return mapStart;
+}
+
+int GetBulletMap(sfFloatRect _hitbox)
+{
+	for (int i = 0; i < mapCount; i++)
+	{
+		sfFloatRect pHitbox = _hitbox;
 		sfFloatRect hitbox = sfSprite_getGlobalBounds(map[i].sprite);
 		if (sfFloatRect_intersects(&pHitbox, &hitbox, NULL))
 		{

@@ -360,16 +360,26 @@ void LoseLife(int _life)
 	}
 }
 
-void PlayerTransition(sfRenderWindow* _window)
+void PlayerTransition(int _num)
 {
-	if (sfKeyboard_isKeyPressed(sfKeyS))
+	switch (_num)
+	{
+	case 0:
 		sfSprite_move(player.sprite, (sfVector2f) { 0, 100 });
-	if (sfKeyboard_isKeyPressed(sfKeyZ))
+		break;
+	case 1:
 		sfSprite_move(player.sprite, (sfVector2f) { 0, -100	});
-	if (sfKeyboard_isKeyPressed(sfKeyD))
+		break;
+	case 2:
 		sfSprite_move(player.sprite, (sfVector2f) { 100, 0 });
-	if (sfKeyboard_isKeyPressed(sfKeyQ))
+		break;
+	case 3:
 		sfSprite_move(player.sprite, (sfVector2f) { -100, 0 });
+		break;
+	default:
+		break;
+	}
+	//SZDQ
 }
 
 int GetHP(void)

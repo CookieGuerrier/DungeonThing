@@ -66,5 +66,6 @@ void CreateBattleBorder(sfVector2f _pos, MapType _type);
 sfVector2f GetSpawnPoint(void);
 void SetCameraMap(int _ID , sfRenderWindow* _window);
 int GetCurrentMap(void);
+int GetBulletMap(sfFloatRect _hitbox);
 
 #endif // !MAP_H

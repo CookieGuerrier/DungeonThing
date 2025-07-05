@@ -87,7 +87,7 @@ void DeleteMiniMap(int _ID)
 void PositionMini(int _ID)
 {
 	sfSprite_setColor(mini[current].sprite, (sfColor) { 255, 255, 255, 150 });
-	sfSprite_setColor(mini[_ID].sprite, (sfColor) { 255, 255, 255, 255 });
+	sfSprite_setColor(mini[_ID].sprite, (sfColor) { 255, 255, 255, 230 });
 	mini[_ID].disco = sfTrue;
 	current = _ID;
 }

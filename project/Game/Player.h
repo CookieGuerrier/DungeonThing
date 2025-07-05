@@ -44,7 +44,7 @@ void CleanupPlayer(void);
 void PlayerMove(float _dt, sfRenderWindow* _window, sfKeyCode _key);
 void PlayerShoot(float _dt);
 void HandThing(sfVector2f _pos);
-void PlayerTransition(sfRenderWindow* _window);
+void PlayerTransition(int _num);
 
 void LoseLife(int _life);
 void GainLife(int _life);
