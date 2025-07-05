@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Camera.h"
+#include "Shop.h"
 
 typedef struct GameData
 {

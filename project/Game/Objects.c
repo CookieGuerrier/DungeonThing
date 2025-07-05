@@ -1,7 +1,7 @@
 #include "Objects.h"
 
 Object object[300];
-sfTexture* textureObject[5];
+sfTexture* textureObject[6];
 sfTexture* shadowTexture;
 int objectCount;
 
@@ -16,6 +16,7 @@ void LoadObject(void)
 	textureObject[WALL_BATTLERL] = sfTexture_createFromFile("Assets/Texture/Objects/blockRL.png", NULL);
 
 	textureObject[POT] = sfTexture_createFromFile("Assets/Texture/Objects/pot.png", NULL);
+	textureObject[STATUE] = sfTexture_createFromFile("Assets/Texture/Objects/shop.png", NULL);
 	shadowTexture = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
 
 	AddObject((sfVector2f) { 0, 0 }, 0, WALL_BATTLERL);
@@ -88,6 +89,10 @@ void AddObject(sfVector2f _pos, float _rot, ObjectType _type)
 			sfColor col = (sfColor){ 100, 255, 255, 255 };
 			col.r += rand() % 199 + 1;
 			sfSprite_setColor(obj.sprite, col);
+		}
+		else if (_type == STATUE)
+		{
+			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width, hitbox.height - 60 }, sfFalse);
 		}
 		else
 		{

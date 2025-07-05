@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Walls.h"
 #include "Objects.h"
+#include "Shop.h"
 
 typedef enum MapType
 {

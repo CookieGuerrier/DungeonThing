@@ -9,8 +9,9 @@ void LoadGame(sfRenderWindow* _window)
 	LoadMoney();
 
 	LoadEnemy();
+	LoadShop();
 	LoadMap(_window);
-	
+
 	LoadPlayer();
 
 	LoadBullet();
@@ -53,6 +54,7 @@ void UpdateGame(float _dt, sfRenderWindow* _window)
 	UpdateObject(_dt, _window);
 	UpdateMap(_dt, _window);
 	UpdateMoney(_dt, _window);
+	UpdateShop(_dt, _window);
 
 	UpdateBullet(_dt, _window);
 	UpdatePlayer(_dt, _window);
@@ -68,6 +70,7 @@ void DrawGame(sfRenderWindow* _window)
 	DrawMap(_window, debugMode);
 	DrawObject(_window, debugMode);
 	DrawWall(_window, debugMode);
+	DrawShop(_window, debugMode);
 
 	DrawEnemy(_window, debugMode);
 	DrawMoney(_window, debugMode);
@@ -84,6 +87,7 @@ void CleanupGame(void)
 	CleanupObject();
 	CleanupMap();
 	CleanupMoney();
+	CleanupShop();
 		
 	CleanupBullet();
 	CleanupPlayer();

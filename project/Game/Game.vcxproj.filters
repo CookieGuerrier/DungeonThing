@@ -37,6 +37,12 @@
     <Filter Include="Fichiers d%27en-tête\Misc">
       <UniqueIdentifier>{26197526-3bfb-4212-ab77-f737f5e15bc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Map">
+      <UniqueIdentifier>{fe253fb6-eac0-4878-aede-0844b741edd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Map">
+      <UniqueIdentifier>{74610f4d-71f7-4454-9aba-102b9a8e7a35}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Menu.c">
@@ -60,9 +66,6 @@
     <ClCompile Include="GameHUD.c">
       <Filter>Fichiers sources\HUD</Filter>
     </ClCompile>
-    <ClCompile Include="Map.c">
-      <Filter>Fichiers sources\Misc</Filter>
-    </ClCompile>
     <ClCompile Include="Enemy.c">
       <Filter>Fichiers sources\Entity</Filter>
     </ClCompile>
@@ -78,13 +81,19 @@
     <ClCompile Include="Math.c">
       <Filter>Fichiers sources\Misc</Filter>
     </ClCompile>
-    <ClCompile Include="Walls.c">
-      <Filter>Fichiers sources\Misc</Filter>
-    </ClCompile>
     <ClCompile Include="Objects.c">
       <Filter>Fichiers sources\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="Map.c">
+      <Filter>Fichiers sources\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Walls.c">
+      <Filter>Fichiers sources\Map</Filter>
+    </ClCompile>
     <ClCompile Include="Money.c">
+      <Filter>Fichiers sources\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Shop.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -110,17 +119,11 @@
     <ClInclude Include="GameHUD.h">
       <Filter>Fichiers d%27en-tête\HUD</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>Fichiers d%27en-tête\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>Fichiers d%27en-tête\Entity</Filter>
     </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>Fichiers d%27en-tête\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="Walls.h">
-      <Filter>Fichiers d%27en-tête\Misc</Filter>
     </ClInclude>
     <ClInclude Include="Animator.h">
       <Filter>Fichiers d%27en-tête\Misc</Filter>
@@ -134,8 +137,17 @@
     <ClInclude Include="Objects.h">
       <Filter>Fichiers d%27en-tête\Entity</Filter>
     </ClInclude>
+    <ClInclude Include="Walls.h">
+      <Filter>Fichiers d%27en-tête\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Fichiers d%27en-tête\Map</Filter>
+    </ClInclude>
     <ClInclude Include="Money.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Shop.h">
+      <Filter>Fichiers d%27en-tête\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -52,6 +52,7 @@ void LoseGold(int _gold);
 void GainGold(int _gold);
 
 int GetHP(void);
+int GetMoney(void);
 sfVector2f GetPlayerPos(void);
 sfFloatRect GetPlayerHitbox(void);
 sfVector2f GetMousePos(void);

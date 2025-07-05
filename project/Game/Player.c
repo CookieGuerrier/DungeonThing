@@ -377,6 +377,11 @@ int GetHP(void)
 	return player.life;
 }
 
+int GetMoney(void)
+{
+	return player.gold;
+}
+
 sfVector2f GetPlayerPos(void)
 {
 	return sfSprite_getPosition(player.sprite);

@@ -4,6 +4,7 @@ MapPiece map[30];
 sfTexture* mainTexture[MAX];
 int mapStart;
 sfBool startPlaced;
+sfBool shopPlaced;
 int mapCount;
 
 int mapCurrent;
@@ -15,6 +16,7 @@ void LoadMap(sfRenderWindow* _window)
 {
 	mapStart = 0;
 	startPlaced = sfFalse;
+	shopPlaced = sfFalse;
 
 	mapCount = 0;
 	mainTexture[R] = sfTexture_createFromFile("Assets/Texture/Map/rText.png", NULL);
@@ -134,6 +136,15 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		{
 			startPlaced = sfTrue;
 			element = START;
+		}
+	}
+	//Shop
+	else if (!shopPlaced)
+	{
+		if (_type == L || _type == R || _type == D || _type == U)
+		{
+			shopPlaced = sfTrue;
+			element = SHOP;
 		}
 	}
 
@@ -287,6 +298,12 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		break;
 	case START:
 		mapStart = mapCount;
+		break;
+	case SHOP:
+		AddObject((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 - 150 }, 0, STATUE);
+		AddItem(0, LIFE_POTION, (sfVector2f) { _pos.x + hitbox.width / 2 - 250, _pos.y + hitbox.height / 2 + 20});
+		AddItem(1, LIFE_POTION, (sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 + 20});
+		AddItem(2, LIFE_POTION, (sfVector2f) { _pos.x + hitbox.width / 2 + 250, _pos.y + hitbox.height / 2 + 20});
 		break;
 	default:
 		break;

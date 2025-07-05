@@ -10,7 +10,8 @@ typedef enum ObjectType
 	WALL_BLOCKRL,
 	WALL_BATTLEUD,
 	WALL_BATTLERL,
-	POT
+	POT,
+	STATUE
 }ObjectType;
 
 typedef struct Object
