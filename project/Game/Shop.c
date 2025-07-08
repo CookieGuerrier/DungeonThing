@@ -1,17 +1,19 @@
 #include "Shop.h"
 
-sfTexture* textureItems[1];
+sfTexture* textureItems[2];
 sfFont* font;
 ItemShop itemShop[3];
-int price[1];
+int price[2];
 
 void LoadShop(void)
 {
-	textureItems[0] = sfTexture_createFromFile("Assets/Texture/Shop Items/potion.png", NULL);
-	font = sfFont_createFromFile("Assets/Font/VT323-Regular.ttf");
+	textureItems[POTION] = sfTexture_createFromFile("Assets/Texture/Shop Items/potion.png", NULL);
+	textureItems[BIG_POTION] = sfTexture_createFromFile("Assets/Texture/Shop Items/bigPotion.png", NULL);
+	font = sfFont_createFromFile("Assets/Font/font.ttf");
 
 	//Price
-	price[LIFE_POTION] = 10;
+	price[POTION] = 10;
+	price[BIG_POTION] = 20;
 
 	//Items
 	for (int i = 0; i < 3; i++)
@@ -45,8 +47,11 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 
 					switch (itemShop[i].type)
 					{
-					case LIFE_POTION:
+					case POTION:
 						GainLife(1);
+						break;
+					case BIG_POTION:
+						GainLife(2);
 						break;
 					default:
 						break;
@@ -98,6 +103,7 @@ void AddItem(int _num, ShopType _type, sfVector2f _position)
 	sfFloatRect hitbox = sfSprite_getGlobalBounds(itemShop[_num].sprite);
 	sfSprite_setOrigin(itemShop[_num].sprite, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
 	sfSprite_setPosition(itemShop[_num].sprite, _position);
+	itemShop[_num].type = _type;
 
 	UpdateText(itemShop[_num].text, price[_type]);
 	sfText_setPosition(itemShop[_num].text, (sfVector2f) { _position.x, _position.y + 30});

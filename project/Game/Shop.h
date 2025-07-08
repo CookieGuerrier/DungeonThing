@@ -7,7 +7,8 @@
 
 typedef enum ShopType
 {
-	LIFE_POTION
+	POTION,
+	BIG_POTION
 }ShopType;
 
 

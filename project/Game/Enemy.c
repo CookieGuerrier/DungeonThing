@@ -32,7 +32,7 @@ void LoadEnemyAnimation(Enemy* _enemy)
 		_enemy->anims[WALK_E]->events = malloc(sizeof(AnimEvent));
 
 		first = (sfIntRect){ 0,  75 * 3, size.x / 8, size.y / 4 };
-		_enemy->anims[DEATH_E] = CreateAnim(enemyTexture[REA_BASE], first, 8, 1 / 12.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfFalse);
+		_enemy->anims[DEATH_E] = CreateAnim(enemyTexture[REA_BASE], first, 4, 1 / 12.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfFalse);
 		_enemy->anims[DEATH_E]->aimOffset = (sfVector2f){ 0 };
 		_enemy->anims[DEATH_E]->events = malloc(sizeof(AnimEvent));
 	}break;
@@ -49,7 +49,7 @@ void LoadEnemyAnimation(Enemy* _enemy)
 		_enemy->anims[WALK_E]->events = malloc(sizeof(AnimEvent));
 
 		first = (sfIntRect){ 0,  75 * 3, size.x / 8, size.y / 4 };
-		_enemy->anims[DEATH_E] = CreateAnim(enemyTexture[REA_SHOTGUN], first, 8, 1 / 12.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfFalse);
+		_enemy->anims[DEATH_E] = CreateAnim(enemyTexture[REA_SHOTGUN], first, 4, 1 / 12.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfFalse);
 		_enemy->anims[DEATH_E]->aimOffset = (sfVector2f){ 0 };
 		_enemy->anims[DEATH_E]->events = malloc(sizeof(AnimEvent));
 	}break;

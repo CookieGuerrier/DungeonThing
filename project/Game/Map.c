@@ -323,9 +323,12 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		break;
 	case SHOP:
 		AddObject((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 - 150 }, 0, STATUE);
-		AddItem(0, LIFE_POTION, (sfVector2f) { _pos.x + hitbox.width / 2 - 250, _pos.y + hitbox.height / 2 + 20});
-		AddItem(1, LIFE_POTION, (sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 + 20});
-		AddItem(2, LIFE_POTION, (sfVector2f) { _pos.x + hitbox.width / 2 + 250, _pos.y + hitbox.height / 2 + 20});
+		ran = rand() % 2;
+		AddItem(0, ran, (sfVector2f) { _pos.x + hitbox.width / 2 - 250, _pos.y + hitbox.height / 2 + 20});
+		ran = rand() % 2;
+		AddItem(1, ran, (sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 + 20});
+		ran = rand() % 2;
+		AddItem(2, ran, (sfVector2f) { _pos.x + hitbox.width / 2 + 250, _pos.y + hitbox.height / 2 + 20});
 		break;
 	default:
 		break;

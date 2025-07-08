@@ -10,7 +10,7 @@ sfFont* font;
 
 void LoadGameHUD(void)
 {
-	font = sfFont_createFromFile("Assets/Font/VT323-Regular.ttf");
+	font = sfFont_createFromFile("Assets/Font/font.ttf");
 
 	//Life
 	lifeCount = 0;
@@ -35,10 +35,10 @@ void LoadGameHUD(void)
 	gameHUD[0].text = sfText_create();
 	sfText_setFont(gameHUD[0].text, font);
 	sfText_setOutlineColor(gameHUD[0].text, sfBlack);
-	sfText_setOutlineThickness(gameHUD[0].text, 1);
+	sfText_setOutlineThickness(gameHUD[0].text, 2);
 	sfText_setCharacterSize(gameHUD[0].text, 50);
 	sfText_setString(gameHUD[0].text, "0");
-	sfText_setPosition(gameHUD[0].text, (sfVector2f) { -350, 115 });
+	sfText_setPosition(gameHUD[0].text, (sfVector2f) { -350, 110 });
 }
 
 void UpdateGameHUD(float _dt)

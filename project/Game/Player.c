@@ -13,7 +13,7 @@ void LoadPlayer(void)
 	//Stats
 	player.speed = 500;
 	player.life = 0;
-	player.gold = 0;
+	player.gold = 30;
 
 	//Sprite
 	player.sprite = sfSprite_create();
