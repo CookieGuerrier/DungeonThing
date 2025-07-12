@@ -99,15 +99,18 @@ void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire)
 
 void DeleteBullet(int _ID)
 {
-	sfSprite_destroy(bullet[_ID].sprite);
-	bullet[_ID].sprite = NULL;
-
-	for (int i = _ID; i < bulletCount - 1; i++)
+	if (bulletCount > 0)
 	{
-		Bullet temp = bullet[i];
-		bullet[i] = bullet[i + 1];
-		bullet[i + 1] = temp;
-	}
+		sfSprite_destroy(bullet[_ID].sprite);
+		bullet[_ID].sprite = NULL;
+		 
+		for (int i = _ID; i < bulletCount - 1; i++)
+		{
+			Bullet temp = bullet[i];
+			bullet[i] = bullet[i + 1];
+			bullet[i + 1] = temp;
+		}
 
-	bulletCount--;
+		bulletCount--;
+	}
 }

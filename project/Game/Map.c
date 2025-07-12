@@ -30,13 +30,13 @@ void LoadMap(sfRenderWindow* _window)
 	mainTexture[LRUD] = sfTexture_createFromFile("Assets/Texture/Map/lrudText.png", NULL);
 
 	CreateLevel(1);
-	mapCurrent = mapStart;
 }
 
 void UpdateMap(float _dt, sfRenderWindow* _window)
 {
 	if (mapCurrent != GetCurrentMap())
 	{
+		SetCameraMap(GetCurrentMap(), _window);
 		mapCurrent = GetCurrentMap();
 		PositionMini(mapCurrent);
 		if (map[mapCurrent].element == BATTLE)
@@ -436,19 +436,19 @@ void CreateLevel(int _pathLength)
 
 void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 {
-	int ran = rand() % 2;
+	int ran = rand() % 3;
 	switch (_type)
 	{
 	case ONE:
-		ran = rand() % 2;
+		ran = rand() % 3;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
-		ran = rand() % 2;
+		ran = rand() % 3;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
 		break;
 	case TWO:
-		ran = rand() % 2;
+		ran = rand() % 3;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
-		ran = rand() % 2;
+		ran = rand() % 3;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
 		break;
 	default:

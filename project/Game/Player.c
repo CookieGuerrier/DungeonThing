@@ -79,8 +79,6 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 	mousePos = sfRenderWindow_mapPixelToCoords(_window, renderMouse, GetView());
 	sfVector2f pos = sfSprite_getPosition(player.sprite);
 
-	SetCameraMap(GetCurrentMap(), _window);
-
 	//Move
 	if (sfKeyboard_isKeyPressed(sfKeyZ) && !sfKeyboard_isKeyPressed(sfKeyS))
 	{

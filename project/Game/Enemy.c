@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 Enemy enemy[100];
-sfTexture* enemyTexture[2];
+sfTexture* enemyTexture[3];
 sfTexture* shadowTexture;
 int enemyCount;
 
@@ -10,6 +10,7 @@ void LoadEnemy(void)
 	enemyCount = 0;
 	enemyTexture[REA_BASE] = sfTexture_createFromFile("Assets/Texture/Enemy/rea_base.png", NULL);
 	enemyTexture[REA_SHOTGUN] = sfTexture_createFromFile("Assets/Texture/Enemy/rea_shotgun.png", NULL);
+	enemyTexture[SLIME] = sfTexture_createFromFile("Assets/Texture/Enemy/slime.png", NULL);
 	shadowTexture = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
 }
 
@@ -27,7 +28,7 @@ void LoadEnemyAnimation(Enemy* _enemy)
 		_enemy->anims[IDLE_E]->events = malloc(sizeof(AnimEvent));
 
 		first = (sfIntRect){ 0, 75 * 2, size.x / 8, size.y / 4 };
-		_enemy->anims[WALK_E] = CreateAnim(enemyTexture[REA_BASE], first, 8, 1 / 8.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfTrue);
+ 		_enemy->anims[WALK_E] = CreateAnim(enemyTexture[REA_BASE], first, 8, 1 / 8.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfTrue);
 		_enemy->anims[WALK_E]->aimOffset = (sfVector2f){ 0 };
 		_enemy->anims[WALK_E]->events = malloc(sizeof(AnimEvent));
 
@@ -35,7 +36,8 @@ void LoadEnemyAnimation(Enemy* _enemy)
 		_enemy->anims[DEATH_E] = CreateAnim(enemyTexture[REA_BASE], first, 4, 1 / 12.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfFalse);
 		_enemy->anims[DEATH_E]->aimOffset = (sfVector2f){ 0 };
 		_enemy->anims[DEATH_E]->events = malloc(sizeof(AnimEvent));
-	}break;
+		break;
+	}
 	case REA_SHOTGUN: {
 		sfVector2u size = sfTexture_getSize(enemyTexture[REA_SHOTGUN]);
 		sfIntRect first = { 0, 0, size.x / 8, size.y / 4 };
@@ -53,6 +55,23 @@ void LoadEnemyAnimation(Enemy* _enemy)
 		_enemy->anims[DEATH_E]->aimOffset = (sfVector2f){ 0 };
 		_enemy->anims[DEATH_E]->events = malloc(sizeof(AnimEvent));
 	}break;
+	case SLIME: {
+		sfVector2u size = sfTexture_getSize(enemyTexture[SLIME]);
+		sfIntRect first = { 0, 0, size.x / 4, size.y / 4 };
+		_enemy->anims[IDLE_E] = CreateAnim(enemyTexture[SLIME], first, 4, 1 / 8.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 8.f, (float)size.y / 12.f }, sfTrue);
+		_enemy->anims[IDLE_E]->aimOffset = (sfVector2f){ 0 };
+		_enemy->anims[IDLE_E]->events = malloc(sizeof(AnimEvent));
+
+		first = (sfIntRect){ 0, 60 * 2, size.x / 4, size.y / 4 };
+		_enemy->anims[WALK_E] = CreateAnim(enemyTexture[SLIME], first, 4, 1 / 8.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 8.f, (float)size.y / 12.f}, sfTrue);
+		_enemy->anims[WALK_E]->aimOffset = (sfVector2f){ 0 };
+		_enemy->anims[WALK_E]->events = malloc(sizeof(AnimEvent));
+
+		first = (sfIntRect){ 0,  60 * 3, size.x / 4, size.y / 4 }; 
+		_enemy->anims[DEATH_E] = CreateAnim(enemyTexture[SLIME], first, 3, 1 / 12.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 8.f, (float)size.y / 12.f	}, sfFalse);
+		_enemy->anims[DEATH_E]->aimOffset = (sfVector2f){ 0 };
+		_enemy->anims[DEATH_E]->events = malloc(sizeof(AnimEvent));
+	}break;
 	default:
 		break;
 	}
@@ -65,8 +84,19 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 		if (enemy[i].life > 0)
 		{
 			sfVector2f pos = sfSprite_getPosition(enemy[i].sprite);
-			sfRectangleShape_setPosition(enemy[i].collider, (sfVector2f) { pos.x + 2, pos.y + 2 });
 			sfSprite_setPosition(enemy[i].spriteShadow, (sfVector2f) { pos.x + 2, pos.y + 2 });
+			switch (enemy[i].type)
+			{
+			case REA_BASE:
+				sfRectangleShape_setPosition(enemy[i].collider, (sfVector2f) { pos.x + 2, pos.y + 2 });
+				break;
+			case REA_SHOTGUN:
+				sfRectangleShape_setPosition(enemy[i].collider, (sfVector2f) { pos.x + 2, pos.y + 2 });
+				break;
+			case SLIME:
+				sfRectangleShape_setPosition(enemy[i].collider, (sfVector2f) { pos.x + 2, pos.y + 20 });
+				break;
+			}
 
 			if (GetCurrentMap() == enemy[i].id)
 			{
@@ -157,7 +187,27 @@ void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
 		sfSprite_setOrigin(temp.sprite, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
 
 		temp.collider = sfRectangleShape_create();
-		sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 60 });
+		//Type
+		switch (_type)
+		{
+		case REA_BASE:
+			temp.life = 5;
+			temp.speed = 150;
+			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 60});
+			break;
+		case REA_SHOTGUN:
+			temp.life = 5;
+			temp.speed = 150;
+			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 60});
+			break;
+		case SLIME:
+			temp.life = 3;
+			temp.speed = 200;
+			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 40});
+			break;
+		default:
+			break;
+		}
 		sfRectangleShape_setOutlineThickness(temp.collider, 3);
 		sfRectangleShape_setOutlineColor(temp.collider, sfRed);
 		sfRectangleShape_setFillColor(temp.collider, (sfColor) { 0, 0, 0, 0 });
@@ -176,21 +226,6 @@ void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
 		temp.type = _type;
 
 		LoadEnemyAnimation(&temp);
-
-		//Type
-		switch (_type)
-		{
-		case REA_BASE:
-			temp.life = 5;
-			temp.speed = 150;
-			break;
-		case REA_SHOTGUN:
-			temp.life = 5;
-			temp.speed = 150;
-			break;
-		default:
-			break;
-		}
 
 		enemy[enemyCount] = temp;
 		enemyCount++;
@@ -225,7 +260,10 @@ void EnemyMove(int _ID, float _dt)
 		float radian = rotation * (float)(M_PI / 180);
 		enemy[_ID].velocity.x = (float)(sin(radian));
 		enemy[_ID].velocity.y = (float)(-cos(radian));
-		sfSprite_move(enemy[_ID].sprite, (sfVector2f) { enemy[_ID].velocity.x* enemy[_ID].speed* _dt, enemy[_ID].velocity.y* enemy[_ID].speed* _dt });
+		if (GetDistanceVector2f(pos, GetPlayerPos()) > 30)
+		{
+			sfSprite_move(enemy[_ID].sprite, (sfVector2f) { enemy[_ID].velocity.x* enemy[_ID].speed* _dt, enemy[_ID].velocity.y* enemy[_ID].speed* _dt });
+		}
 	}
 	else
 	{
@@ -290,6 +328,9 @@ void EnemyShoot(int _ID, float _dt)
 			}
 		}
 		break;
+	case SLIME:
+		
+		break;
 	default:
 		break;
 	}
@@ -303,10 +344,22 @@ void EnemyHandThing(int _ID, sfVector2f _pos)
 void EnemyHurt(int _ID)
 {
 	if (enemy[_ID].life > 0)
-	{
+	{ 
 		enemy[_ID].life--;
 		enemy[_ID].hurtFrame = 0.02f;
-		sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 75, 75, 75 });
+
+		switch (enemy[_ID].type)
+		{
+		case REA_BASE:
+			sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 75, 75, 75 });
+			break;
+		case REA_SHOTGUN:
+			sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 75, 75, 75 });
+			break;
+		case SLIME:
+			sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 60, 60, 60 });
+			break;
+		}
 	}
 }
 

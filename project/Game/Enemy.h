@@ -8,7 +8,8 @@
 typedef enum TypeEnemy
 {
 	REA_BASE,
-	REA_SHOTGUN
+	REA_SHOTGUN,
+	SLIME
 }TypeEnemy;
 
 typedef enum TextureEnemy
