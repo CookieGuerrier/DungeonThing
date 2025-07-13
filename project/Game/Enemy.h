@@ -34,12 +34,14 @@ typedef struct Enemy
 	sfVector2f velocity;
 	float speed;
 	sfBool isShooting;
+	int color;
 
 	float fireRate;
 	int fireThing;
 	float hurtFrame;
+	float stateTimer;
+	int state;
 }Enemy;
-
 
 void LoadEnemy(void);
 void LoadEnemyAnimation(Enemy* _enemy);
@@ -52,7 +54,6 @@ void DeleteEnemy(int _ID);
 
 void EnemyMove(int _ID, float _dt);
 void EnemyShoot(int _ID, float _dt);
-void EnemyHandThing(int _ID, sfVector2f _pos);
 void EnemyHurt(int _ID);
 
 int GetEnemyCount(void);

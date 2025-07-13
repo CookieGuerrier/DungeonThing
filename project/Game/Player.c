@@ -99,7 +99,6 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 	else if (sfKeyboard_isKeyPressed(sfKeyD) && !sfKeyboard_isKeyPressed(sfKeyQ))
 	{
 		PlayerMove(_dt, _window, sfKeyD);
-
 	}
 	else
 	{

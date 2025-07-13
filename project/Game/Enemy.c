@@ -28,7 +28,7 @@ void LoadEnemyAnimation(Enemy* _enemy)
 		_enemy->anims[IDLE_E]->events = malloc(sizeof(AnimEvent));
 
 		first = (sfIntRect){ 0, 75 * 2, size.x / 8, size.y / 4 };
- 		_enemy->anims[WALK_E] = CreateAnim(enemyTexture[REA_BASE], first, 8, 1 / 8.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfTrue);
+		_enemy->anims[WALK_E] = CreateAnim(enemyTexture[REA_BASE], first, 8, 1 / 8.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfTrue);
 		_enemy->anims[WALK_E]->aimOffset = (sfVector2f){ 0 };
 		_enemy->anims[WALK_E]->events = malloc(sizeof(AnimEvent));
 
@@ -63,12 +63,12 @@ void LoadEnemyAnimation(Enemy* _enemy)
 		_enemy->anims[IDLE_E]->events = malloc(sizeof(AnimEvent));
 
 		first = (sfIntRect){ 0, 60 * 2, size.x / 4, size.y / 4 };
-		_enemy->anims[WALK_E] = CreateAnim(enemyTexture[SLIME], first, 4, 1 / 8.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 8.f, (float)size.y / 12.f}, sfTrue);
+		_enemy->anims[WALK_E] = CreateAnim(enemyTexture[SLIME], first, 4, 1 / 8.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 8.f, (float)size.y / 12.f }, sfTrue);
 		_enemy->anims[WALK_E]->aimOffset = (sfVector2f){ 0 };
 		_enemy->anims[WALK_E]->events = malloc(sizeof(AnimEvent));
 
-		first = (sfIntRect){ 0,  60 * 3, size.x / 4, size.y / 4 }; 
-		_enemy->anims[DEATH_E] = CreateAnim(enemyTexture[SLIME], first, 3, 1 / 12.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 8.f, (float)size.y / 12.f	}, sfFalse);
+		first = (sfIntRect){ 0,  60 * 3, size.x / 4, size.y / 4 };
+		_enemy->anims[DEATH_E] = CreateAnim(enemyTexture[SLIME], first, 3, 1 / 12.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 8.f, (float)size.y / 12.f }, sfFalse);
 		_enemy->anims[DEATH_E]->aimOffset = (sfVector2f){ 0 };
 		_enemy->anims[DEATH_E]->events = malloc(sizeof(AnimEvent));
 	}break;
@@ -83,6 +83,7 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 	{
 		if (enemy[i].life > 0)
 		{
+			//Collider
 			sfVector2f pos = sfSprite_getPosition(enemy[i].sprite);
 			sfSprite_setPosition(enemy[i].spriteShadow, (sfVector2f) { pos.x + 2, pos.y + 2 });
 			switch (enemy[i].type)
@@ -98,11 +99,13 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 				break;
 			}
 
+			//Function
 			if (GetCurrentMap() == enemy[i].id)
 			{
 				EnemyMove(i, _dt);
 				EnemyShoot(i, _dt);
 			}
+			//Animations
 			if (enemy[i].hurtFrame > 0)
 			{
 				enemy[i].hurtFrame -= _dt;
@@ -121,12 +124,19 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 		}
 		else
 		{
+			//Death
 			if (!enemy[i].isDead)
 			{
 				RemoveEnemyCurrent();
 				sfFloatRect hitbox = GetEnemyHitBox(i);
 				AddNugget(hitbox);
 				enemy[i].isDead = sfTrue;
+			}
+			if (enemy[i].color > 160)
+			{
+				enemy[i].color--;
+				sfSprite_setColor(enemy[i].sprite, (sfColor) { enemy[i].color, enemy[i].color, enemy[i].color, 255 });
+
 			}
 			UpdateAnim(_dt, enemy[i].anims[DEATH_E]);
 		}
@@ -150,27 +160,15 @@ void CleanupEnemy(void)
 {
 	for (int i = 0; i < enemyCount; i++)
 	{
-		if (enemy[i].anims != NULL)
-		{
-			for (int y = 0; y < 3; y++)
-			{
-				if (enemy[i].anims[y] != NULL)
-				{
-					DestroyAnim(enemy[i].anims[y]);
-					enemy[i].anims[y] = NULL;
-				}
-			}
-			free(enemy[i].anims);
-			enemy[i].anims = NULL;
-		}
-	}
-
-	for (int i = 0; i < enemyCount; i++)
-	{
 		DeleteEnemy(i);
+		enemyCount++;
 	}
 	sfTexture_destroy(enemyTexture[REA_BASE]);
 	enemyTexture[REA_BASE] = NULL;
+	sfTexture_destroy(enemyTexture[REA_SHOTGUN]);
+	enemyTexture[REA_SHOTGUN] = NULL;
+	sfTexture_destroy(enemyTexture[SLIME]);
+	enemyTexture[SLIME] = NULL;
 }
 
 void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
@@ -187,23 +185,24 @@ void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
 		sfSprite_setOrigin(temp.sprite, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
 
 		temp.collider = sfRectangleShape_create();
+		temp.color = 255;
 		//Type
 		switch (_type)
 		{
 		case REA_BASE:
 			temp.life = 5;
 			temp.speed = 150;
-			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 60});
+			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 60 });
 			break;
 		case REA_SHOTGUN:
 			temp.life = 5;
 			temp.speed = 150;
-			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 60});
+			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 60 });
 			break;
 		case SLIME:
 			temp.life = 3;
 			temp.speed = 200;
-			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 40});
+			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 40 });
 			break;
 		default:
 			break;
@@ -239,7 +238,7 @@ void DeleteEnemy(int _ID)
 	sfSprite_destroy(enemy[_ID].spriteShadow);
 	enemy[_ID].spriteShadow = NULL;
 	sfRectangleShape_destroy(enemy[_ID].collider);
-	enemy[_ID].sprite = NULL;
+	enemy[_ID].collider = NULL;
 
 	for (int i = _ID; i < enemyCount - 1; i++)
 	{
@@ -256,10 +255,87 @@ void EnemyMove(int _ID, float _dt)
 	if (!enemy[_ID].isShooting && enemy[_ID].fireRate < 0.7f)
 	{
 		sfVector2f pos = sfSprite_getPosition(enemy[_ID].sprite);
+		sfFloatRect hitbox = sfSprite_getGlobalBounds(enemy[_ID].sprite);
 		float rotation = LookToDirection(GetPlayerPos(), pos) + 90;
 		float radian = rotation * (float)(M_PI / 180);
+		
+		//State
+		if (enemy[_ID].stateTimer > 0)
+		{
+			enemy[_ID].stateTimer -= _dt;
+		}
+		else
+		{
+			enemy[_ID].state = rand() % 3;
+			enemy[_ID].stateTimer = 2;
+		}
+
+		//States
+		switch (enemy[_ID].type)
+		{
+		case REA_BASE:
+			switch (enemy[_ID].state)
+			{
+			case 0:
+				radian -= 45;
+				break;
+			case 1:
+				radian -= 45;
+				break;
+			case 2:
+				radian += 45;
+				break;
+			}
+			break;
+		case REA_SHOTGUN:
+			switch (enemy[_ID].state)
+			{
+			case 1:
+				radian -= 45;
+				break;
+			case 2:
+				radian += 45;
+				break;
+			}
+			break;
+		case SLIME:
+			break;
+		}
+		
+		//Move
 		enemy[_ID].velocity.x = (float)(sin(radian));
-		enemy[_ID].velocity.y = (float)(-cos(radian));
+		enemy[_ID].velocity.y = (float)(-cos(radian)); 
+
+		//Collision
+		if (enemy[_ID].velocity.x > 0)
+		{ 
+			if (ObjectCollision((sfVector2f) { pos.x + hitbox.width / 2, pos.y }))
+			{
+				enemy[_ID].velocity.x = 0;
+			}
+		}
+		else 
+		{
+			if (ObjectCollision((sfVector2f) { pos.x - hitbox.width / 2, pos.y }))
+			{
+				enemy[_ID].velocity.x = 0;
+			}
+		}
+		if (enemy[_ID].velocity.y > 0)
+		{
+			if (ObjectCollision((sfVector2f) { pos.x, pos.y + hitbox.height / 2	}))
+			{
+				enemy[_ID].velocity.y = 0;
+			}
+		}
+		else
+		{
+			if (ObjectCollision((sfVector2f) { pos.x, pos.y - hitbox.height / 2 }))
+			{
+				enemy[_ID].velocity.y = 0;
+			}
+		}
+
 		if (GetDistanceVector2f(pos, GetPlayerPos()) > 30)
 		{
 			sfSprite_move(enemy[_ID].sprite, (sfVector2f) { enemy[_ID].velocity.x* enemy[_ID].speed* _dt, enemy[_ID].velocity.y* enemy[_ID].speed* _dt });
@@ -329,7 +405,7 @@ void EnemyShoot(int _ID, float _dt)
 		}
 		break;
 	case SLIME:
-		
+
 		break;
 	default:
 		break;
@@ -337,14 +413,10 @@ void EnemyShoot(int _ID, float _dt)
 
 }
 
-void EnemyHandThing(int _ID, sfVector2f _pos)
-{
-}
-
 void EnemyHurt(int _ID)
 {
 	if (enemy[_ID].life > 0)
-	{ 
+	{
 		enemy[_ID].life--;
 		enemy[_ID].hurtFrame = 0.02f;
 

@@ -87,6 +87,10 @@ void CleanupShop(void)
 {
 	sfTexture_destroy(textureItems[0]);
 	textureItems[0] = NULL;
+	sfTexture_destroy(textureItems[1]);
+	textureItems[1] = NULL;
+	sfFont_destroy(font);
+	font = NULL;
 	for (int i = 0; i < 3; i++)
 	{
 		sfSprite_destroy(itemShop[i].sprite);

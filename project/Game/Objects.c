@@ -55,12 +55,16 @@ void CleanupObject(void)
 	for (int i = 0; i < objectCount; i++)
 	{
 		DeleteObject(i);
+		objectCount++;
 	}
-	for (int i = 0; i < 5; i++)
+
+	for (int i = 0; i < 6; i++)
 	{
 		sfTexture_destroy(textureObject[i]);
 		textureObject[i] = NULL;
 	}
+	sfTexture_destroy(shadowTexture);
+	shadowTexture = NULL;
 }
 
 void AddObject(sfVector2f _pos, float _rot, ObjectType _type)

@@ -28,6 +28,7 @@ void CleanupWall(void)
 	for (int i = 0; i < wallCount; i++)
 	{
 		DeleteWall(i);
+		wallCount++;
 	}
 }
 
