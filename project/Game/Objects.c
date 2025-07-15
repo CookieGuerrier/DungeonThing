@@ -106,7 +106,7 @@ void AddObject(sfVector2f _pos, float _rot, ObjectType _type)
 			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width, hitbox.height - 60 }, sfFalse, objectCount);
 			break;
 		case BIG_HOLE:
-			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width, hitbox.height - 60 }, sfTrue, objectCount);
+			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width, hitbox.height }, sfTrue, objectCount);
 			break;
 		}
 

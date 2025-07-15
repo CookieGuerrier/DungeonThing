@@ -40,7 +40,9 @@ typedef struct Enemy
 	int fireThing;
 	float hurtFrame;
 	float stateTimer;
+	float misc;
 	int state;
+	float playerRot;
 }Enemy;
 
 void LoadEnemy(void);

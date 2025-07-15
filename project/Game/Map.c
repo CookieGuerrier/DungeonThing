@@ -458,7 +458,7 @@ void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
 		ran = rand() % 3;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
-		ran = rand() % 3;
+		ran = rand() % 3; 
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
 		break;
 	case EMPTY_CENTER:
@@ -474,8 +474,8 @@ void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 	case CROSS:
 		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 - 580, _hitbox.top + _hitbox.height / 2 - 280 }, 0, BIG_HOLE);
 		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 + 580, _hitbox.top + _hitbox.height / 2 - 280 }, 0, BIG_HOLE);
-		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 - 580, _hitbox.top + _hitbox.height / 2 + 325 }, 0, BIG_HOLE);
-		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 + 580, _hitbox.top + _hitbox.height / 2 + 325 }, 0, BIG_HOLE);
+		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 - 580, _hitbox.top + _hitbox.height / 2 + 340 }, 0, BIG_HOLE);
+		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 + 580, _hitbox.top + _hitbox.height / 2 + 340 }, 0, BIG_HOLE);
 		ran = rand() % 3;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
 		ran = rand() % 3;

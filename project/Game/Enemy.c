@@ -186,6 +186,7 @@ void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
 
 		temp.collider = sfRectangleShape_create();
 		temp.color = 255;
+		temp.misc = 1;
 		//Type
 		switch (_type)
 		{
@@ -236,7 +237,7 @@ void DeleteEnemy(int _ID)
 	sfSprite_destroy(enemy[_ID].sprite);
 	enemy[_ID].sprite = NULL;
 	sfSprite_destroy(enemy[_ID].spriteShadow);
-	enemy[_ID].spriteShadow = NULL; 
+	enemy[_ID].spriteShadow = NULL;
 	sfRectangleShape_destroy(enemy[_ID].collider);
 	enemy[_ID].collider = NULL;
 
@@ -256,9 +257,8 @@ void EnemyMove(int _ID, float _dt)
 	{
 		sfVector2f pos = sfSprite_getPosition(enemy[_ID].sprite);
 		sfFloatRect hitbox = sfSprite_getGlobalBounds(enemy[_ID].sprite);
-		float rotation = LookToDirection(GetPlayerPos(), pos) + 90;
-		float radian = rotation * (float)(M_PI / 180);
-		
+		float radian = 0;
+
 		//State
 		if (enemy[_ID].stateTimer > 0)
 		{
@@ -274,6 +274,8 @@ void EnemyMove(int _ID, float _dt)
 		switch (enemy[_ID].type)
 		{
 		case REA_BASE:
+			enemy[_ID].playerRot = LookToDirection(GetPlayerPos(), pos) + 90;
+			radian = enemy[_ID].playerRot * (float)(M_PI / 180);
 			switch (enemy[_ID].state)
 			{
 			case 0:
@@ -281,13 +283,17 @@ void EnemyMove(int _ID, float _dt)
 				break;
 			case 1:
 				radian -= 45;
-				break;
+				break; 
 			case 2:
 				radian += 45;
 				break;
 			}
+			enemy[_ID].velocity.x = (float)(sin(radian));
+			enemy[_ID].velocity.y = (float)(-cos(radian));
 			break;
 		case REA_SHOTGUN:
+			enemy[_ID].playerRot = LookToDirection(GetPlayerPos(), pos) + 90;
+			radian = enemy[_ID].playerRot * (float)(M_PI / 180);
 			switch (enemy[_ID].state)
 			{
 			case 1:
@@ -297,24 +303,46 @@ void EnemyMove(int _ID, float _dt)
 				radian += 45;
 				break;
 			}
+			enemy[_ID].velocity.x = (float)(sin(radian));
+			enemy[_ID].velocity.y = (float)(-cos(radian));
 			break;
 		case SLIME:
+			if (enemy[_ID].stateTimer < 0)
+			{
+				enemy[_ID].playerRot = LookToDirection(GetPlayerPos(), pos) + 90;
+				enemy[_ID].misc = 1;
+			}
+			else
+			{
+				if (enemy[_ID].misc > 0)
+				{
+					enemy[_ID].misc -= 0.008f;
+				}
+			}
+			radian = enemy[_ID].playerRot * (float)(M_PI / 180);
+			switch (enemy[_ID].state)
+			{
+			case 1:
+				radian -= 0.2f;
+				break;
+			case 2:
+				radian += 0.2f;
+				break;
+			}
+			enemy[_ID].velocity.x = (float)(sin(radian) * enemy[_ID].misc);
+			enemy[_ID].velocity.y = (float)(-cos(radian) * enemy[_ID].misc);
 			break;
 		}
-		
-		//Move
-		enemy[_ID].velocity.x = (float)(sin(radian));
-		enemy[_ID].velocity.y = (float)(-cos(radian)); 
 
 		//Collision
 		if (enemy[_ID].velocity.x > 0)
-		{ 
+		{
 			if (ObjectCollision((sfVector2f) { pos.x + hitbox.width / 2, pos.y }))
 			{
 				enemy[_ID].velocity.x = 0;
 			}
 		}
-		else 
+		else
 		{
 			if (ObjectCollision((sfVector2f) { pos.x - hitbox.width / 2, pos.y }))
 			{
@@ -323,7 +351,7 @@ void EnemyMove(int _ID, float _dt)
 		}
 		if (enemy[_ID].velocity.y > 0)
 		{
-			if (ObjectCollision((sfVector2f) { pos.x, pos.y + hitbox.height / 2	}))
+			if (ObjectCollision((sfVector2f) { pos.x, pos.y + hitbox.height / 2 }))
 			{
 				enemy[_ID].velocity.y = 0;
 			}

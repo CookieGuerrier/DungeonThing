@@ -221,7 +221,7 @@ void PlayerMove(float _dt, sfRenderWindow* _window, sfKeyCode _key)
 	switch (_key)
 	{
 	case sfKeyZ:
-		if (!MoveCollision((sfFloatRect) { hitbox.left + 10, hitbox.top - 12, hitbox.width - 10, hitbox.height / 2 }))
+		if (!MoveCollision((sfFloatRect) { hitbox.left + 10, hitbox.top + 30, hitbox.width - 10, hitbox.height / 2 }))
 		{
 			player.velocity.y = -player.speed * _dt;
 		}
@@ -241,7 +241,7 @@ void PlayerMove(float _dt, sfRenderWindow* _window, sfKeyCode _key)
 		}
 		break;
 	case sfKeyQ:
-		if (!MoveCollision((sfFloatRect) { hitbox.left, hitbox.top + 4, hitbox.width / 2, hitbox.height - 4 }))
+		if (!MoveCollision((sfFloatRect) { hitbox.left, hitbox.top + 40, hitbox.width / 2, hitbox.height - 40 }))
 		{
 			player.velocity.x = -player.speed * _dt;
 		}
@@ -255,7 +255,7 @@ void PlayerMove(float _dt, sfRenderWindow* _window, sfKeyCode _key)
 		}
 		break;
 	case sfKeyD:
-		if (!MoveCollision((sfFloatRect) { hitbox.left + hitbox.width / 2 + 12, hitbox.top + 7, hitbox.width / 2, hitbox.height - 7 }))
+		if (!MoveCollision((sfFloatRect) { hitbox.left + hitbox.width / 2 + 12, hitbox.top + 42, hitbox.width / 2, hitbox.height - 42 }))
 		{
 			player.velocity.x = player.speed * _dt;
 		}
