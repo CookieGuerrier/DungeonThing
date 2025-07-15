@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\No\u00E9\\Documents\\GitHub\\DungeonThing\\project\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\No\u00E9\\Documents\\GitHub\\DungeonThing\\project\\Game\\Enemy.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Enemy.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\No\u00E9\\Documents\\GitHub\\DungeonThing\\project\\Game\\Objects.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Objects.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\No\u00E9\\Documents\\GitHub\\DungeonThing\\project\\Game\\Walls.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Walls.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|C:\\Users\\No\u00E9\\Documents\\GitHub\\DungeonThing\\project\\Game\\Bullet.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{1A590E2D-7A67-4E88-816F-E7C5AE766404}|Game\\Game.vcxproj|solutionrelative:Game\\Bullet.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +27,40 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Enemy.c",
-              "DocumentMoniker": "C:\\Users\\No\u00E9\\Documents\\GitHub\\DungeonThing\\project\\Game\\Enemy.c",
-              "RelativeDocumentMoniker": "Game\\Enemy.c",
-              "ToolTip": "C:\\Users\\No\u00E9\\Documents\\GitHub\\DungeonThing\\project\\Game\\Enemy.c",
-              "RelativeToolTip": "Game\\Enemy.c",
-              "ViewState": "AgIAANQAAAAAAAAAAAAewO4AAAAgAAAAAAAAAA==",
+              "Title": "Objects.c",
+              "DocumentMoniker": "C:\\Users\\No\u00E9\\Documents\\GitHub\\DungeonThing\\project\\Game\\Objects.c",
+              "RelativeDocumentMoniker": "Game\\Objects.c",
+              "ToolTip": "C:\\Users\\No\u00E9\\Documents\\GitHub\\DungeonThing\\project\\Game\\Objects.c",
+              "RelativeToolTip": "Game\\Objects.c",
+              "ViewState": "AgIAAFQAAAAAAAAAAADgv1IAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2025-07-13T19:04:56.639Z",
+              "WhenOpened": "2025-07-14T23:14:53.549Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Walls.c",
+              "DocumentMoniker": "C:\\Users\\No\u00E9\\Documents\\GitHub\\DungeonThing\\project\\Game\\Walls.c",
+              "RelativeDocumentMoniker": "Game\\Walls.c",
+              "ToolTip": "C:\\Users\\No\u00E9\\Documents\\GitHub\\DungeonThing\\project\\Game\\Walls.c",
+              "RelativeToolTip": "Game\\Walls.c",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAAAFYAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2025-07-14T23:11:42.727Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Bullet.c",
+              "DocumentMoniker": "C:\\Users\\No\u00E9\\Documents\\GitHub\\DungeonThing\\project\\Game\\Bullet.c",
+              "RelativeDocumentMoniker": "Game\\Bullet.c",
+              "ToolTip": "C:\\Users\\No\u00E9\\Documents\\GitHub\\DungeonThing\\project\\Game\\Bullet.c",
+              "RelativeToolTip": "Game\\Bullet.c",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAACsAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2025-07-14T23:11:24.676Z",
               "EditorCaption": ""
             }
           ]

@@ -32,13 +32,13 @@ void CleanupWall(void)
 	}
 }
 
-void AddWall(sfVector2f _pos, sfBool _rotate, sfVector2f _size, sfBool _isBreakable)
+void AddWall(sfVector2f _pos, sfBool _rotate, sfVector2f _size, sfBool _bulletThrough, int _object)
 {
 	if (wallCount < 500)
 	{
 		Wall wall2 = { 0 };
 		wall2.collider = sfRectangleShape_create();
-		wall2.isBreakable = _isBreakable;
+		wall2.bulletThrough = _bulletThrough;
 
 		sfFloatRect hitbox = sfRectangleShape_getGlobalBounds(wall2.collider);
 		sfRectangleShape_setOrigin(wall2.collider, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
@@ -85,11 +85,10 @@ sfBool BulletCollision(sfFloatRect _hitbox)
 		sfFloatRect collision = sfRectangleShape_getGlobalBounds(wall[i].collider);
 		if (sfFloatRect_intersects(&collision, &hitbox, NULL))
 		{
-			//if (wall[i].isBreakable)
+			if (!wall[i].bulletThrough)
 			{
-				//DeleteWall(i);
+				return sfTrue;
 			}
-			return sfTrue;
 		}
 	}
 	return sfFalse;

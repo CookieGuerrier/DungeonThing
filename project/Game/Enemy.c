@@ -236,7 +236,7 @@ void DeleteEnemy(int _ID)
 	sfSprite_destroy(enemy[_ID].sprite);
 	enemy[_ID].sprite = NULL;
 	sfSprite_destroy(enemy[_ID].spriteShadow);
-	enemy[_ID].spriteShadow = NULL;
+	enemy[_ID].spriteShadow = NULL; 
 	sfRectangleShape_destroy(enemy[_ID].collider);
 	enemy[_ID].collider = NULL;
 

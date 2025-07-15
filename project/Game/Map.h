@@ -32,8 +32,10 @@ typedef enum ElementType
 
 typedef enum BattleType
 {
-	ONE,
-	TWO,
+	EMPTY_SIDES,
+	EMPTY_CENTER,
+	CROSS,
+	CENTER_BRIDGE,
 	MAX_LEVEL
 }BattleType;
 

@@ -13,7 +13,7 @@ void LoadPlayer(void)
 	//Stats
 	player.speed = 500;
 	player.life = 0;
-	player.gold = 30;
+	player.gold = 0;
 
 	//Sprite
 	player.sprite = sfSprite_create();
@@ -154,8 +154,8 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 
 	//Movements
 	pos = sfSprite_getPosition(player.sprite);
-	sfRectangleShape_setPosition(player.collider, (sfVector2f) { pos.x + 4, pos.y + 4 });
-	sfSprite_setPosition(player.spriteShadow, (sfVector2f) { pos.x + 2, pos.y + 2 });
+	sfRectangleShape_setPosition(player.collider, (sfVector2f) { pos.x, pos.y + 5});
+	sfSprite_setPosition(player.spriteShadow, (sfVector2f) { pos.x, pos.y });
 
 	//Animations
 	if (player.hurtFrame > 0)

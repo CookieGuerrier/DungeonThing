@@ -231,82 +231,45 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 	//Up
 	if (_type == D || _type == LRD || _type == LR || _type == L || _type == R)
 	{
-		AddWall((sfVector2f) { hitbox.left, hitbox.top }, sfFalse, (sfVector2f) { SCREEN_WIDTH, 80 }, sfFalse);
+		AddWall((sfVector2f) { hitbox.left, hitbox.top }, sfFalse, (sfVector2f) { SCREEN_WIDTH, 80 }, sfFalse, 500);
 	}
 	else
 	{
-		AddWall((sfVector2f) { hitbox.left, hitbox.top }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 }, sfFalse);
-		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH / 2 + 70, hitbox.top }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 }, sfFalse);
+		AddWall((sfVector2f) { hitbox.left, hitbox.top }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 }, sfFalse, 500);
+		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH / 2 + 70, hitbox.top }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 }, sfFalse, 500);
 	}
 	//Down
 	if (_type == LR || _type == LRU || _type == L || _type == R || _type == U)
 	{
 
-		AddWall((sfVector2f) { hitbox.left, hitbox.top + SCREEN_HEIGHT - 40 }, sfFalse, (sfVector2f) { SCREEN_WIDTH, 40 }, sfFalse);
+		AddWall((sfVector2f) { hitbox.left, hitbox.top + SCREEN_HEIGHT - 40 }, sfFalse, (sfVector2f) { SCREEN_WIDTH, 40 }, sfFalse, 500);
 	}
 	else
 	{
-		AddWall((sfVector2f) { hitbox.left, hitbox.top + SCREEN_HEIGHT - 40 }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 }, sfFalse);
-		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH / 2 + 70, hitbox.top + SCREEN_HEIGHT - 40 }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 }, sfFalse);
+		AddWall((sfVector2f) { hitbox.left, hitbox.top + SCREEN_HEIGHT - 40 }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 }, sfFalse, 500);
+		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH / 2 + 70, hitbox.top + SCREEN_HEIGHT - 40 }, sfFalse, (sfVector2f) { SCREEN_WIDTH / 2 - 70, 80 }, sfFalse, 500);
 	}
 	//Right
 	if (_type == D || _type == L || _type == U)
 	{
-		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT, 40 }, sfFalse);
+		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT, 40 }, sfFalse, 500);
 	}
 	else
 	{
-		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH, hitbox.top + SCREEN_HEIGHT / 2 + 70 }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 }, sfFalse);
-		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 }, sfFalse);
+		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH, hitbox.top + SCREEN_HEIGHT / 2 + 70 }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 }, sfFalse, 500);
+		AddWall((sfVector2f) { hitbox.left + SCREEN_WIDTH, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 }, sfFalse, 500);
 	}
 	//Left
 	if (_type == D || _type == R || _type == U)
 	{
-		AddWall((sfVector2f) { hitbox.left + 40, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT, 40 }, sfFalse);
+		AddWall((sfVector2f) { hitbox.left + 40, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT, 40 }, sfFalse, 500);
 	}
 	else
 	{
-		AddWall((sfVector2f) { hitbox.left + 40, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 }, sfFalse);
-		AddWall((sfVector2f) { hitbox.left + 40, hitbox.top + SCREEN_HEIGHT / 2 + 70 }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 }, sfFalse);
+		AddWall((sfVector2f) { hitbox.left + 40, hitbox.top }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 }, sfFalse, 500);
+		AddWall((sfVector2f) { hitbox.left + 40, hitbox.top + SCREEN_HEIGHT / 2 + 70 }, sfTrue, (sfVector2f) { SCREEN_HEIGHT / 2 - 70, 40 }, sfFalse, 500);
 	}
 
-	//Object
-	int prob = 20;
-	//Left
-	for (size_t i = 3; i < 19; i++)
-	{
-		int randBull = rand() % prob;
-		if (i != 9 && i != 10 && i != 11 && randBull == 0)
-		{
-			AddObject((sfVector2f) { hitbox.left + 70, hitbox.top + (60 * i) - 60 }, 0, POT);
-		}
-	}
-	//Right
-	for (size_t i = 3; i < 19; i++)
-	{
-		int randBull = rand() % prob;
-		if (i != 9 && i != 10 && i != 11 && randBull == 0)
-		{
-			AddObject((sfVector2f) { hitbox.left + hitbox.width - 70, hitbox.top + (60 * i) - 60 }, 0, POT);
-		}
-	}
-	//Up
-	for (size_t i = 2; i < 30; i++)
-	{
-		int randBull = rand() % prob;
-		if (i != 15 && i != 16 && i != 17 && randBull == 0)
-		{
-			AddObject((sfVector2f) { hitbox.left + (60 * i) + 10, hitbox.top + 120 }, 0, POT);
-		}
-	}
-	for (size_t i = 2; i < 30; i++)
-	{
-		int randBull = rand() % prob;
-		if (i != 15 && i != 16 && i != 17 && randBull == 0)
-		{
-			AddObject((sfVector2f) { hitbox.left + (60 * i) + 10, hitbox.top + hitbox.height - 60 }, 0, POT);
-		}
-	}
 	AddMiniMap(_pos, temp.element);
 
 	//Type of stuff
@@ -334,6 +297,55 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		break;
 	}
 
+	//Object
+	int prob = 20;
+	//Left
+	for (size_t i = 3; i < 19; i++)
+	{
+		int randBull = rand() % prob;
+		if (i != 9 && i != 10 && i != 11 && randBull == 0)
+		{
+			if (!ObjectCollision((sfVector2f) { hitbox.left + 70, hitbox.top + (60 * i) - 60 }))
+			{
+				AddObject((sfVector2f) { hitbox.left + 70, hitbox.top + (60 * i) - 60 }, 0, POT);
+			}
+		}
+	}
+	//Right
+	for (size_t i = 3; i < 19; i++)
+	{
+		int randBull = rand() % prob;
+		if (i != 9 && i != 10 && i != 11 && randBull == 0)
+		{
+			if (!ObjectCollision((sfVector2f) { hitbox.left + hitbox.width - 70, hitbox.top + (60 * i) - 60 }))
+			{
+				AddObject((sfVector2f) { hitbox.left + hitbox.width - 70, hitbox.top + (60 * i) - 60 }, 0, POT);
+			}
+		}
+	}
+	//Up
+	for (size_t i = 2; i < 30; i++)
+	{
+		int randBull = rand() % prob;
+		if (i != 15 && i != 16 && i != 17 && randBull == 0)
+		{
+			if (!ObjectCollision((sfVector2f) { hitbox.left + (60 * i) + 10, hitbox.top + 120 }))
+			{
+				AddObject((sfVector2f) { hitbox.left + (60 * i) + 10, hitbox.top + 120 }, 0, POT);
+			}
+		}
+	}
+	for (size_t i = 2; i < 30; i++)
+	{
+		int randBull = rand() % prob;
+		if (i != 15 && i != 16 && i != 17 && randBull == 0)
+		{
+			if (!ObjectCollision((sfVector2f) { hitbox.left + (60 * i) + 10, hitbox.top + hitbox.height - 60 }))
+			{
+				AddObject((sfVector2f) { hitbox.left + (60 * i) + 10, hitbox.top + hitbox.height - 60 }, 0, POT);
+			}
+		}
+	}
 
 	map[mapCount] = temp;
 	mapCount++;
@@ -436,20 +448,54 @@ void CreateLevel(int _pathLength)
 
 void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 {
-	int ran = rand() % 3;
+	int ran = rand() % MAX_LEVEL;
 	switch (_type)
 	{
-	case ONE:
+	case EMPTY_SIDES:
 		ran = rand() % 3;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
 		ran = rand() % 3;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
 		break;
-	case TWO:
+	case EMPTY_CENTER:
 		ran = rand() % 3;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
 		ran = rand() % 3;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 + 200 }, mapCount);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 - 200 }, mapCount);
+		break;
+	case CROSS:
+		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 - 580, _hitbox.top + _hitbox.height / 2 - 280 }, 0, BIG_HOLE);
+		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 + 580, _hitbox.top + _hitbox.height / 2 - 280 }, 0, BIG_HOLE);
+		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 - 580, _hitbox.top + _hitbox.height / 2 + 325 }, 0, BIG_HOLE);
+		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 + 580, _hitbox.top + _hitbox.height / 2 + 325 }, 0, BIG_HOLE);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 + 200 }, mapCount);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 - 200 }, mapCount);
+		break;
+	case CENTER_BRIDGE:
+		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 - 400, _hitbox.top + _hitbox.height / 2 }, 0, BIG_HOLE);
+		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 + 400, _hitbox.top + _hitbox.height / 2 }, 0, BIG_HOLE);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 + 200 }, mapCount);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 - 200 }, mapCount);
 		break;
 	default:
 		break;
