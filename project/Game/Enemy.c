@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 Enemy enemy[100];
-sfTexture* enemyTexture[3];
+sfTexture* enemyTexture[4];
 sfTexture* shadowTexture;
 int enemyCount;
 
@@ -11,6 +11,7 @@ void LoadEnemy(void)
 	enemyTexture[REA_BASE] = sfTexture_createFromFile("Assets/Texture/Enemy/rea_base.png", NULL);
 	enemyTexture[REA_SHOTGUN] = sfTexture_createFromFile("Assets/Texture/Enemy/rea_shotgun.png", NULL);
 	enemyTexture[SLIME] = sfTexture_createFromFile("Assets/Texture/Enemy/slime.png", NULL);
+	enemyTexture[TORMENTED_SOUL] = sfTexture_createFromFile("Assets/Texture/Enemy/tormented_soul.png", NULL);
 	shadowTexture = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
 }
 
@@ -72,6 +73,23 @@ void LoadEnemyAnimation(Enemy* _enemy)
 		_enemy->anims[DEATH_E]->aimOffset = (sfVector2f){ 0 };
 		_enemy->anims[DEATH_E]->events = malloc(sizeof(AnimEvent));
 	}break;
+	case TORMENTED_SOUL: {
+		sfVector2u size = sfTexture_getSize(enemyTexture[TORMENTED_SOUL]);
+		sfIntRect first = { 0, 0, size.x / 8, size.y / 2 };
+		_enemy->anims[WALK_E] = CreateAnim(enemyTexture[TORMENTED_SOUL], first, 8, 1 / 8.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfTrue);
+		_enemy->anims[WALK_E]->aimOffset = (sfVector2f){ 0 };
+		_enemy->anims[WALK_E]->events = malloc(sizeof(AnimEvent));
+
+		first = (sfIntRect){ 0, 0, size.x / 8, size.y / 2 };
+		_enemy->anims[IDLE_E] = CreateAnim(enemyTexture[TORMENTED_SOUL], first, 8, 1 / 8.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfTrue);
+		_enemy->anims[IDLE_E]->aimOffset = (sfVector2f){ 0 };
+		_enemy->anims[IDLE_E]->events = malloc(sizeof(AnimEvent));
+
+		first = (sfIntRect){ 0, 85, size.x / 8, size.y / 2 };
+		_enemy->anims[DEATH_E] = CreateAnim(enemyTexture[TORMENTED_SOUL], first, 8, 1 / 12.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfFalse);
+		_enemy->anims[DEATH_E]->aimOffset = (sfVector2f){ 0 };
+		_enemy->anims[DEATH_E]->events = malloc(sizeof(AnimEvent));
+	}break;
 	default:
 		break;
 	}
@@ -96,6 +114,14 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 				break;
 			case SLIME:
 				sfRectangleShape_setPosition(enemy[i].collider, (sfVector2f) { pos.x + 2, pos.y + 20 });
+				break;
+			case TORMENTED_SOUL:
+				sfRectangleShape_setPosition(enemy[i].collider, (sfVector2f) { pos.x + 2, pos.y + 20 });
+
+				if (GetEnemyMap(GetCurrentMap()) == 1)
+				{
+					enemy[i].life--;
+				}
 				break;
 			}
 
@@ -147,7 +173,10 @@ void DrawEnemy(sfRenderWindow* _window, sfBool _debug)
 {
 	for (int i = 0; i < enemyCount; i++)
 	{
-		sfRenderWindow_drawSprite(_window, enemy[i].spriteShadow, NULL);
+		if (enemy[i].type != TORMENTED_SOUL)
+		{
+			sfRenderWindow_drawSprite(_window, enemy[i].spriteShadow, NULL);
+		}
 		sfRenderWindow_drawSprite(_window, enemy[i].sprite, NULL);
 		if (_debug)
 		{
@@ -169,6 +198,8 @@ void CleanupEnemy(void)
 	enemyTexture[REA_SHOTGUN] = NULL;
 	sfTexture_destroy(enemyTexture[SLIME]);
 	enemyTexture[SLIME] = NULL;
+	sfTexture_destroy(enemyTexture[TORMENTED_SOUL]);
+	enemyTexture[TORMENTED_SOUL] = NULL;
 }
 
 void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
@@ -202,8 +233,13 @@ void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
 			break;
 		case SLIME:
 			temp.life = 3;
-			temp.speed = 200;
+			temp.speed = 300;
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 40 });
+			break;
+		case TORMENTED_SOUL:
+			temp.life = 1;
+			temp.speed = 150;
+			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 60, 85 });
 			break;
 		default:
 			break;
@@ -283,7 +319,7 @@ void EnemyMove(int _ID, float _dt)
 				break;
 			case 1:
 				radian -= 45;
-				break; 
+				break;
 			case 2:
 				radian += 45;
 				break;
@@ -332,35 +368,44 @@ void EnemyMove(int _ID, float _dt)
 			enemy[_ID].velocity.x = (float)(sin(radian) * enemy[_ID].misc);
 			enemy[_ID].velocity.y = (float)(-cos(radian) * enemy[_ID].misc);
 			break;
+		case TORMENTED_SOUL:
+			enemy[_ID].playerRot = LookToDirection(GetPlayerPos(), pos) + 90;
+			radian = enemy[_ID].playerRot * (float)(M_PI / 180);
+			enemy[_ID].velocity.x = (float)(sin(radian) * enemy[_ID].misc);
+			enemy[_ID].velocity.y = (float)(-cos(radian) * enemy[_ID].misc);
+			break;
 		}
 
 		//Collision
-		if (enemy[_ID].velocity.x > 0)
+		if (enemy[_ID].type != TORMENTED_SOUL)
 		{
-			if (ObjectCollision((sfVector2f) { pos.x + hitbox.width / 2, pos.y }))
+			if (enemy[_ID].velocity.x > 0)
 			{
-				enemy[_ID].velocity.x = 0;
+				if (ObjectCollision((sfVector2f) { pos.x + hitbox.width / 2, pos.y }))
+				{
+					enemy[_ID].velocity.x = 0;
+				}
 			}
-		}
-		else
-		{
-			if (ObjectCollision((sfVector2f) { pos.x - hitbox.width / 2, pos.y }))
+			else
 			{
-				enemy[_ID].velocity.x = 0;
+				if (ObjectCollision((sfVector2f) { pos.x - hitbox.width / 2, pos.y }))
+				{
+					enemy[_ID].velocity.x = 0;
+				}
 			}
-		}
-		if (enemy[_ID].velocity.y > 0)
-		{
-			if (ObjectCollision((sfVector2f) { pos.x, pos.y + hitbox.height / 2 }))
+			if (enemy[_ID].velocity.y > 0)
 			{
-				enemy[_ID].velocity.y = 0;
+				if (ObjectCollision((sfVector2f) { pos.x, pos.y + hitbox.height / 2 }))
+				{
+					enemy[_ID].velocity.y = 0;
+				}
 			}
-		}
-		else
-		{
-			if (ObjectCollision((sfVector2f) { pos.x, pos.y - hitbox.height / 2 }))
+			else
 			{
-				enemy[_ID].velocity.y = 0;
+				if (ObjectCollision((sfVector2f) { pos.x, pos.y - hitbox.height / 2 }))
+				{
+					enemy[_ID].velocity.y = 0;
+				}
 			}
 		}
 
@@ -432,9 +477,6 @@ void EnemyShoot(int _ID, float _dt)
 			}
 		}
 		break;
-	case SLIME:
-
-		break;
 	default:
 		break;
 	}
@@ -443,7 +485,7 @@ void EnemyShoot(int _ID, float _dt)
 
 void EnemyHurt(int _ID)
 {
-	if (enemy[_ID].life > 0)
+	if (enemy[_ID].life > 0 && enemy[_ID].type != TORMENTED_SOUL)
 	{
 		enemy[_ID].life--;
 		enemy[_ID].hurtFrame = 0.02f;
@@ -475,7 +517,7 @@ sfFloatRect GetEnemyHitBox(int _ID)
 
 sfBool IsEnemyAlive(int _ID)
 {
-	if (enemy[_ID].life > 0)
+	if (enemy[_ID].life > 0 && enemy[_ID].type != TORMENTED_SOUL)
 	{
 		return sfTrue;
 	}

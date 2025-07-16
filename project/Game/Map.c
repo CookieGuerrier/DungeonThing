@@ -500,6 +500,11 @@ void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 	default:
 		break;
 	}
+	ran = rand() % 8;
+	if (ran == 0)
+	{
+		AddEnemy(TORMENTED_SOUL, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 - 200 }, mapCount);
+	}
 }
 
 void RemoveEnemyCurrent(void)
