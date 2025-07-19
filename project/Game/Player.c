@@ -13,7 +13,7 @@ void LoadPlayer(void)
 	//Stats
 	player.speed = 500;
 	player.life = 0;
-	player.gold = 0;
+	player.gold = 300;
 
 	//Sprite
 	player.sprite = sfSprite_create();
@@ -154,7 +154,7 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 
 	//Movements
 	pos = sfSprite_getPosition(player.sprite);
-	sfRectangleShape_setPosition(player.collider, (sfVector2f) { pos.x, pos.y + 5});
+	sfRectangleShape_setPosition(player.collider, (sfVector2f) { pos.x, pos.y + 5 });
 	sfSprite_setPosition(player.spriteShadow, (sfVector2f) { pos.x, pos.y });
 
 	//Animations
@@ -162,7 +162,7 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 	{
 		player.hurtFrame -= _dt;
 	}
-	else 
+	else
 	{
 		if (player.velocity.x == 0 && player.velocity.y == 0)
 		{
@@ -210,7 +210,7 @@ void CleanupPlayer(void)
 	player.spriteShadow = NULL;
 	sfTexture_destroy(shadowTexture);
 	shadowTexture = NULL;
-  	sfRectangleShape_destroy(player.collider);
+	sfRectangleShape_destroy(player.collider);
 	player.collider = NULL;
 }
 
@@ -324,7 +324,7 @@ void GainLife(int _life)
 	for (int i = 0; i < _life; i++)
 	{
 		player.life++;
-		AddLifePoint();
+		AddLife(); 
 	}
 }
 
@@ -348,8 +348,8 @@ void LoseLife(int _life)
 		{
 			if (player.life > 0)
 				player.life--;
-			DeleteLifePoint();
 			player.invFrame = 1.2f;
+			DeleteLife();
 			sfSprite_setTextureRect(player.sprite, (sfIntRect) { 0, 80, 80, 80 });
 			player.hurtFrame = 0.05f;
 			sfSprite_setColor(player.spriteHand, (sfColor) { 255, 255, 255, 0 });
@@ -365,7 +365,7 @@ void PlayerTransition(int _num)
 		sfSprite_move(player.sprite, (sfVector2f) { 0, 100 });
 		break;
 	case 1:
-		sfSprite_move(player.sprite, (sfVector2f) { 0, -100	});
+		sfSprite_move(player.sprite, (sfVector2f) { 0, -100 });
 		break;
 	case 2:
 		sfSprite_move(player.sprite, (sfVector2f) { 100, 0 });

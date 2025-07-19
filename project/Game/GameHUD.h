@@ -20,8 +20,8 @@ void UpdateGameHUD(float _dt);
 void DrawGameHUD(sfRenderWindow* _window, sfBool _debug);
 void CleanupGameHUD(void);
 
-void AddLifePoint(void);
-void DeleteLifePoint(void);
+void AddLife(void);
+void DeleteLife(void);
 
 void UpdateText(sfText* const _text, int _value);
 void UpdateGold(int _value);

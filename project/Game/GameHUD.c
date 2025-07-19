@@ -1,34 +1,46 @@
 #include "GameHUD.h"
 
-LifePoints* lifePoints = NULL;
+LifePoints lifePoints[3];
 GameHUD gameHUD[1];
-sfTexture* lifeTexture[2];
-sfTexture* goldTexture;
-int lifeCount;
+int currentLife;
 
+sfTexture* lifeTexture[3];
+sfTexture* goldTexture;
 sfFont* font;
 
 void LoadGameHUD(void)
 {
 	font = sfFont_createFromFile("Assets/Font/font.ttf");
+	currentLife = 0;
 
 	//Life
-	lifeCount = 0;
-	lifePoints = calloc(1, sizeof(LifePoints));
-	if (!lifePoints)
-	{
-		fprintf(stderr, "Erreur d'allocation memoire pour enemyList.\n");
-		return;
-	}
 	lifeTexture[0] = sfTexture_createFromFile("Assets/Texture/HUD/life.png", NULL);
 	lifeTexture[1] = sfTexture_createFromFile("Assets/Texture/HUD/lifehalf.png", NULL);
+	lifeTexture[2] = sfTexture_createFromFile("Assets/Texture/HUD/lifeempty.png", NULL);
 	goldTexture = sfTexture_createFromFile("Assets/Texture/HUD/gold.png", NULL);
+
+	lifePoints[0].sprite = sfSprite_create();
+	sfSprite_setTexture(lifePoints[0].sprite, lifeTexture[2], sfTrue);
+	sfFloatRect hitbox = sfSprite_getGlobalBounds(lifePoints[0].sprite);
+	sfSprite_setOrigin(lifePoints[0].sprite, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
+	sfSprite_setPosition(lifePoints[0].sprite, (sfVector2f) { (float)(100 * 0) - 350.f, 50.f });
+	lifePoints[1].sprite = sfSprite_create();
+	sfSprite_setTexture(lifePoints[1].sprite, lifeTexture[2], sfTrue);
+	hitbox = sfSprite_getGlobalBounds(lifePoints[1].sprite);
+	sfSprite_setOrigin(lifePoints[1].sprite, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
+	sfSprite_setPosition(lifePoints[1].sprite, (sfVector2f) { (float)(100 * 1) - 350.f, 50.f });
+	lifePoints[2].sprite = sfSprite_create();
+	sfSprite_setTexture(lifePoints[2].sprite, lifeTexture[2], sfTrue);
+	hitbox = sfSprite_getGlobalBounds(lifePoints[2].sprite);
+	sfSprite_setOrigin(lifePoints[2].sprite, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
+	sfSprite_setPosition(lifePoints[2].sprite, (sfVector2f) { (float)(100 * 2) - 350.f, 50.f });
+
 	GainLife(6);
 
 	//Gold
 	gameHUD[0].sprite = sfSprite_create();
 	sfSprite_setTexture(gameHUD[0].sprite, goldTexture, sfTrue);
-	sfFloatRect hitbox = sfSprite_getGlobalBounds(gameHUD[0].sprite);
+	hitbox = sfSprite_getGlobalBounds(gameHUD[0].sprite);
 	sfSprite_setOrigin(gameHUD[0].sprite, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
 	sfSprite_setPosition(gameHUD[0].sprite, (sfVector2f) { -400, 150 });
 
@@ -43,29 +55,34 @@ void LoadGameHUD(void)
 
 void UpdateGameHUD(float _dt)
 {
-	
+	printf("%d\n", currentLife);
 }
 
 void DrawGameHUD(sfRenderWindow* _window, sfBool _debug)
 {
-	for (int i = 0; i < lifeCount; i++)
-	{
-		sfRenderWindow_drawSprite(_window, lifePoints[i].sprite, NULL);
-	}
+	sfRenderWindow_drawSprite(_window, lifePoints[0].sprite, NULL);
+	sfRenderWindow_drawSprite(_window, lifePoints[1].sprite, NULL);
+	sfRenderWindow_drawSprite(_window, lifePoints[2].sprite, NULL);
+
 	sfRenderWindow_drawSprite(_window, gameHUD[0].sprite, NULL);
 	sfRenderWindow_drawText(_window, gameHUD[0].text, NULL);
 }
 
 void CleanupGameHUD(void)
 {
-	for (int i = 0; i < lifeCount; i++)
-	{
-		DeleteLifePoint();
-	}
+	sfSprite_destroy(lifePoints[0].sprite);
+	lifePoints[0].sprite = NULL;
+	sfSprite_destroy(lifePoints[1].sprite);
+	lifePoints[1].sprite = NULL;
+	sfSprite_destroy(lifePoints[2].sprite);
+	lifePoints[2].sprite = NULL;
+
 	sfTexture_destroy(lifeTexture[0]);
 	lifeTexture[0] = NULL;
 	sfTexture_destroy(lifeTexture[1]);
 	lifeTexture[1] = NULL;
+	sfTexture_destroy(lifeTexture[2]);
+	lifeTexture[2] = NULL;
 	sfTexture_destroy(goldTexture);
 	goldTexture = NULL;
 	sfFont_destroy(font);
@@ -78,69 +95,36 @@ void CleanupGameHUD(void)
 	gameHUD[0].text = NULL;
 }
 
-void AddLifePoint(void) 
+void AddLife(void)
 {
-	if (GetHP() % 2 != 0)
-	{
-		LifePoints* temp = realloc(lifePoints, (size_t)(lifeCount + 1) * sizeof(LifePoints));
-		if (!temp) {
-			fprintf(stderr, "LifePoint list reallocation failed!\n");
-			return;
-		}
-		lifePoints = temp;
-
-		LifePoints life = { 0 };
-		life.sprite = sfSprite_create();
-		sfSprite_setTexture(life.sprite, lifeTexture[1], sfTrue);
-
-		sfFloatRect hitbox = sfSprite_getGlobalBounds(life.sprite);
-		sfSprite_setOrigin(life.sprite, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
-		sfSprite_setPosition(life.sprite, (sfVector2f) { (float)(100 * lifeCount) - 350.f, 50.f });
-
-		lifePoints[lifeCount] = life;
-		lifeCount++;
-	}
-	else
-	{
-		if (lifeCount != 0)
-		{
-			sfSprite_setTexture(lifePoints[lifeCount - 1].sprite, lifeTexture[0], sfTrue);
-		}
-	}
-}
-
-void DeleteLifePoint(void)
-{
-	//Delete full heart
 	if (GetHP() % 2 == 0)
 	{
-		if (lifeCount > 0)
+		if (currentLife < 3)
 		{
-			if (lifeCount > 1)
-			{
-				LifePoints* temp = realloc(lifePoints, (size_t)(lifeCount - 1) * sizeof(LifePoints));
-				if (!temp) {
-					fprintf(stderr, "LifePoint list reallocation failed!\n");
-					return;
-				}
+			sfSprite_setTexture(lifePoints[currentLife].sprite, lifeTexture[0], sfTrue);
+			currentLife++;
+		}
+	}
+	else if (currentLife < 3)
+	{
+		sfSprite_setTexture(lifePoints[currentLife].sprite, lifeTexture[1], sfTrue);
+	} 
+}
 
-				lifePoints = temp;
-				lifeCount--;
-			}
-			else
-			{
-				sfSprite_destroy(lifePoints[0].sprite);
-				lifePoints[0].sprite = NULL;
-				lifeCount--;
-			}
+void DeleteLife(void)
+{
+	if (GetHP() % 2 == 0)
+	{
+		sfSprite_setTexture(lifePoints[currentLife - 1].sprite, lifeTexture[2], sfTrue);
+
+		if (GetHP() >= 0)
+		{
+			currentLife--;
 		}
 	}
 	else
 	{
-		if (lifeCount != 0)
-		{
-			sfSprite_setTexture(lifePoints[lifeCount - 1].sprite, lifeTexture[1], sfTrue);
-		}
+		sfSprite_setTexture(lifePoints[currentLife - 1].sprite, lifeTexture[1], sfTrue);
 	}
 }
 

@@ -69,5 +69,6 @@ sfVector2f GetSpawnPoint(void);
 void SetCameraMap(int _ID, sfRenderWindow* _window);
 int GetCurrentMap(void);
 int GetBulletMap(sfFloatRect _hitbox);
+float GetBattleDelay(void);
 
 #endif // !MAP_H

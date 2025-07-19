@@ -117,8 +117,7 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 				break;
 			case TORMENTED_SOUL:
 				sfRectangleShape_setPosition(enemy[i].collider, (sfVector2f) { pos.x + 2, pos.y + 20 });
-
-				if (GetEnemyMap(GetCurrentMap()) == 1)
+				if (GetEnemyMap(GetCurrentMap()) == 1 && GetCurrentMap() == enemy[i].id)
 				{
 					enemy[i].life--;
 				}
@@ -126,10 +125,13 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 			}
 
 			//Function
-			if (GetCurrentMap() == enemy[i].id)
+			if (GetBattleDelay() < 0)
 			{
-				EnemyMove(i, _dt);
-				EnemyShoot(i, _dt);
+				if (GetCurrentMap() == enemy[i].id)
+				{
+					EnemyMove(i, _dt);
+					EnemyShoot(i, _dt);
+				}
 			}
 			//Animations
 			if (enemy[i].hurtFrame > 0)
@@ -218,6 +220,7 @@ void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
 		temp.collider = sfRectangleShape_create();
 		temp.color = 255;
 		temp.misc = 1;
+
 		//Type
 		switch (_type)
 		{
@@ -233,7 +236,7 @@ void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
 			break;
 		case SLIME:
 			temp.life = 3;
-			temp.speed = 300;
+			temp.speed = 400;
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 40 });
 			break;
 		case TORMENTED_SOUL:
@@ -303,7 +306,8 @@ void EnemyMove(int _ID, float _dt)
 		else
 		{
 			enemy[_ID].state = rand() % 3;
-			enemy[_ID].stateTimer = 2;
+			float ran = (float) (rand() % 11 - 5);
+			enemy[_ID].stateTimer = 2 + (ran / 10);
 		}
 
 		//States
@@ -343,7 +347,7 @@ void EnemyMove(int _ID, float _dt)
 			enemy[_ID].velocity.y = (float)(-cos(radian));
 			break;
 		case SLIME:
-			if (enemy[_ID].stateTimer < 0)
+			if (enemy[_ID].stateTimer <= 0)
 			{
 				enemy[_ID].playerRot = LookToDirection(GetPlayerPos(), pos) + 90;
 				enemy[_ID].misc = 1;
@@ -356,17 +360,11 @@ void EnemyMove(int _ID, float _dt)
 				}
 			}
 			radian = enemy[_ID].playerRot * (float)(M_PI / 180);
-			switch (enemy[_ID].state)
+			if (radian != 0.000)
 			{
-			case 1:
-				radian -= 0.2f;
-				break;
-			case 2:
-				radian += 0.2f;
-				break;
+				enemy[_ID].velocity.x = (float)(sin(radian) * enemy[_ID].misc);
+				enemy[_ID].velocity.y = (float)(-cos(radian) * enemy[_ID].misc);
 			}
-			enemy[_ID].velocity.x = (float)(sin(radian) * enemy[_ID].misc);
-			enemy[_ID].velocity.y = (float)(-cos(radian) * enemy[_ID].misc);
 			break;
 		case TORMENTED_SOUL:
 			enemy[_ID].playerRot = LookToDirection(GetPlayerPos(), pos) + 90;
@@ -439,15 +437,14 @@ void EnemyShoot(int _ID, float _dt)
 	}
 
 	//Actual Shooting
+	sfVector2f pos = { 0 };
 	switch (enemy[_ID].type)
 	{
 	case REA_BASE:
-		if (GetDistanceVector2f(GetPlayerPos(), sfSprite_getPosition(enemy[_ID].sprite)) < 400 || enemy[_ID].isShooting)
-		{
-			sfVector2f pos = sfSprite_getPosition(enemy[_ID].sprite);
+			pos = sfSprite_getPosition(enemy[_ID].sprite);
 			if (enemy[_ID].fireRate <= 0)
 			{
-				AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 300, sfTrue);
+				AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 600, sfTrue);
 				if (enemy[_ID].fireThing < 2)
 				{
 					enemy[_ID].isShooting = sfTrue;
@@ -457,25 +454,23 @@ void EnemyShoot(int _ID, float _dt)
 				else
 				{
 					enemy[_ID].isShooting = sfFalse;
-					enemy[_ID].fireRate = 1.2f;
+					float ran = (float) (rand() % 11 - 5);
+					enemy[_ID].fireRate = 1.2f + (ran / 10);
 					enemy[_ID].fireThing = 0;
 				}
 			}
-		}
 		break;
 	case REA_SHOTGUN:
-		if (GetDistanceVector2f(GetPlayerPos(), sfSprite_getPosition(enemy[_ID].sprite)) < 400 || enemy[_ID].isShooting)
-		{
-			sfVector2f pos = sfSprite_getPosition(enemy[_ID].sprite);
+			pos = sfSprite_getPosition(enemy[_ID].sprite);
 			if (enemy[_ID].fireRate <= 0)
 			{
 				AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 300, sfTrue);
 				AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) + 20, 300, sfTrue);
 				AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) - 20, 300, sfTrue);
 				enemy[_ID].isShooting = sfFalse;
-				enemy[_ID].fireRate = 2.f;
+				float ran = (float) (rand() % 11 - 5);
+				enemy[_ID].fireRate = 2.f + (ran / 10);
 			}
-		}
 		break;
 	default:
 		break;

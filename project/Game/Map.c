@@ -11,12 +11,14 @@ int mapCurrent;
 int enemyCurrent;
 
 sfBool battle;
+float battleDelay;
 
 void LoadMap(sfRenderWindow* _window)
 {
 	mapStart = 0;
 	startPlaced = sfFalse;
 	shopPlaced = sfFalse;
+	battleDelay = 0.5f;
 
 	mapCount = 0;
 	mainTexture[R] = sfTexture_createFromFile("Assets/Texture/Map/rText.png", NULL);
@@ -81,7 +83,15 @@ void UpdateMap(float _dt, sfRenderWindow* _window)
 				MoveObject(1, (sfVector2f) { 0,0 });
 				MoveObject(2, (sfVector2f) { 0,0 });
 				MoveObject(3, (sfVector2f) { 0,0 });
+				battleDelay = 0.5f;
 				battle = sfFalse;
+			}
+			else
+			{
+				if (battleDelay > 0)
+				{
+					battleDelay -= _dt;
+				}
 			}
 		}
 	}
@@ -369,8 +379,8 @@ void DeleteMap(int _ID)
 void CreateLevel(int _pathLength)
 {
 	//First
-	int randPiece = rand() % (LRUD + 1 - 4) + 4;
-	AddMap(randPiece, (sfVector2f) { 1500, 1500 }, MAX, BATTLE);
+	int randPiece = 0;
+	AddMap(LRUD, (sfVector2f) { 1500, 1500 }, MAX, BATTLE);
 
 	//Middle
 	for (int i = 0; i < _pathLength; i++)
@@ -570,4 +580,9 @@ int GetBulletMap(sfFloatRect _hitbox)
 		}
 	}
 	return mapStart;
+}
+
+float GetBattleDelay(void)
+{
+	return battleDelay;
 }

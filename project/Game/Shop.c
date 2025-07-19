@@ -110,7 +110,7 @@ void AddItem(int _num, ShopType _type, sfVector2f _position)
 	itemShop[_num].type = _type;
 
 	UpdateText(itemShop[_num].text, price[_type]);
-	sfText_setPosition(itemShop[_num].text, (sfVector2f) { _position.x, _position.y + 30});
+	sfText_setPosition(itemShop[_num].text, (sfVector2f) { _position.x, _position.y + 30 });
 	hitbox = sfText_getGlobalBounds(itemShop[_num].text);
 	sfText_setOrigin(itemShop[_num].text, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
 	itemShop[_num].isActive = sfTrue;
