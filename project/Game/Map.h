@@ -36,6 +36,9 @@ typedef enum BattleType
 	EMPTY_CENTER,
 	CROSS,
 	CENTER_BRIDGE,
+	ROCK_MIDDLE,
+	FOUR_ROCK,
+	ROCK_LINE,
 	MAX_LEVEL
 }BattleType;
 

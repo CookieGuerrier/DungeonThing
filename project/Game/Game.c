@@ -44,6 +44,12 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _key)
 			debugMode = sfTrue;
 		}
 		break;
+	case sfKeyI:
+		GainLife(1);
+		break;
+	case sfKeyO:
+		LoseLife(1);
+		break;
 	default:
 		break;
 	}

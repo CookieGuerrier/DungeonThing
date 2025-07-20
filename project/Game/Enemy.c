@@ -241,7 +241,7 @@ void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
 			break;
 		case TORMENTED_SOUL:
 			temp.life = 1;
-			temp.speed = 150;
+			temp.speed = 250;
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 60, 85 });
 			break;
 		default:

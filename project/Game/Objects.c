@@ -1,7 +1,7 @@
 #include "Objects.h"
 
 Object object[300];
-sfTexture* textureObject[7];
+sfTexture* textureObject[8];
 sfTexture* shadowTexture;
 int objectCount;
 
@@ -18,6 +18,7 @@ void LoadObject(void)
 	textureObject[POT] = sfTexture_createFromFile("Assets/Texture/Objects/pot.png", NULL);
 	textureObject[STATUE] = sfTexture_createFromFile("Assets/Texture/Objects/shop.png", NULL);
 	textureObject[BIG_HOLE] = sfTexture_createFromFile("Assets/Texture/Objects/bigHole.png", NULL);
+	textureObject[ROCK] = sfTexture_createFromFile("Assets/Texture/Objects/rock.png", NULL);
 	shadowTexture = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
 
 	AddObject((sfVector2f) { 0, 0 }, 0, WALL_BATTLERL);
@@ -59,7 +60,7 @@ void CleanupObject(void)
 		objectCount++;
 	}
 
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		sfTexture_destroy(textureObject[i]);
 		textureObject[i] = NULL;
@@ -74,6 +75,7 @@ void AddObject(sfVector2f _pos, float _rot, ObjectType _type)
 	{
 		Object obj = { 0 };
 		obj.sprite = sfSprite_create();
+		int ran = 0;
 		sfSprite_setTexture(obj.sprite, textureObject[_type], sfTrue);
 
 		sfFloatRect hitbox = sfSprite_getGlobalBounds(obj.sprite);
@@ -107,6 +109,11 @@ void AddObject(sfVector2f _pos, float _rot, ObjectType _type)
 			break;
 		case BIG_HOLE:
 			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width, hitbox.height }, sfTrue, objectCount);
+			break;
+		case ROCK:
+			ran = rand() % 3;
+			sfSprite_setTextureRect(obj.sprite, (sfIntRect) { 0 + 60 * ran, 0, 60, 60 });
+			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width / 3, hitbox.height }, sfFalse, objectCount);
 			break;
 		}
 

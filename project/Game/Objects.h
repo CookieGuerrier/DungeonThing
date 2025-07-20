@@ -12,7 +12,8 @@ typedef enum ObjectType
 	WALL_BATTLERL,
 	POT,
 	STATUE,
-	BIG_HOLE
+	BIG_HOLE,
+	ROCK
 }ObjectType;
 
 typedef struct Object

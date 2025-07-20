@@ -55,7 +55,7 @@ void LoadGameHUD(void)
 
 void UpdateGameHUD(float _dt)
 {
-	printf("%d\n", currentLife);
+
 }
 
 void DrawGameHUD(sfRenderWindow* _window, sfBool _debug)
@@ -97,18 +97,15 @@ void CleanupGameHUD(void)
 
 void AddLife(void)
 {
-	if (GetHP() % 2 == 0)
+	if (GetHP() % 2 != 0)
 	{
-		if (currentLife < 3)
-		{
-			sfSprite_setTexture(lifePoints[currentLife].sprite, lifeTexture[0], sfTrue);
-			currentLife++;
-		}
+		currentLife++;
+		sfSprite_setTexture(lifePoints[currentLife - 1].sprite, lifeTexture[1], sfTrue);
 	}
-	else if (currentLife < 3)
+	else
 	{
-		sfSprite_setTexture(lifePoints[currentLife].sprite, lifeTexture[1], sfTrue);
-	} 
+		sfSprite_setTexture(lifePoints[currentLife - 1].sprite, lifeTexture[0], sfTrue);
+	}
 }
 
 void DeleteLife(void)
@@ -116,11 +113,7 @@ void DeleteLife(void)
 	if (GetHP() % 2 == 0)
 	{
 		sfSprite_setTexture(lifePoints[currentLife - 1].sprite, lifeTexture[2], sfTrue);
-
-		if (GetHP() >= 0)
-		{
-			currentLife--;
-		}
+		currentLife--;
 	}
 	else
 	{
@@ -128,7 +121,7 @@ void DeleteLife(void)
 	}
 }
 
-void UpdateText(sfText* const _text, int _value)
+void UpdateText(sfText* const _text, int _value) 
 {
 	// Copy the value into the text
 	char string[5];
