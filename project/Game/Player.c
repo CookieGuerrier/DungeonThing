@@ -6,6 +6,10 @@ sfTexture* textureHand;
 sfTexture* shadowTexture;
 sfVector2f mousePos;
 
+int artifactCount;
+Artifacts artifact[3];
+
+
 sfRectangleShape* temp;
 
 void LoadPlayer(void)
@@ -14,6 +18,7 @@ void LoadPlayer(void)
 	player.speed = 500;
 	player.life = 0;
 	player.gold = 300;
+	artifactCount = 0;
 
 	//Sprite
 	player.sprite = sfSprite_create();
@@ -346,6 +351,12 @@ void GainGold(int _gold)
 	UpdateGold(player.gold);
 }
 
+void SetArtifact(Artifacts _artifact)
+{
+	artifact[artifactCount] = _artifact;
+	artifactCount++;
+}
+
 void LoseLife(int _life)
 {
 	if (player.invFrame <= 0)
@@ -410,4 +421,9 @@ sfFloatRect GetPlayerHitbox(void)
 sfVector2f GetMousePos(void)
 {
 	return mousePos;
+}
+
+int GetArtifactCount(void)
+{
+	return artifactCount;
 }

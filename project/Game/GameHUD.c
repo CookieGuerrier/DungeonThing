@@ -1,10 +1,12 @@
 #include "GameHUD.h"
 
 LifePoints lifePoints[3];
+ArtifactSlot slot[3];
 GameHUD gameHUD[1];
 int currentLife;
 
 sfTexture* lifeTexture[3];
+sfTexture* textureSlot;
 sfTexture* goldTexture;
 sfFont* font;
 
@@ -18,6 +20,7 @@ void LoadGameHUD(void)
 	lifeTexture[1] = sfTexture_createFromFile("Assets/Texture/HUD/lifehalf.png", NULL);
 	lifeTexture[2] = sfTexture_createFromFile("Assets/Texture/HUD/lifeempty.png", NULL);
 	goldTexture = sfTexture_createFromFile("Assets/Texture/HUD/gold.png", NULL);
+	textureSlot = sfTexture_createFromFile("Assets/Texture/HUD/slot.png", NULL);
 
 	lifePoints[0].sprite = sfSprite_create();
 	sfSprite_setTexture(lifePoints[0].sprite, lifeTexture[2], sfTrue);
@@ -34,6 +37,22 @@ void LoadGameHUD(void)
 	hitbox = sfSprite_getGlobalBounds(lifePoints[2].sprite);
 	sfSprite_setOrigin(lifePoints[2].sprite, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
 	sfSprite_setPosition(lifePoints[2].sprite, (sfVector2f) { (float)(100 * 2) - 350.f, 50.f });
+
+	slot[0].sprite = sfSprite_create();
+	sfSprite_setTexture(slot[0].sprite, textureSlot, sfTrue);
+	hitbox = sfSprite_getGlobalBounds(lifePoints[0].sprite);
+	sfSprite_setOrigin(slot[0].sprite, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
+	sfSprite_setPosition(slot[0].sprite, (sfVector2f) { -720.f, 990.f});
+	slot[1].sprite = sfSprite_create();
+	sfSprite_setTexture(slot[1].sprite, textureSlot, sfTrue);
+	hitbox = sfSprite_getGlobalBounds(lifePoints[1].sprite);
+	sfSprite_setOrigin(slot[1].sprite, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
+	sfSprite_setPosition(slot[1].sprite, (sfVector2f) { -540.f, 990.f });
+	slot[2].sprite = sfSprite_create();
+	sfSprite_setTexture(slot[2].sprite, textureSlot, sfTrue);
+	hitbox = sfSprite_getGlobalBounds(lifePoints[2].sprite);
+	sfSprite_setOrigin(slot[2].sprite, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
+	sfSprite_setPosition(slot[2].sprite, (sfVector2f) { -360.f, 990.f });
 
 	GainLife(6);
 
@@ -60,9 +79,11 @@ void UpdateGameHUD(float _dt)
 
 void DrawGameHUD(sfRenderWindow* _window, sfBool _debug)
 {
-	sfRenderWindow_drawSprite(_window, lifePoints[0].sprite, NULL);
-	sfRenderWindow_drawSprite(_window, lifePoints[1].sprite, NULL);
-	sfRenderWindow_drawSprite(_window, lifePoints[2].sprite, NULL);
+	for (int i = 0; i < 3; i++)
+	{
+		sfRenderWindow_drawSprite(_window, lifePoints[i].sprite, NULL);
+		sfRenderWindow_drawSprite(_window, slot[i].sprite, NULL);
+	}
 
 	sfRenderWindow_drawSprite(_window, gameHUD[0].sprite, NULL);
 	sfRenderWindow_drawText(_window, gameHUD[0].text, NULL);
@@ -70,21 +91,20 @@ void DrawGameHUD(sfRenderWindow* _window, sfBool _debug)
 
 void CleanupGameHUD(void)
 {
-	sfSprite_destroy(lifePoints[0].sprite);
-	lifePoints[0].sprite = NULL;
-	sfSprite_destroy(lifePoints[1].sprite);
-	lifePoints[1].sprite = NULL;
-	sfSprite_destroy(lifePoints[2].sprite);
-	lifePoints[2].sprite = NULL;
+	for (int i = 0; i < 3; i++)
+	{
+		sfSprite_destroy(lifePoints[i].sprite);
+		lifePoints[i].sprite = NULL;
+		sfSprite_destroy(slot[i].sprite);
+		slot[i].sprite = NULL;
+		sfTexture_destroy(lifeTexture[i]);
+		lifeTexture[i] = NULL;
+	}
 
-	sfTexture_destroy(lifeTexture[0]);
-	lifeTexture[0] = NULL;
-	sfTexture_destroy(lifeTexture[1]);
-	lifeTexture[1] = NULL;
-	sfTexture_destroy(lifeTexture[2]);
-	lifeTexture[2] = NULL;
 	sfTexture_destroy(goldTexture);
 	goldTexture = NULL;
+	sfTexture_destroy(textureSlot);
+	textureSlot = NULL;
 	sfFont_destroy(font);
 	font = NULL;
 
@@ -121,7 +141,7 @@ void DeleteLife(void)
 	}
 }
 
-void UpdateText(sfText* const _text, int _value) 
+void UpdateText(sfText* const _text, int _value)
 {
 	// Copy the value into the text
 	char string[5];
@@ -132,4 +152,9 @@ void UpdateText(sfText* const _text, int _value)
 void UpdateGold(int _value)
 {
 	UpdateText(gameHUD[0].text, _value);
+}
+
+void UpdateSlot(int _ID, sfTexture* _texture)
+{
+	sfSprite_setTexture(slot[_ID].sprite, _texture, sfTrue);
 }

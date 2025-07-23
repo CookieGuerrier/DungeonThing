@@ -288,7 +288,7 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 	{
 	case BATTLE:
 		ran = rand() % MAX_LEVEL;
-		// ran = ROCK_LINE;
+		//ran = BIG_CRAB_PLAZA;
 
 		CreateBattle(ran, hitbox);
 		break;
@@ -298,11 +298,14 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		break;
 	case SHOP:
 		AddObject((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 - 150 }, 0, STATUE);
+		//Heal
 		ran = rand() % 2;
 		AddItem(0, ran, (sfVector2f) { _pos.x + hitbox.width / 2 - 250, _pos.y + hitbox.height / 2 + 20 });
-		ran = rand() % 2;
+		//Ran
+		ran = rand() % 3;
 		AddItem(1, ran, (sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 + 20 });
-		ran = rand() % 2;
+		//Arti
+		ran = rand() % 1 + 2;
 		AddItem(2, ran, (sfVector2f) { _pos.x + hitbox.width / 2 + 250, _pos.y + hitbox.height / 2 + 20 });
 		break;
 	default:
@@ -460,51 +463,32 @@ void CreateLevel(int _pathLength)
 
 void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 {
-	int ran = 0;
+	int ran = 0;	
 	sfVector2f off = { 0 };
 	switch (_type)
 	{
-	case EMPTY_SIDES:
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
-		break;
-	case EMPTY_CENTER:
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 + 200 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 - 200 }, mapCount);
+	case EMPTY:
+		ran = rand() % 2;
+		if (ran == 0)
+		{
+			EnemyPlacements(0, _hitbox);
+		}
+		else
+		{
+			EnemyPlacements(1, _hitbox);
+		}
 		break;
 	case CROSS:
 		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 - 580, _hitbox.top + _hitbox.height / 2 - 280 }, 0, BIG_HOLE);
 		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 + 580, _hitbox.top + _hitbox.height / 2 - 280 }, 0, BIG_HOLE);
 		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 - 580, _hitbox.top + _hitbox.height / 2 + 340 }, 0, BIG_HOLE);
 		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 + 580, _hitbox.top + _hitbox.height / 2 + 340 }, 0, BIG_HOLE);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
+		EnemyPlacements(2, _hitbox);
 		break;
 	case CENTER_BRIDGE:
 		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 - 400, _hitbox.top + _hitbox.height / 2 }, 0, BIG_HOLE);
 		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 + 400, _hitbox.top + _hitbox.height / 2 }, 0, BIG_HOLE);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 + 200 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 - 200 }, mapCount);
+		EnemyPlacements(0, _hitbox);
 		break;
 	case ROCK_MIDDLE:
 		off.x = -120;
@@ -519,14 +503,7 @@ void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 			AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 + off.x + 60 * i, _hitbox.top + _hitbox.height / 2 - 120 }, 0, ROCK);
 			AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 + off.x + 60 * i, _hitbox.top + _hitbox.height / 2 + 120 }, 0, ROCK);
 		}
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
+		EnemyPlacements(0, _hitbox);
 		break;
 	case FOUR_ROCK:
 		for (int i = 0; i < 3; i++)
@@ -557,28 +534,22 @@ void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 				AddObject((sfVector2f) { _hitbox.left + _hitbox.width - 500 + 60 * i, _hitbox.top + _hitbox.height - 300 - 60 * j }, 0, ROCK);
 			}
 		}
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 + 200 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 - 200 }, mapCount);
+		ran = rand() % 2;
+		if (ran == 0)
+		{
+			EnemyPlacements(0, _hitbox);
+		}
+		else
+		{
+			EnemyPlacements(1, _hitbox);
+		}
 		break;
 	case ROCK_LINE:
 		for (int i = 0; i < 11; i++)
 		{
 			AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 - 250 + 60 * i, _hitbox.top + _hitbox.height / 2 }, 0, ROCK);
 		}
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
-		ran = rand() % 3;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
+		EnemyPlacements(0, _hitbox);
 		break;
 	default:
 		break;
@@ -593,6 +564,11 @@ void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 void RemoveEnemyCurrent(void)
 {
 	enemyCurrent--;
+}
+
+void AddEnemyCurrent(void)
+{
+	enemyCurrent++;
 }
 
 void CreateBattleBorder(sfVector2f _pos, MapType _type)
@@ -612,6 +588,57 @@ void CreateBattleBorder(sfVector2f _pos, MapType _type)
 	if (_type == U || _type == LRU || _type == LRUD)
 	{
 		MoveObject(3, (sfVector2f) { _pos.x + SCREEN_WIDTH / 2, _pos.y + 10 });
+	}
+}
+
+void EnemyPlacements(int _ID, sfFloatRect _hitbox)
+{
+	int ran = 0;
+	switch (_ID)
+	{
+	case 0:
+		//Sides
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
+		break;
+	case 1:
+		//Center
+		ran = rand() % 2;
+		if (ran == 0)
+		{
+			ran = rand() % 3;
+			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
+			ran = rand() % 3;
+			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
+			ran = rand() % 3;
+			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 + 200 }, mapCount);
+			ran = rand() % 3;
+			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 - 200 }, mapCount);
+		}
+		else
+		{
+			AddEnemy(BIG_CRAB, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 }, mapCount);
+			ran = rand() % 3;
+			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
+			ran = rand() % 3;
+			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
+			ran = rand() % 3;
+			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 + 200 }, mapCount);
+		}
+		break;
+	case 2:
+		//Close center
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
+		ran = rand() % 3;
+		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
+		break;
 	}
 }
 

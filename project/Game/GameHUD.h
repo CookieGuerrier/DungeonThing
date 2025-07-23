@@ -9,6 +9,11 @@ typedef struct LifePoints
 	sfSprite* sprite;
 }LifePoints;
 
+typedef struct ArtifactSlot
+{
+	sfSprite* sprite;
+}ArtifactSlot;
+
 typedef struct GameHUD
 {
 	sfSprite* sprite;
@@ -25,4 +30,5 @@ void DeleteLife(void);
 
 void UpdateText(sfText* const _text, int _value);
 void UpdateGold(int _value);
+void UpdateSlot(int _ID, sfTexture* _texture);
 #endif // !GAMEHUD_H

@@ -10,7 +10,9 @@ typedef enum TypeEnemy
 	REA_BASE,
 	REA_SHOTGUN,
 	SLIME,
-	TORMENTED_SOUL
+	TORMENTED_SOUL,
+	BIG_CRAB,
+	TINY_CRAB
 }TypeEnemy;
 
 typedef enum TextureEnemy

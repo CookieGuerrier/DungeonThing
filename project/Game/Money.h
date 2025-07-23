@@ -16,7 +16,7 @@ void UpdateMoney(float _dt, sfRenderWindow* _window);
 void DrawMoney(sfRenderWindow* _window, sfBool _debug);
 void CleanupMoney(void);
 
-void AddNugget(sfFloatRect _hitbox);
+void AddNugget(sfFloatRect _hitbox, int _num);
 void DeleteNugget(int _ID);
 
 #endif // !MONEY_H

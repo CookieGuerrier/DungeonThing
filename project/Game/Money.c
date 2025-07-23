@@ -1,6 +1,6 @@
 #include "Money.h"
 
-Nugget nugget[100];
+Nugget nugget[200];
 sfTexture* nuggetTexture;
 int nuggetCount;
 
@@ -61,26 +61,28 @@ void CleanupMoney(void)
 		nuggetCount++;
 	}
 	sfTexture_destroy(nuggetTexture);
-	nuggetTexture = NULL;
 }
 
-void AddNugget(sfFloatRect _hitbox)
+void AddNugget(sfFloatRect _hitbox, int _num)
 {
-	if (nuggetCount < 100)
+	if (nuggetCount < 200)
 	{
-		Nugget temp = { 0 };
+		for (int i = 0; i < _num; i++)
+		{
+			Nugget temp = { 0 };
 
-		temp.sprite = sfSprite_create();
-		sfSprite_setTexture(temp.sprite, nuggetTexture, sfTrue);
-		int randLeft = rand() % (int)_hitbox.width;
-		int randTop = rand() % (int)_hitbox.height;
-		sfSprite_setPosition(temp.sprite, (sfVector2f) { _hitbox.left + (float)randLeft, _hitbox.top + (float)randTop });
+			temp.sprite = sfSprite_create();
+			sfSprite_setTexture(temp.sprite, nuggetTexture, sfTrue);
+			int randLeft = rand() % (int)_hitbox.width;
+			int randTop = rand() % (int)_hitbox.height;
+			sfSprite_setPosition(temp.sprite, (sfVector2f) { _hitbox.left + (float)randLeft, _hitbox.top + (float)randTop });
 
-		sfFloatRect hitbox = sfSprite_getGlobalBounds(temp.sprite);
-		sfSprite_setOrigin(temp.sprite, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
+			sfFloatRect hitbox = sfSprite_getGlobalBounds(temp.sprite);
+			sfSprite_setOrigin(temp.sprite, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
 
-		nugget[nuggetCount] = temp;
-		nuggetCount++;
+			nugget[nuggetCount] = temp;
+			nuggetCount++;
+		}
 	}
 }
 

@@ -7,8 +7,13 @@
 
 typedef enum ShopType
 {
+	//Heal
 	POTION,
-	BIG_POTION
+	BIG_POTION,
+
+	//Artifacts
+	SAW_SHOP,
+	TEMP
 }ShopType;
 
 
@@ -26,5 +31,6 @@ void DrawShop(sfRenderWindow* _window, sfBool _debug);
 void CleanupShop(void);
 
 void AddItem(int _num, ShopType _type, sfVector2f _position);
+void ItemDescription(void);
 
 #endif // !SHOP_H
