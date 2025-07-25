@@ -1,7 +1,7 @@
 #include "Objects.h"
 
 Object object[300];
-sfTexture* textureObject[8];
+sfTexture* textureObject[9];
 sfTexture* shadowTexture;
 int objectCount;
 
@@ -18,6 +18,7 @@ void LoadObject(void)
 	textureObject[POT] = sfTexture_createFromFile("Assets/Texture/Objects/pot.png", NULL);
 	textureObject[STATUE] = sfTexture_createFromFile("Assets/Texture/Objects/shop.png", NULL);
 	textureObject[BIG_HOLE] = sfTexture_createFromFile("Assets/Texture/Objects/bigHole.png", NULL);
+	textureObject[LONG_HOLE] = sfTexture_createFromFile("Assets/Texture/Objects/longHole.png", NULL);
 	textureObject[ROCK] = sfTexture_createFromFile("Assets/Texture/Objects/rock.png", NULL);
 	shadowTexture = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
 
@@ -60,7 +61,7 @@ void CleanupObject(void)
 		objectCount++;
 	}
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 9; i++)
 	{
 		sfTexture_destroy(textureObject[i]);
 		textureObject[i] = NULL;
@@ -108,6 +109,9 @@ void AddObject(sfVector2f _pos, float _rot, ObjectType _type)
 			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width, hitbox.height - 60 }, sfFalse, objectCount);
 			break;
 		case BIG_HOLE:
+			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width, hitbox.height }, sfTrue, objectCount);
+			break;
+		case LONG_HOLE:
 			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width, hitbox.height }, sfTrue, objectCount);
 			break;
 		case ROCK:

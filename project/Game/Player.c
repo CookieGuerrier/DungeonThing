@@ -8,6 +8,7 @@ sfVector2f mousePos;
 
 int artifactCount;
 Artifacts artifact[3];
+sfBool effects[3];
 
 
 sfRectangleShape* temp;
@@ -72,7 +73,7 @@ void LoadPlayerAnims(void)
 
 		size = sfTexture_getSize(textureHand);
 		first = (sfIntRect){ 0, 0, size.x / 4, size.y };
-		player.anims[HAND] = CreateAnim(textureHand, first, 4, 1 / 10.0f, player.spriteHand, (sfVector2f) { (float)size.x / 7.f, (float)size.y / 2.f }, sfTrue);
+		player.anims[HAND] = CreateAnim(textureHand, first, 4, 1 / 8.0f, player.spriteHand, (sfVector2f) { (float)size.x / 7.f, (float)size.y / 2.f }, sfTrue);
 		player.anims[HAND]->aimOffset = (sfVector2f){ 0 };
 		player.anims[HAND]->events = malloc(sizeof(AnimEvent));
 	}
@@ -294,7 +295,13 @@ void PlayerShoot(float _dt)
 		sfVector2f pos = sfSprite_getPosition(player.spriteHand);
 		if (player.anims[HAND]->frameNum == 1 && player.fireRate)
 		{
+			//Tha shoot
 			AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 90), 1200, sfFalse);
+			if (effects[SAW])
+			{
+				AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 120), 1200, sfFalse);
+				AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 70), 1200, sfFalse);
+			}
 		}
 		player.turnFrame = 0.3f;
 		if (abs((int)(LookToDirection(GetMousePos(), pos))) < 90)
@@ -354,6 +361,7 @@ void GainGold(int _gold)
 void SetArtifact(Artifacts _artifact)
 {
 	artifact[artifactCount] = _artifact;
+	effects[artifactCount] = sfTrue;
 	artifactCount++;
 }
 

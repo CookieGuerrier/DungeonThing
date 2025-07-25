@@ -18,7 +18,8 @@ typedef enum TexturePlayer
 
 typedef enum Artifacts
 {
-	SAW
+	SAW,
+	ANNOYING_ROCK
 }Artifacts;
 
 typedef struct Player

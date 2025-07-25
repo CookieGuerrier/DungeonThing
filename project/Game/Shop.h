@@ -13,7 +13,7 @@ typedef enum ShopType
 
 	//Artifacts
 	SAW_SHOP,
-	TEMP
+	ROCK_SHOP
 }ShopType;
 
 

@@ -10,7 +10,7 @@ void LoadMiniMap(void)
 	miniCount = 0;
 	current = 0;
 	texture[BATTLE] = sfTexture_createFromFile("Assets/Texture/MiniMap/battle.png", NULL);
-	texture[BOSS] = sfTexture_createFromFile("Assets/Texture/MiniMap/end.png", NULL);
+	texture[EXIT] = sfTexture_createFromFile("Assets/Texture/MiniMap/end.png", NULL);
 	texture[SHOP] = sfTexture_createFromFile("Assets/Texture/MiniMap/shop.png", NULL);
 	texture[START] = sfTexture_createFromFile("Assets/Texture/MiniMap/start.png", NULL);
 }

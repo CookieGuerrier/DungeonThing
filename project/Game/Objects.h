@@ -13,6 +13,7 @@ typedef enum ObjectType
 	POT,
 	STATUE,
 	BIG_HOLE,
+	LONG_HOLE,
 	ROCK
 }ObjectType;
 

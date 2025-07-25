@@ -550,7 +550,7 @@ void EnemyShoot(int _ID, float _dt)
 			{
 				enemy[_ID].isShooting = sfFalse;
 				float ran = (float)(rand() % 11 - 5);
-				enemy[_ID].fireRate = 1.2f + (ran / 10);
+				enemy[_ID].fireRate = 1.8f + (ran / 10);
 				enemy[_ID].fireThing = 0;
 			}
 		}
@@ -564,7 +564,7 @@ void EnemyShoot(int _ID, float _dt)
 			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) - 20, 300, sfTrue);
 			enemy[_ID].isShooting = sfFalse;
 			float ran = (float)(rand() % 11 - 5);
-			enemy[_ID].fireRate = 2.f + (ran / 10);
+			enemy[_ID].fireRate = 2.2f + (ran / 10);
 		}
 		break;
 	case BIG_CRAB:

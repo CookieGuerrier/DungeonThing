@@ -3,8 +3,8 @@
 MapPiece map[30];
 sfTexture* mainTexture[MAX];
 int mapStart;
-sfBool startPlaced;
-sfBool shopPlaced;
+
+sfBool placed[4];
 int mapCount;
 
 int mapCurrent;
@@ -16,8 +16,6 @@ float battleDelay;
 void LoadMap(sfRenderWindow* _window)
 {
 	mapStart = 0;
-	startPlaced = sfFalse;
-	shopPlaced = sfFalse;
 	battleDelay = 0.5f;
 
 	mapCount = 0;
@@ -30,6 +28,11 @@ void LoadMap(sfRenderWindow* _window)
 	mainTexture[LRU] = sfTexture_createFromFile("Assets/Texture/Map/lruText.png", NULL);
 	mainTexture[LRD] = sfTexture_createFromFile("Assets/Texture/Map/lrdText.png", NULL);
 	mainTexture[LRUD] = sfTexture_createFromFile("Assets/Texture/Map/lrudText.png", NULL);
+
+	for(int i = 0; i < 4; i++)
+	{
+		placed[i] = sfFalse;
+	}
 
 	CreateLevel(1);
 }
@@ -160,21 +163,23 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 	sfSprite_setPosition(temp.sprite, _pos);
 
 	//Start
-	if (!startPlaced)
+	if (_type == L || _type == R || _type == D || _type == U)
 	{
-		if (_type == L || _type == R || _type == D || _type == U)
+		if (!placed[START])
 		{
-			startPlaced = sfTrue;
+			placed[START] = sfTrue;
 			element = START;
 		}
-	}
-	//Shop
-	else if (!shopPlaced)
-	{
-		if (_type == L || _type == R || _type == D || _type == U)
+		//Shop
+		else if (!placed[SHOP])
 		{
-			shopPlaced = sfTrue;
+			placed[SHOP] = sfTrue;
 			element = SHOP;
+		}
+		else if (!placed[EXIT])
+		{
+			placed[EXIT] = sfTrue;
+			element = EXIT;
 		}
 	}
 
@@ -288,7 +293,7 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 	{
 	case BATTLE:
 		ran = rand() % MAX_LEVEL;
-		//ran = BIG_CRAB_PLAZA;
+		//ran = SNIPER_SPOT;
 
 		CreateBattle(ran, hitbox);
 		break;
@@ -463,7 +468,7 @@ void CreateLevel(int _pathLength)
 
 void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 {
-	int ran = 0;	
+	int ran = 0;
 	sfVector2f off = { 0 };
 	switch (_type)
 	{
@@ -550,6 +555,13 @@ void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 			AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 - 250 + 60 * i, _hitbox.top + _hitbox.height / 2 }, 0, ROCK);
 		}
 		EnemyPlacements(0, _hitbox);
+		break;
+	case SNIPER_SPOT:
+		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 - 100 }, 0, LONG_HOLE);
+		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 + 100 }, 0, LONG_HOLE);
+		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 + 500, _hitbox.top + _hitbox.height / 2 }, 0, ROCK);
+		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 - 380, _hitbox.top + _hitbox.height / 2 }, 0, ROCK);
+		EnemyPlacements(3, _hitbox);
 		break;
 	default:
 		break;
@@ -638,6 +650,13 @@ void EnemyPlacements(int _ID, sfFloatRect _hitbox)
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
 		ran = rand() % 3;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
+		break;
+	case 3:
+		for (int i = 0; i < 4; i++)
+		{
+			ran = rand() % 2;
+			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 100 + 100 * i, _hitbox.top + _hitbox.height / 2 }, mapCount);
+		}
 		break;
 	}
 }
