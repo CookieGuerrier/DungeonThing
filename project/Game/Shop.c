@@ -1,22 +1,30 @@
 #include "Shop.h"
 
-sfTexture* textureItems[3];
+sfTexture* textureItems[6];
 sfFont* font;
 sfText* description;
 ItemShop itemShop[3];
-int price[4];
+int price[6];
+
+sfBool test;
 
 void LoadShop(void)
 {
 	textureItems[POTION] = sfTexture_createFromFile("Assets/Texture/Shop Items/potion.png", NULL);
 	textureItems[BIG_POTION] = sfTexture_createFromFile("Assets/Texture/Shop Items/bigPotion.png", NULL);
-	textureItems[SAW_SHOP] = sfTexture_createFromFile("Assets/Texture/Shop Items/saw.png", NULL);
+	textureItems[SAW] = sfTexture_createFromFile("Assets/Texture/Shop Items/saw.png", NULL);
+	textureItems[ANNOYING_ROCK] = sfTexture_createFromFile("Assets/Texture/Shop Items/rock.png", NULL);
+	textureItems[BOOMERANG] = sfTexture_createFromFile("Assets/Texture/Shop Items/boomerang.png", NULL);
+	textureItems[SIGHT] = sfTexture_createFromFile("Assets/Texture/Shop Items/sight.png", NULL);
 	font = sfFont_createFromFile("Assets/Font/font.ttf");
 
 	//Price
 	price[POTION] = 10;
 	price[BIG_POTION] = 20;
-	price[SAW_SHOP] = 50;
+	price[SAW] = 50;
+	price[ANNOYING_ROCK] = 0;
+	price[BOOMERANG] = 50;
+	price[SIGHT] = 50;
 
 	//Items
 	for (int i = 0; i < 3; i++)
@@ -40,6 +48,15 @@ void LoadShop(void)
 
 void UpdateShop(float _dt, sfRenderWindow* _window)
 {
+	if (!test)
+	{
+		UpdateSlot(GetArtifactCount(), textureItems[BOOMERANG]);
+		SetArtifact(BOOMERANG);
+		UpdateSlot(GetArtifactCount(), textureItems[SAW]);
+		SetArtifact(SAW);
+		test = sfTrue;
+	}
+
 	for (int i = 0; i < 3; i++)
 	{
 		ItemDescription();
@@ -52,21 +69,14 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 			{
 				if (GetMoney() >= price[itemShop[i].type])
 				{
-					if (itemShop[i].type == SAW_SHOP)
+					if (itemShop[i].type < 4)
 					{
 						if (GetArtifactCount() < 3)
 						{
 							itemShop[i].isActive = sfFalse;
 							LoseGold(price[itemShop[i].type]);
-							switch (itemShop[i].type)
-							{
-							case SAW_SHOP:
-								UpdateSlot(GetArtifactCount(), textureItems[SAW_SHOP]);
-								SetArtifact(SAW);
-								break;
-							default:
-								break;
-							}
+							UpdateSlot(GetArtifactCount(), textureItems[itemShop[i].type]);
+							SetArtifact(itemShop[i].type);
 						}
 					}
 					else 
@@ -93,7 +103,7 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 		if (GetMoney() >= price[itemShop[i].type])
 		{
 			sfText_setColor(itemShop[i].text, sfWhite);
-			if (itemShop[i].type == SAW_SHOP && GetArtifactCount() >= 3)
+			if (itemShop[i].type == SAW && GetArtifactCount() >= 3)
 			{
 				sfText_setColor(itemShop[i].text, sfRed);
 			}
@@ -121,7 +131,7 @@ void DrawShop(sfRenderWindow* _window, sfBool _debug)
 
 void CleanupShop(void)
 {
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		sfTexture_destroy(textureItems[i]);
 		textureItems[i] = NULL;
@@ -186,8 +196,17 @@ void ItemDescription(void)
 		case BIG_POTION:
 			sfText_setString(description, "BIG POTION\nGain a full heart");
 			break;
-		case SAW_SHOP:
+		case SAW:
 			sfText_setString(description, "SAW\nFire two more bullets on the sides");
+			break;
+		case ANNOYING_ROCK:
+			sfText_setString(description, "ROCK?\nMaybe something is inside");
+			break;
+		case BOOMERANG:
+			sfText_setString(description, "BOOMERANG\nBullets come back to deal more damage");
+			break;
+		case SIGHT:
+			sfText_setString(description, "SIGHT\nBullets go torwards ennemies");
 			break;
 		}
 		sfFloatRect hitbox = sfText_getGlobalBounds(description);

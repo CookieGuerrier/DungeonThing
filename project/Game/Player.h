@@ -8,6 +8,7 @@
 #include "Map.h"
 #include "Bullet.h"
 #include "Camera.h"
+#include "Shop.h"
 
 typedef enum TexturePlayer
 {
@@ -15,12 +16,6 @@ typedef enum TexturePlayer
 	HAND,
 	WALK
 }TexturePlayer;
-
-typedef enum Artifacts
-{
-	SAW,
-	ANNOYING_ROCK
-}Artifacts;
 
 typedef struct Player
 {
@@ -56,7 +51,7 @@ void LoseLife(int _life);
 void GainLife(int _life);
 void LoseGold(int _gold);
 void GainGold(int _gold);
-void SetArtifact(Artifacts _artifact);
+void SetArtifact(int _artifact);
 
 int GetHP(void);
 int GetMoney(void);
@@ -64,4 +59,5 @@ sfVector2f GetPlayerPos(void);
 sfFloatRect GetPlayerHitbox(void);
 sfVector2f GetMousePos(void);
 int GetArtifactCount(void);
+sfBool GetEffect(int _artifact);
 #endif // !PLAYER_H

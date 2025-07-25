@@ -304,13 +304,13 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 	case SHOP:
 		AddObject((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 - 150 }, 0, STATUE);
 		//Heal
-		ran = rand() % 2;
+		ran = rand() % 2 + 4;
 		AddItem(0, ran, (sfVector2f) { _pos.x + hitbox.width / 2 - 250, _pos.y + hitbox.height / 2 + 20 });
 		//Ran
-		ran = rand() % 3;
+		ran = rand() % 5;
 		AddItem(1, ran, (sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 + 20 });
 		//Arti
-		ran = rand() % 1 + 2;
+		ran = rand() % 4;
 		AddItem(2, ran, (sfVector2f) { _pos.x + hitbox.width / 2 + 250, _pos.y + hitbox.height / 2 + 20 });
 		break;
 	default:

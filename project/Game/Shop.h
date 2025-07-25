@@ -7,13 +7,15 @@
 
 typedef enum ShopType
 {
+	//Artifacts
+	SAW,
+	ANNOYING_ROCK,
+	BOOMERANG,
+	SIGHT,
+
 	//Heal
 	POTION,
-	BIG_POTION,
-
-	//Artifacts
-	SAW_SHOP,
-	ROCK_SHOP
+	BIG_POTION
 }ShopType;
 
 

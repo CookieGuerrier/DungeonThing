@@ -14,6 +14,15 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 {
 	for (int i = 0; i < bulletCount; i++)
 	{
+		if (GetEffect(BOOMERANG) && !bullet[i].friendlyFire)
+		{
+			bullet[i].speed -= 50;
+		}
+		if (GetEffect(SIGHT) && !bullet[i].friendlyFire)
+		{
+			
+		}
+
 		sfSprite_move(bullet[i].sprite, (sfVector2f) { bullet[i].velocity.x* (_dt * bullet[i].speed), bullet[i].velocity.y* (_dt * bullet[i].speed) });
 
 		//Wall collision
@@ -90,6 +99,10 @@ void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire)
 		temp.velocity.y = (float)(-cos(playerRadian));
 
 		temp.friendlyFire = _friendlyFire;
+		if (_friendlyFire)
+		{
+			sfSprite_setColor(temp.sprite, (sfColor) { 255, 0, 255, 255});
+		}
 		temp.speed = _speed;
 
 		bullet[bulletCount] = temp;

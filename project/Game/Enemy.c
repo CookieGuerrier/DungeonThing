@@ -281,18 +281,22 @@ void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
 		temp.collider = sfRectangleShape_create();
 		temp.color = 255;
 		temp.misc = 1;
-
+		float ran = 0;
 		//Type
 		switch (_type)
 		{
 		case REA_BASE:
 			temp.life = 5;
 			temp.speed = 150;
+			ran = (float)(rand() % 11 - 5);
+			temp.fireRate = 1.8f + (ran / 10);
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 60 });
 			break;
 		case REA_SHOTGUN:
 			temp.life = 5;
 			temp.speed = 150;
+			ran = (float)(rand() % 11 - 5);
+			temp.fireRate = 2.2f + (ran / 10);
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 60 });
 			break;
 		case SLIME:
@@ -330,7 +334,6 @@ void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
 		hitbox = sfSprite_getGlobalBounds(temp.spriteShadow);
 		sfSprite_setOrigin(temp.spriteShadow, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
 
-		temp.fireRate = 0;
 		temp.velocity = (sfVector2f){ 0 };
 		temp.id = _idMap;
 		temp.type = _type;
@@ -649,4 +652,24 @@ int GetEnemyMap(int _ID)
 		}
 	}
 	return count;
+}
+
+sfVector2f GetClosestEnemy(sfVector2f _pos)
+{
+	float closestPos = 10000;
+	sfVector2f finalPos = { 0 };
+	for (int i = 0; i < enemyCount; i++)
+	{
+		if (enemy[i].id == GetCurrentMap())
+		{
+			sfVector2f pos = sfSprite_getPosition(enemy[i].sprite);
+			float newPos = GetDistanceVector2f(pos, _pos);
+			if (newPos < closestPos)
+			{
+				closestPos = newPos;
+				finalPos = pos;
+			}
+		}
+	}
+	return finalPos;
 }

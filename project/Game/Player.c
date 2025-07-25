@@ -7,9 +7,8 @@ sfTexture* shadowTexture;
 sfVector2f mousePos;
 
 int artifactCount;
-Artifacts artifact[3];
+ShopType artifact[3];
 sfBool effects[3];
-
 
 sfRectangleShape* temp;
 
@@ -38,6 +37,11 @@ void LoadPlayer(void)
 	sfSprite_setOrigin(player.spriteHand, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
 
 	LoadPlayerAnims();
+
+	for (int i = 0; i < 3; i++)
+	{
+		effects[i] = sfFalse;
+	}
 
 	//Collider
 	player.collider = sfRectangleShape_create();
@@ -358,10 +362,10 @@ void GainGold(int _gold)
 	UpdateGold(player.gold);
 }
 
-void SetArtifact(Artifacts _artifact)
+void SetArtifact(int _artifact)
 {
 	artifact[artifactCount] = _artifact;
-	effects[artifactCount] = sfTrue;
+	effects[_artifact] = sfTrue;
 	artifactCount++;
 }
 
@@ -434,4 +438,9 @@ sfVector2f GetMousePos(void)
 int GetArtifactCount(void)
 {
 	return artifactCount;
+}
+
+sfBool GetEffect(int _artifact)
+{
+	return effects[_artifact];
 }

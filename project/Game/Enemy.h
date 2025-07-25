@@ -65,4 +65,5 @@ int GetEnemyCount(void);
 sfFloatRect GetEnemyHitBox(int _ID);
 sfBool IsEnemyAlive(int _ID);
 int GetEnemyMap(int _ID);
+sfVector2f GetClosestEnemy(sfVector2f _pos);
 #endif // !ENEMY_H
