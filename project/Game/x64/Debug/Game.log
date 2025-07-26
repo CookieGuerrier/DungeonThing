@@ -1,4 +1,5 @@
 ﻿  Bullet.c
+  Camera.c
   Enemy.c
   Game.c
   GameHUD.c

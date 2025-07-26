@@ -14,15 +14,6 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 {
 	for (int i = 0; i < bulletCount; i++)
 	{
-		if (GetEffect(BOOMERANG) && !bullet[i].friendlyFire)
-		{
-			bullet[i].speed -= 50;
-		}
-		if (GetEffect(SIGHT) && !bullet[i].friendlyFire)
-		{
-			
-		}
-
 		sfSprite_move(bullet[i].sprite, (sfVector2f) { bullet[i].velocity.x* (_dt * bullet[i].speed), bullet[i].velocity.y* (_dt * bullet[i].speed) });
 
 		//Wall collision
@@ -31,6 +22,13 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 		//Enemy Collision
 		if (!bullet[i].friendlyFire)
 		{
+			//Effects
+			if (GetEffect(BOOMERANG) && bullet[i].speed > -2500)
+			{
+				bullet[i].speed -= 50;
+			}
+			//printf("%d\n", bullet[i].speed);
+			
 			for (int y = 0; y < GetEnemyCount(); y++)
 			{
 				if (IsEnemyAlive(y))
@@ -38,7 +36,12 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 					sfFloatRect enemy = GetEnemyHitBox(y);
 					if (sfFloatRect_intersects(&enemy, &hitbox, NULL))
 					{
-						EnemyHurt(y);
+						if (bullet[i].speed < 0)
+						{
+							bullet[i].dmg++;
+						}
+						printf("%d\n", bullet[i].dmg);
+						EnemyHurt(y, bullet[i].dmg);
 						DeleteBullet(i);
 					}
 				}
@@ -56,7 +59,24 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 
 		if (BulletCollision(hitbox) || GetBulletMap(hitbox) != GetCurrentMap())
 		{
-			DeleteBullet(i);
+			if (bullet[i].bounce > 0 )
+			{
+				bullet[i].bounce--;
+				if (bullet[i].speed < 0)
+				{
+					bullet[i].speed -= 500;
+				}
+				else
+				{
+					bullet[i].speed += 500;
+				}
+				bullet[i].velocity.x *= -1;
+				bullet[i].velocity.y *= -1;
+			}
+			else
+			{
+				DeleteBullet(i);
+			}
 		}
 	}
 }
@@ -94,14 +114,23 @@ void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire)
 		sfFloatRect hitbox = sfSprite_getGlobalBounds(temp.sprite);
 		sfSprite_setOrigin(temp.sprite, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
 
+		temp.rotation = _rot;
 		float playerRadian = _rot * (float)(M_PI / 180);
 		temp.velocity.x = (float)(sin(playerRadian));
 		temp.velocity.y = (float)(-cos(playerRadian));
+		temp.dmg = 1;
 
 		temp.friendlyFire = _friendlyFire;
 		if (_friendlyFire)
 		{
 			sfSprite_setColor(temp.sprite, (sfColor) { 255, 0, 255, 255});
+		}
+		else
+		{
+			if (GetEffect(BLUE_GEL))
+			{
+				temp.bounce = 2;
+			}
 		}
 		temp.speed = _speed;
 

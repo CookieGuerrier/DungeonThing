@@ -59,7 +59,7 @@ void DeleteEnemy(int _ID);
 
 void EnemyMove(int _ID, float _dt);
 void EnemyShoot(int _ID, float _dt);
-void EnemyHurt(int _ID);
+void EnemyHurt(int _ID, int _dmg);
 
 int GetEnemyCount(void);
 sfFloatRect GetEnemyHitBox(int _ID);

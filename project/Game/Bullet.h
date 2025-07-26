@@ -10,7 +10,10 @@ typedef struct Bullet
 	sfSprite* sprite;
 	sfVector2f velocity;
 	sfBool friendlyFire;
+	float rotation;
+	int bounce;
 	int speed;
+	int dmg;
 }Bullet;
 
 void LoadBullet(void);

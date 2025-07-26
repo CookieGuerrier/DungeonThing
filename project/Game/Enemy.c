@@ -594,11 +594,11 @@ void EnemyShoot(int _ID, float _dt)
 
 }
 
-void EnemyHurt(int _ID)
+void EnemyHurt(int _ID, int _dmg)
 {
 	if (enemy[_ID].life > 0 && enemy[_ID].type != TORMENTED_SOUL)
 	{
-		enemy[_ID].life--;
+		enemy[_ID].life -= _dmg;
 		enemy[_ID].hurtFrame = 0.02f;
 
 		switch (enemy[_ID].type)
@@ -660,15 +660,12 @@ sfVector2f GetClosestEnemy(sfVector2f _pos)
 	sfVector2f finalPos = { 0 };
 	for (int i = 0; i < enemyCount; i++)
 	{
-		if (enemy[i].id == GetCurrentMap())
+		sfVector2f pos = sfSprite_getPosition(enemy[i].sprite);
+		float newPos = GetDistanceVector2f(pos, _pos);
+		if (newPos < closestPos)
 		{
-			sfVector2f pos = sfSprite_getPosition(enemy[i].sprite);
-			float newPos = GetDistanceVector2f(pos, _pos);
-			if (newPos < closestPos)
-			{
-				closestPos = newPos;
-				finalPos = pos;
-			}
+			closestPos = newPos;
+			finalPos = pos;
 		}
 	}
 	return finalPos;

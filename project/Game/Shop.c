@@ -15,7 +15,7 @@ void LoadShop(void)
 	textureItems[SAW] = sfTexture_createFromFile("Assets/Texture/Shop Items/saw.png", NULL);
 	textureItems[ANNOYING_ROCK] = sfTexture_createFromFile("Assets/Texture/Shop Items/rock.png", NULL);
 	textureItems[BOOMERANG] = sfTexture_createFromFile("Assets/Texture/Shop Items/boomerang.png", NULL);
-	textureItems[SIGHT] = sfTexture_createFromFile("Assets/Texture/Shop Items/sight.png", NULL);
+	textureItems[BLUE_GEL] = sfTexture_createFromFile("Assets/Texture/Shop Items/blue_gel.png", NULL);
 	font = sfFont_createFromFile("Assets/Font/font.ttf");
 
 	//Price
@@ -24,7 +24,7 @@ void LoadShop(void)
 	price[SAW] = 50;
 	price[ANNOYING_ROCK] = 0;
 	price[BOOMERANG] = 50;
-	price[SIGHT] = 50;
+	price[BLUE_GEL] = 50;
 
 	//Items
 	for (int i = 0; i < 3; i++)
@@ -54,6 +54,8 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 		SetArtifact(BOOMERANG);
 		UpdateSlot(GetArtifactCount(), textureItems[SAW]);
 		SetArtifact(SAW);
+		UpdateSlot(GetArtifactCount(), textureItems[BLUE_GEL]);
+		SetArtifact(BLUE_GEL);
 		test = sfTrue;
 	}
 
@@ -205,8 +207,8 @@ void ItemDescription(void)
 		case BOOMERANG:
 			sfText_setString(description, "BOOMERANG\nBullets come back to deal more damage");
 			break;
-		case SIGHT:
-			sfText_setString(description, "SIGHT\nBullets go torwards ennemies");
+		case BLUE_GEL:
+			sfText_setString(description, "BLUE GEL\nBullets bounce up walls twice and get faster");
 			break;
 		}
 		sfFloatRect hitbox = sfText_getGlobalBounds(description);

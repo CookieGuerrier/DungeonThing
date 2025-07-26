@@ -11,9 +11,9 @@ typedef enum ShopType
 	SAW,
 	ANNOYING_ROCK,
 	BOOMERANG,
-	SIGHT,
+	BLUE_GEL,
 
-	//Heal
+	//Heal 
 	POTION,
 	BIG_POTION
 }ShopType;

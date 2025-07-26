@@ -12,5 +12,6 @@ void MoveCamera(sfVector2f _pos, float _speed);
 sfView* GetView(void);
 sfView* GetHUDView(void);
 void SetView(int _num, sfRenderWindow* _window);
+void SetDamageCamera(void);
 
 #endif // !CAMERA_H

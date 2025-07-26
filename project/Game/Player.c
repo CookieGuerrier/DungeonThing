@@ -7,8 +7,8 @@ sfTexture* shadowTexture;
 sfVector2f mousePos;
 
 int artifactCount;
-ShopType artifact[3];
-sfBool effects[3];
+ShopType artifact[4];
+sfBool effects[4];
 
 sfRectangleShape* temp;
 
@@ -38,7 +38,7 @@ void LoadPlayer(void)
 
 	LoadPlayerAnims();
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		effects[i] = sfFalse;
 	}
@@ -300,11 +300,11 @@ void PlayerShoot(float _dt)
 		if (player.anims[HAND]->frameNum == 1 && player.fireRate)
 		{
 			//Tha shoot
-			AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 90), 1200, sfFalse);
+			AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 90), 1000, sfFalse);
 			if (effects[SAW])
 			{
-				AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 120), 1200, sfFalse);
-				AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 70), 1200, sfFalse);
+				AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 120), 1000, sfFalse);
+				AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 70), 1000, sfFalse);
 			}
 		}
 		player.turnFrame = 0.3f;
@@ -384,6 +384,7 @@ void LoseLife(int _life)
 			sfSprite_setTextureRect(player.sprite, (sfIntRect) { 0, 80, 80, 80 });
 			player.hurtFrame = 0.05f;
 			sfSprite_setColor(player.spriteHand, (sfColor) { 255, 255, 255, 0 });
+			SetDamageCamera();
 		}
 	}
 }

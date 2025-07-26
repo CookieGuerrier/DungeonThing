@@ -6,6 +6,7 @@ sfView* miniView;
 sfVector2f newPos;
 sfVector2f move;
 float speed;
+sfBool damage;
 
 void LoadCamera(sfRenderWindow* _window)
 {
@@ -33,6 +34,18 @@ void UpdateCamera(sfRenderWindow* _window, float _dt)
 	if (sfKeyboard_isKeyPressed(sfKeyL))
 	{
 		sfView_setSize(view, (sfVector2f) { SCREEN_WIDTH, SCREEN_HEIGHT });
+	}
+
+	if (damage)
+	{
+		if (sfView_getRotation(view) != 1.f)
+		{
+			sfView_rotate(view, -0.5f);
+		}
+		else
+		{
+			damage = sfFalse;
+		}
 	}
 }
 
@@ -78,4 +91,10 @@ void SetView(int _num, sfRenderWindow* _window)
 	default:
 		break;
 	}
+}
+
+void SetDamageCamera(void)
+{
+	sfView_setRotation(view, 5);
+	damage = sfTrue;
 }
