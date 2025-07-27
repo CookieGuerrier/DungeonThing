@@ -77,7 +77,7 @@ void MoveWall(int _ID, sfVector2f _pos)
 	sfRectangleShape_setPosition(wall[_ID].collider, _pos);
 }
 
-sfBool BulletCollision(sfFloatRect _hitbox)
+sfBool BulletCollision(sfFloatRect _hitbox, sfVector2f* _vel)
 {
 	for (int i = 0; i < wallCount; i++)
 	{
@@ -87,6 +87,14 @@ sfBool BulletCollision(sfFloatRect _hitbox)
 		{
 			if (!wall[i].bulletThrough)
 			{
+				sfVector2f posBul = (sfVector2f) { hitbox.left + hitbox.width / 2,  hitbox.top + hitbox.height / 2 };
+				sfVector2f posHit = (sfVector2f) { collision.left + collision.width / 2, collision.top + collision.height / 2 };
+
+				if (posBul.y < posHit.y - collision.height / 2 + 20 || posBul.y > posHit.y + collision.height / 2 - 20)
+				_vel->y *= -1;
+				else
+				_vel->x *= -1;
+
 				return sfTrue;
 			}
 		}

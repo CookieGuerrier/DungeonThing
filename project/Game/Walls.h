@@ -23,7 +23,7 @@ void AddWall(sfVector2f _pos, sfBool _rotate, sfVector2f _size, sfBool _bulletTh
 void DeleteWall(int _ID);
 void MoveWall(int _ID, sfVector2f _pos);
 
-sfBool BulletCollision(sfFloatRect _hitbox);
+sfBool BulletCollision(sfFloatRect _hitbox, sfVector2f* _vel);
 sfBool MoveCollision(sfFloatRect _direction);
 sfBool ObjectCollision(sfVector2f _direction);
 

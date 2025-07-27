@@ -58,7 +58,7 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 		}
 		//printf("%d\n", bullet[i].speed);
 
-		if (BulletCollision(hitbox) || GetBulletMap(hitbox) != GetCurrentMap())
+		if (BulletCollision(hitbox, &bullet[i].velocity) || GetBulletMap(hitbox) != GetCurrentMap())
 		{
 			if (bullet[i].bounce > 0)
 			{
@@ -71,8 +71,6 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 				{
 					bullet[i].speed += 500;
 				}
-				bullet[i].velocity.x *= -1;
-				bullet[i].velocity.y *= -1;
 			}
 			else
 			{
