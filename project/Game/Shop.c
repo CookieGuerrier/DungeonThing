@@ -1,10 +1,10 @@
 #include "Shop.h"
 
-sfTexture* textureItems[6];
+sfTexture* textureItems[7];
 sfFont* font;
 sfText* description;
 ItemShop itemShop[3];
-int price[6];
+int price[7];
 
 sfBool test;
 
@@ -16,6 +16,7 @@ void LoadShop(void)
 	textureItems[ANNOYING_ROCK] = sfTexture_createFromFile("Assets/Texture/Shop Items/rock.png", NULL);
 	textureItems[BOOMERANG] = sfTexture_createFromFile("Assets/Texture/Shop Items/boomerang.png", NULL);
 	textureItems[BLUE_GEL] = sfTexture_createFromFile("Assets/Texture/Shop Items/blue_gel.png", NULL);
+	textureItems[CHRONO] = sfTexture_createFromFile("Assets/Texture/Shop Items/chrono.png", NULL);
 	font = sfFont_createFromFile("Assets/Font/font.ttf");
 
 	//Price
@@ -25,6 +26,7 @@ void LoadShop(void)
 	price[ANNOYING_ROCK] = 0;
 	price[BOOMERANG] = 50;
 	price[BLUE_GEL] = 50;
+	price[CHRONO] = 50;
 
 	//Items
 	for (int i = 0; i < 3; i++)
@@ -52,8 +54,8 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 	{
 		UpdateSlot(GetArtifactCount(), textureItems[BOOMERANG]);
 		SetArtifact(BOOMERANG);
-		UpdateSlot(GetArtifactCount(), textureItems[SAW]);
-		SetArtifact(SAW);
+		UpdateSlot(GetArtifactCount(), textureItems[CHRONO]);
+		SetArtifact(CHRONO);
 		UpdateSlot(GetArtifactCount(), textureItems[BLUE_GEL]);
 		SetArtifact(BLUE_GEL);
 		test = sfTrue;
@@ -133,7 +135,7 @@ void DrawShop(sfRenderWindow* _window, sfBool _debug)
 
 void CleanupShop(void)
 {
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 7; i++)
 	{
 		sfTexture_destroy(textureItems[i]);
 		textureItems[i] = NULL;
@@ -209,6 +211,9 @@ void ItemDescription(void)
 			break;
 		case BLUE_GEL:
 			sfText_setString(description, "BLUE GEL\nBullets bounce up walls twice and get faster");
+			break;
+		case CHRONO:
+			sfText_setString(description, "CHRONO\nDoes more damage depending on bullet speed");
 			break;
 		}
 		sfFloatRect hitbox = sfText_getGlobalBounds(description);

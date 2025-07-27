@@ -23,12 +23,11 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 		if (!bullet[i].friendlyFire)
 		{
 			//Effects
-			if (GetEffect(BOOMERANG) && bullet[i].speed > -2500)
+			if (GetEffect(BOOMERANG) && bullet[i].speed > -2000)
 			{
 				bullet[i].speed -= 50;
 			}
-			//printf("%d\n", bullet[i].speed);
-			
+
 			for (int y = 0; y < GetEnemyCount(); y++)
 			{
 				if (IsEnemyAlive(y))
@@ -40,7 +39,8 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 						{
 							bullet[i].dmg++;
 						}
-						printf("%d\n", bullet[i].dmg);
+						bullet[i].dmg += abs(bullet[i].speed / 1000);
+
 						EnemyHurt(y, bullet[i].dmg);
 						DeleteBullet(i);
 					}
@@ -56,10 +56,11 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 				DeleteBullet(i);
 			}
 		}
+		//printf("%d\n", bullet[i].speed);
 
 		if (BulletCollision(hitbox) || GetBulletMap(hitbox) != GetCurrentMap())
 		{
-			if (bullet[i].bounce > 0 )
+			if (bullet[i].bounce > 0)
 			{
 				bullet[i].bounce--;
 				if (bullet[i].speed < 0)
@@ -123,7 +124,7 @@ void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire)
 		temp.friendlyFire = _friendlyFire;
 		if (_friendlyFire)
 		{
-			sfSprite_setColor(temp.sprite, (sfColor) { 255, 0, 255, 255});
+			sfSprite_setColor(temp.sprite, (sfColor) { 255, 0, 255, 255 });
 		}
 		else
 		{
@@ -145,7 +146,7 @@ void DeleteBullet(int _ID)
 	{
 		sfSprite_destroy(bullet[_ID].sprite);
 		bullet[_ID].sprite = NULL;
-		 
+
 		for (int i = _ID; i < bulletCount - 1; i++)
 		{
 			Bullet temp = bullet[i];

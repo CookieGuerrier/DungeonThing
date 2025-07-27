@@ -12,6 +12,7 @@ typedef enum ShopType
 	ANNOYING_ROCK,
 	BOOMERANG,
 	BLUE_GEL,
+	CHRONO,
 
 	//Heal 
 	POTION,

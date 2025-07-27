@@ -7,8 +7,8 @@ sfTexture* shadowTexture;
 sfVector2f mousePos;
 
 int artifactCount;
-ShopType artifact[4];
-sfBool effects[4];
+ShopType artifact[5];
+sfBool effects[5];
 
 sfRectangleShape* temp;
 
