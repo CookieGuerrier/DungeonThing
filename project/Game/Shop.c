@@ -52,8 +52,8 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 {
 	if (!test)
 	{
-		UpdateSlot(GetArtifactCount(), textureItems[BOOMERANG]);
-		SetArtifact(BOOMERANG);
+		UpdateSlot(GetArtifactCount(), textureItems[SAW]);
+		SetArtifact(SAW);
 		UpdateSlot(GetArtifactCount(), textureItems[CHRONO]);
 		SetArtifact(CHRONO);
 		UpdateSlot(GetArtifactCount(), textureItems[BLUE_GEL]);
@@ -107,7 +107,7 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 		if (GetMoney() >= price[itemShop[i].type])
 		{
 			sfText_setColor(itemShop[i].text, sfWhite);
-			if (itemShop[i].type == SAW && GetArtifactCount() >= 3)
+			if (itemShop[i].type < POTION && GetArtifactCount() >= 3)
 			{
 				sfText_setColor(itemShop[i].text, sfRed);
 			}
@@ -210,7 +210,7 @@ void ItemDescription(void)
 			sfText_setString(description, "BOOMERANG\nBullets come back to deal more damage");
 			break;
 		case BLUE_GEL:
-			sfText_setString(description, "BLUE GEL\nBullets bounce up walls twice and get faster");
+			sfText_setString(description, "BLUE GEL\nBullets bounce up walls thrice and get faster");
 			break;
 		case CHRONO:
 			sfText_setString(description, "CHRONO\nDoes more damage depending on bullet speed");

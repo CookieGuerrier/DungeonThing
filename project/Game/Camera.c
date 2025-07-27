@@ -45,6 +45,7 @@ void UpdateCamera(sfRenderWindow* _window, float _dt)
 		else
 		{
 			damage = sfFalse;
+			sfView_setRotation(view, 0);
 		}
 	}
 }

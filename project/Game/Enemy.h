@@ -48,6 +48,12 @@ typedef struct Enemy
 	float playerRot;
 }Enemy;
 
+typedef struct Marker
+{
+	sfText* text;
+	int alpha;
+}Marker;
+
 void LoadEnemy(void);
 void LoadEnemyAnimation(Enemy* _enemy);
 void UpdateEnemy(float _dt, sfRenderWindow* _window);
@@ -56,6 +62,9 @@ void CleanupEnemy(void);
 
 void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap);
 void DeleteEnemy(int _ID);
+
+void AddMarker(sfVector2f _pos, int _dmg);
+void DeleteMarker(int _ID);
 
 void EnemyMove(int _ID, float _dt);
 void EnemyShoot(int _ID, float _dt);

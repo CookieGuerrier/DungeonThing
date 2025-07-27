@@ -5,6 +5,8 @@ ArtifactSlot slot[3];
 GameHUD gameHUD[1];
 int currentLife;
 
+
+
 sfTexture* lifeTexture[3];
 sfTexture* textureSlot;
 sfTexture* goldTexture;

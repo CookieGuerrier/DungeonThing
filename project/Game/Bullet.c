@@ -39,7 +39,7 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 						{
 							bullet[i].dmg++;
 						}
-						bullet[i].dmg += abs(bullet[i].speed / 1000);
+						bullet[i].dmg += abs(bullet[i].speed / 2000);
 
 						EnemyHurt(y, bullet[i].dmg);
 						DeleteBullet(i);
@@ -65,11 +65,11 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 				bullet[i].bounce--;
 				if (bullet[i].speed < 0)
 				{
-					bullet[i].speed -= 500;
+					bullet[i].speed -= 1000;
 				}
 				else
 				{
-					bullet[i].speed += 500;
+					bullet[i].speed += 1000;
 				}
 			}
 			else
@@ -128,7 +128,7 @@ void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire)
 		{
 			if (GetEffect(BLUE_GEL))
 			{
-				temp.bounce = 2;
+				temp.bounce = 3;
 			}
 		}
 		temp.speed = _speed;

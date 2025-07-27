@@ -5,9 +5,14 @@ sfTexture* enemyTexture[6];
 sfTexture* shadowTexture;
 int enemyCount;
 
+sfFont* font;
+Marker marker[15];
+int markerCount;
+
 void LoadEnemy(void)
 {
 	enemyCount = 0;
+	markerCount = 0;
 	enemyTexture[REA_BASE] = sfTexture_createFromFile("Assets/Texture/Enemy/rea_base.png", NULL);
 	enemyTexture[REA_SHOTGUN] = sfTexture_createFromFile("Assets/Texture/Enemy/rea_shotgun.png", NULL);
 	enemyTexture[SLIME] = sfTexture_createFromFile("Assets/Texture/Enemy/slime.png", NULL);
@@ -15,6 +20,8 @@ void LoadEnemy(void)
 	enemyTexture[BIG_CRAB] = sfTexture_createFromFile("Assets/Texture/Enemy/big_crab.png", NULL);
 	enemyTexture[TINY_CRAB] = sfTexture_createFromFile("Assets/Texture/Enemy/tiny_crab.png", NULL);
 	shadowTexture = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
+
+	font = sfFont_createFromFile("Assets/Font/font.ttf");
 }
 
 void LoadEnemyAnimation(Enemy* _enemy)
@@ -226,6 +233,19 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 			}
 		}
 	}
+
+	//Marker
+	for (int i = 0; i < markerCount; i++)
+	{
+		sfText_move(marker[i].text, (sfVector2f) { 0, -2 });
+		marker[i].alpha -= 10;
+		sfText_setFillColor(marker[i].text, (sfColor) { 255, 255, 255, marker[i].alpha });
+		sfText_setOutlineColor(marker[i].text, (sfColor) { 255, 255, 255, marker[i].alpha });
+		if (marker[i].alpha <= 0)
+		{
+			DeleteMarker(i);
+		}
+	}
 }
 
 void DrawEnemy(sfRenderWindow* _window, sfBool _debug)
@@ -241,6 +261,10 @@ void DrawEnemy(sfRenderWindow* _window, sfBool _debug)
 		{
 			sfRenderWindow_drawRectangleShape(_window, enemy[i].collider, NULL);
 		}
+	}
+	for (int i = 0; i < markerCount; i++)
+	{
+		sfRenderWindow_drawText(_window, marker[i].text, NULL);
 	}
 }
 
@@ -263,6 +287,14 @@ void CleanupEnemy(void)
 	enemyTexture[BIG_CRAB] = NULL;
 	sfTexture_destroy(enemyTexture[TINY_CRAB]);
 	enemyTexture[TINY_CRAB] = NULL;
+
+	sfFont_destroy(font);
+	font = NULL;
+	for (int i = 0; i < markerCount; i++)
+	{
+		DeleteMarker(i);
+		markerCount++;
+	}
 }
 
 void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
@@ -362,6 +394,40 @@ void DeleteEnemy(int _ID)
 	}
 
 	enemyCount--;
+}
+
+void AddMarker(sfVector2f _pos, int _dmg)
+{
+	Marker temp = { 0 };
+	temp.text = sfText_create();
+	sfText_setFont(temp.text, font);
+	sfText_setOutlineThickness(temp.text, 1);
+	sfText_setCharacterSize(temp.text, 50);
+	temp.alpha = 255;
+
+	char string[5];
+	sprintf_s(string, sizeof(string), "%d", _dmg);
+	sfText_setString(temp.text, string);
+
+	sfText_setPosition(temp.text, _pos);
+
+	marker[markerCount] = temp;
+	markerCount++;
+}
+
+void DeleteMarker(int _ID)
+{
+	sfText_destroy(marker[_ID].text);
+	marker[_ID].text = NULL;
+
+	for (int i = _ID; i < markerCount - 1; i++)
+	{
+		Marker temp = marker[i];
+		marker[i] = marker[i + 1];
+		marker[i + 1] = temp;
+	}
+
+	markerCount--;
 }
 
 void EnemyMove(int _ID, float _dt)
@@ -596,6 +662,8 @@ void EnemyShoot(int _ID, float _dt)
 
 void EnemyHurt(int _ID, int _dmg)
 {
+	sfVector2f pos = sfSprite_getPosition(enemy[_ID].sprite);
+	sfFloatRect hitbox = sfSprite_getGlobalBounds(enemy[_ID].sprite);
 	if (enemy[_ID].life > 0 && enemy[_ID].type != TORMENTED_SOUL)
 	{
 		enemy[_ID].life -= _dmg;
@@ -615,7 +683,13 @@ void EnemyHurt(int _ID, int _dmg)
 		case BIG_CRAB:
 			sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 95, 220, 95 });
 			break;
-		}
+		}		
+		pos.y -= 50 + hitbox.height /2 ;
+		AddMarker(pos, _dmg);
+	}
+	else
+	{
+		AddMarker(pos, 0);
 	}
 }
 

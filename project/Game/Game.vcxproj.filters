@@ -87,9 +87,6 @@
     <ClCompile Include="Map.c">
       <Filter>Fichiers sources\Map</Filter>
     </ClCompile>
-    <ClCompile Include="Walls.c">
-      <Filter>Fichiers sources\Map</Filter>
-    </ClCompile>
     <ClCompile Include="Money.c">
       <Filter>Fichiers sources\Entity</Filter>
     </ClCompile>
@@ -98,6 +95,9 @@
     </ClCompile>
     <ClCompile Include="Shop.c">
       <Filter>Fichiers sources\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Walls.c">
+      <Filter>Fichiers sources\Misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
