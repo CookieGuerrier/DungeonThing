@@ -39,6 +39,8 @@ typedef enum BattleType
 	FOUR_ROCK,
 	ROCK_LINE,
 	SNIPER_SPOT,
+	LINES,
+	FOUR_SMALL_ROCKS,
 	MAX_LEVEL
 }BattleType;
 

@@ -22,10 +22,10 @@ void LoadShop(void)
 	//Price
 	price[POTION] = 10;
 	price[BIG_POTION] = 20;
-	price[SAW] = 50;
+	price[SAW] = 70;
 	price[ANNOYING_ROCK] = 0;
 	price[BOOMERANG] = 50;
-	price[BLUE_GEL] = 50;
+	price[BLUE_GEL] = 30;
 	price[CHRONO] = 50;
 
 	//Items
@@ -54,8 +54,8 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 	{
 		UpdateSlot(GetArtifactCount(), textureItems[SAW]);
 		SetArtifact(SAW);
-		UpdateSlot(GetArtifactCount(), textureItems[CHRONO]);
-		SetArtifact(CHRONO);
+		//UpdateSlot(GetArtifactCount(), textureItems[CHRONO]);
+		//SetArtifact(CHRONO);
 		UpdateSlot(GetArtifactCount(), textureItems[BLUE_GEL]);
 		SetArtifact(BLUE_GEL);
 		test = sfTrue;
@@ -73,7 +73,7 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 			{
 				if (GetMoney() >= price[itemShop[i].type])
 				{
-					if (itemShop[i].type < 4)
+					if (itemShop[i].type < 5)
 					{
 						if (GetArtifactCount() < 3)
 						{

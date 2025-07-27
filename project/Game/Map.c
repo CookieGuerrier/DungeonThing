@@ -29,7 +29,7 @@ void LoadMap(sfRenderWindow* _window)
 	mainTexture[LRD] = sfTexture_createFromFile("Assets/Texture/Map/lrdText.png", NULL);
 	mainTexture[LRUD] = sfTexture_createFromFile("Assets/Texture/Map/lrudText.png", NULL);
 
-	for(int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		placed[i] = sfFalse;
 	}
@@ -293,11 +293,12 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 	{
 	case BATTLE:
 		ran = rand() % MAX_LEVEL;
-		//ran = SNIPER_SPOT;
+		//ran = LINES;
 
 		CreateBattle(ran, hitbox);
 		break;
 	case START:
+		SetCamera((sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
 		PositionMini(mapCount);
 		mapStart = mapCount;
 		break;
@@ -563,13 +564,36 @@ void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 - 380, _hitbox.top + _hitbox.height / 2 }, 0, ROCK);
 		EnemyPlacements(3, _hitbox);
 		break;
+	case LINES:
+		for (int i = 0; i < 2; i++)
+		{
+			AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 - 100 + (200 * i) }, 0, LONG_HOLE);
+			AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 + 600, _hitbox.top + _hitbox.height / 2 - 100 + (200 * i) }, 0, ROCK);
+			AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 - 480, _hitbox.top + _hitbox.height / 2 - 100 + (200 * i) }, 0, ROCK);
+		}
+		EnemyPlacements(0, _hitbox);
+		break;
+	case FOUR_SMALL_ROCKS:
+		AddObject((sfVector2f) { _hitbox.left + 500 + 60, _hitbox.top + 300 + 60 }, 0, ROCK);
+		AddObject((sfVector2f) { _hitbox.left + _hitbox.width - 500 + 60, _hitbox.top + 300 + 60  }, 0, ROCK);
+		AddObject((sfVector2f) { _hitbox.left + 500 + 60, _hitbox.top + _hitbox.height - 300 - 60  }, 0, ROCK);
+		AddObject((sfVector2f) { _hitbox.left + _hitbox.width - 500 + 60, _hitbox.top + _hitbox.height - 300 - 60  }, 0, ROCK);
+		ran = rand() % 2;
+		if (ran == 0)
+		{
+			EnemyPlacements(0, _hitbox);
+		}
+		else
+		{
+			EnemyPlacements(1, _hitbox);
+		}
 	default:
 		break;
 	}
 	ran = rand() % 8;
 	if (ran == 0)
 	{
-		AddEnemy(TORMENTED_SOUL, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 - 200 }, mapCount);
+		AddEnemy(TORMENTED_SOUL, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 }, mapCount);
 	}
 }
 

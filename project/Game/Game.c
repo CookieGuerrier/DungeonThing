@@ -85,6 +85,7 @@ void DrawGame(sfRenderWindow* _window)
 	DrawBullet(_window, debugMode);
 	DrawPlayer(_window, debugMode);
 
+
 	SetView(1, _window);
 	DrawGameHUD(_window, debugMode);
 	

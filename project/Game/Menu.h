@@ -4,6 +4,7 @@
 #include "Common.h"
 #include "GameState.h"
 #include "Game.h"
+#include "MenuHUD.h"
 
 typedef struct MenuData
 {
@@ -13,7 +14,7 @@ typedef struct MenuData
 
 void LoadMenu(void);
 void KeyPressedMenu(sfRenderWindow* _renderWindow, sfKeyEvent _key);
-void UpdateMenu(float _dt);
+void UpdateMenu(float _dt, sfRenderWindow* _window);
 void DrawMenu(sfRenderWindow* _renderWindow);
 void CleanupMenu(void);
 

@@ -39,7 +39,10 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 						{
 							bullet[i].dmg++;
 						}
-						bullet[i].dmg += abs(bullet[i].speed / 2000);
+						if (GetEffect(CHRONO))
+						{
+							bullet[i].dmg += abs(bullet[i].speed / 2000);
+						}
 
 						EnemyHurt(y, bullet[i].dmg);
 						DeleteBullet(i);

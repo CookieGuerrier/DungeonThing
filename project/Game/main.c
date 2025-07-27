@@ -97,7 +97,7 @@ void Update(MainData* const _mainData)
 	switch (GetGameState())
 	{
 	case MENU:
-		UpdateMenu(dt);
+		UpdateMenu(dt, _mainData->renderWindow);
 		break;
 	case GAME:
 		UpdateGame(dt, _mainData->renderWindow);

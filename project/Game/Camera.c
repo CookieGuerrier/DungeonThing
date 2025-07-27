@@ -66,6 +66,11 @@ void MoveCamera(sfVector2f _pos, float _speed)
 	speed = _speed;
 }
 
+void SetCamera(sfVector2f _pos)
+{
+	sfView_setCenter(view, _pos);
+}
+
 sfView* GetView(void)
 {
 	return view;

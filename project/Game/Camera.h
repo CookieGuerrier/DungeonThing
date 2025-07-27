@@ -9,6 +9,7 @@ void UpdateCamera(sfRenderWindow* _window, float _dt);
 void DestroyCamera(void);
 
 void MoveCamera(sfVector2f _pos, float _speed);
+void SetCamera(sfVector2f _pos);
 sfView* GetView(void);
 sfView* GetHUDView(void);
 void SetView(int _num, sfRenderWindow* _window);

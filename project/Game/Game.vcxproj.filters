@@ -99,6 +99,9 @@
     <ClCompile Include="Walls.c">
       <Filter>Fichiers sources\Misc</Filter>
     </ClCompile>
+    <ClCompile Include="MenuHUD.c">
+      <Filter>Fichiers sources\HUD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -154,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="MiniMap.h">
       <Filter>Fichiers d%27en-tête\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuHUD.h">
+      <Filter>Fichiers d%27en-tête\HUD</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
