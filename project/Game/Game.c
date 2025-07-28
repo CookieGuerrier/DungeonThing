@@ -29,10 +29,9 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _key)
 		LoadMenu();
 		SetGameState(MENU);
 		break;
-	case sfKeySpace:
-		CleanupGame();
-		LoadGameOver();
-		SetGameState(GAME_OVER);
+	case sfKeyX:
+		//TEMPORAIRE
+		sfRenderWindow_close(_renderWindow);
 		break;
 	case sfKeyP:
 		if (debugMode)
@@ -44,15 +43,14 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _key)
 			debugMode = sfTrue;
 		}
 		break;
-	case sfKeyI:
-		GainLife(1);
-		break;
-	case sfKeyO:
-		LoseLife(1);
-		break;
 	default:
 		break;
 	}
+}
+
+void MousePressedGame(sfRenderWindow* _renderWindow, sfMouseButtonEvent _mouse)
+{
+
 }
 
 void UpdateGame(float _dt, sfRenderWindow* _window)

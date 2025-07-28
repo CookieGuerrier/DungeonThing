@@ -5,8 +5,7 @@
 typedef enum GameState
 {
 	MENU,
-	GAME,
-	GAME_OVER
+	GAME
 }GameState;
 #pragma endregion
 

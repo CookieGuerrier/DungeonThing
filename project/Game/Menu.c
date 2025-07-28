@@ -39,6 +39,31 @@ void KeyPressedMenu(sfRenderWindow* _renderWindow, sfKeyEvent _key)
 	}
 }
 
+void MousePressedMenu(sfRenderWindow* _renderWindow, sfMouseButtonEvent _mouse)
+{
+	switch (_mouse.button)
+	{
+	case sfMouseLeft:
+	{
+		if (IsMouseOnButton())
+		{
+			switch (GetSelection())
+			{
+			case 0:
+				CleanupMenu();
+				LoadGame(_renderWindow);
+				SetGameState(GAME);
+				break;
+			case 3:
+				sfRenderWindow_close(_renderWindow);
+				break;
+			}
+		}
+	}
+	break;
+	}
+}
+
 void UpdateMenu(float _dt, sfRenderWindow* _window)
 {
 	UpdateMenuHUD(_dt, _window);

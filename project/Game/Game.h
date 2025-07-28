@@ -23,6 +23,7 @@ typedef struct GameData
 
 void LoadGame(sfRenderWindow* _window);
 void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _key);
+void MousePressedGame(sfRenderWindow* _renderWindow, sfMouseButtonEvent _mouse);
 void UpdateGame(float _dt, sfRenderWindow* _window);
 void DrawGame(sfRenderWindow* _renderWindow);
 void CleanupGame(void);

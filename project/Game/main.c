@@ -17,6 +17,7 @@ typedef struct MainData
 void Load(MainData* const _mainData);
 void PollEvent(MainData* const _mainData);
 void KeyPressed(sfRenderWindow* const _renderWindow, sfKeyEvent _key);
+void MousePressed(sfRenderWindow* const _renderWindow,sfMouseButtonEvent _mouse);
 void Update(MainData* const _mainData);
 void Draw(MainData* const _mainData);
 void Cleanup(MainData* const _mainData);
@@ -66,6 +67,9 @@ void PollEvent(MainData* const _mainData)
 		case sfEvtKeyPressed:
 			KeyPressed(_mainData->renderWindow, event.key);
 			break;
+		case sfEvtMouseButtonPressed:
+			MousePressed(_mainData->renderWindow, event.mouseButton);
+			break;
 		default:
 			break;
 		}
@@ -82,8 +86,20 @@ void KeyPressed(sfRenderWindow* const _renderWindow, sfKeyEvent _key)
 	case GAME:
 		KeyPressedGame(_renderWindow, _key);
 		break;
-	case GAME_OVER:
-		KeyPressedGameOver(_renderWindow, _key);
+	default:
+		break;
+	}
+}
+
+void MousePressed(sfRenderWindow* const _renderWindow, sfMouseButtonEvent _mouse)
+{
+	switch (GetGameState())
+	{
+	case MENU:
+		MousePressedMenu(_renderWindow, _mouse);
+		break;
+	case GAME:
+		MousePressedGame(_renderWindow, _mouse);
 		break;
 	default:
 		break;
@@ -101,9 +117,6 @@ void Update(MainData* const _mainData)
 		break;
 	case GAME:
 		UpdateGame(dt, _mainData->renderWindow);
-		break;
-	case GAME_OVER:
-		UpdateGameOver(dt);
 		break;
 	default:
 		break;
@@ -123,9 +136,6 @@ void Draw(MainData* const _mainData)
 	case GAME:
 		DrawGame(_mainData->renderWindow);
 		break;
-	case GAME_OVER:
-		DrawGameOver(_mainData->renderWindow);
-		break;
 	default:
 		break;
 	}
@@ -144,9 +154,6 @@ void Cleanup(MainData* const _mainData)
 		break;
 	case GAME:
 		CleanupGame();
-		break;
-	case GAME_OVER:
-		CleanupGameOver();
 		break;
 	default:
 		break;

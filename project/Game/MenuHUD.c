@@ -5,6 +5,7 @@ sfFont* font;
 Buttons button[4];
 sfTexture* selectionText;
 Selection select[2];
+sfVector2f mousePos;
 
 void LoadMenuHUD(void)
 {
@@ -63,7 +64,7 @@ void UpdateMenuHUD(float _dt, sfRenderWindow* _window)
 	sfSprite_setPosition(select[1].sprite, (sfVector2f) { pos.x + hitbox.width / 2 + 20, pos.y + 40 });
 
 	sfVector2i renderMouse = sfMouse_getPositionRenderWindow(_window);
-	sfVector2f mousePos = sfRenderWindow_mapPixelToCoords(_window, renderMouse, GetView());
+	mousePos = sfRenderWindow_mapPixelToCoords(_window, renderMouse, GetView());
 	for (int i = 0; i < 4; i++)
 	{
 		sfFloatRect hit = sfText_getGlobalBounds(button[i].text);
@@ -102,7 +103,7 @@ void CleanupMenuHUD(void)
 
 void SetSelection(int _sel)
 {
-	if (selection + _sel >= 0 && selection + _sel <= 3)
+	if (selection + _sel >= 0 && selection + _sel <= 3 && !IsMouseOnButton())
 	{
 		selection += _sel;
 	}
@@ -111,4 +112,14 @@ void SetSelection(int _sel)
 int GetSelection(void)
 {
 	return selection;
+}
+
+sfBool IsMouseOnButton(void)
+{
+	sfFloatRect hit = sfText_getGlobalBounds(button[selection].text);
+	if (sfFloatRect_contains(&hit, mousePos.x, mousePos.y))
+	{
+		return sfTrue;
+	}
+	return sfFalse;
 }

@@ -143,7 +143,6 @@
     <ClCompile Include="Enemy.c" />
     <ClCompile Include="Game.c" />
     <ClCompile Include="GameHUD.c" />
-    <ClCompile Include="GameOver.c" />
     <ClCompile Include="GameState.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="Map.c" />

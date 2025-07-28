@@ -57,9 +57,6 @@
     <ClCompile Include="Game.c">
       <Filter>Fichiers sources\States</Filter>
     </ClCompile>
-    <ClCompile Include="GameOver.c">
-      <Filter>Fichiers sources\States</Filter>
-    </ClCompile>
     <ClCompile Include="Player.c">
       <Filter>Fichiers sources\Entity</Filter>
     </ClCompile>

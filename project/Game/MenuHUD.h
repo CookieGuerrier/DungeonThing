@@ -22,4 +22,5 @@ void CleanupMenuHUD(void);
 
 void SetSelection(int _sel);
 int GetSelection(void);
+sfBool IsMouseOnButton(void);
 #endif // !MENUHUD_H
