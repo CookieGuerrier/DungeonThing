@@ -9,6 +9,7 @@ sfVector2f mousePos;
 
 void LoadMenuHUD(void)
 {
+	selection = 0;
 	font = sfFont_createFromFile("Assets/Font/font.ttf");
 	selectionText = sfTexture_createFromFile("Assets/Texture/HUD/hudMarker.png", NULL);
 
@@ -20,7 +21,6 @@ void LoadMenuHUD(void)
 		sfText_setOutlineThickness(button[i].text, 2);
 		sfText_setCharacterSize(button[i].text, 70);
 	}
-	SetCamera((sfVector2f) { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 });
 	sfText_setString(button[0].text, "New Game");
 	sfFloatRect hitbox = sfText_getGlobalBounds(button[0].text);
 	sfText_setOrigin(button[0].text, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });

@@ -299,6 +299,7 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		break;
 	case START:
 		SetCamera((sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
+		MoveCamera((sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 }, 2);
 		PositionMini(mapCount);
 		mapStart = mapCount;
 		break;
@@ -634,13 +635,13 @@ void EnemyPlacements(int _ID, sfFloatRect _hitbox)
 	{
 	case 0:
 		//Sides
-		ran = rand() % 3;
+		ran = rand() % 4;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
-		ran = rand() % 3;
+		ran = rand() % 4;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
-		ran = rand() % 3;
+		ran = rand() % 4;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
-		ran = rand() % 3;
+		ran = rand() % 4;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
 		break;
 	case 1:
@@ -648,31 +649,31 @@ void EnemyPlacements(int _ID, sfFloatRect _hitbox)
 		ran = rand() % 2;
 		if (ran == 0)
 		{
-			ran = rand() % 3;
+			ran = rand() % 4;
 			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
-			ran = rand() % 3;
+			ran = rand() % 4;
 			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
-			ran = rand() % 3;
+			ran = rand() % 4;
 			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 + 200 }, mapCount);
-			ran = rand() % 3;
+			ran = rand() % 4;
 			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 - 200 }, mapCount);
 		}
 		else
 		{
 			AddEnemy(BIG_CRAB, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 }, mapCount);
-			ran = rand() % 3;
+			ran = rand() % 4;
 			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
-			ran = rand() % 3;
+			ran = rand() % 4;
 			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
-			ran = rand() % 3;
+			ran = rand() % 4;
 			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 + 200 }, mapCount);
 		}
 		break;
 	case 2:
 		//Close center
-		ran = rand() % 3;
+		ran = rand() % 4;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
-		ran = rand() % 3;
+		ran = rand() % 4;
 		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
 		break;
 	case 3:

@@ -7,8 +7,8 @@ sfTexture* shadowTexture;
 sfVector2f mousePos;
 
 int artifactCount;
-ShopType artifact[5];
-sfBool effects[5];
+ShopType artifact[6];
+sfBool effects[6];
 
 sfRectangleShape* temp;
 
@@ -17,7 +17,7 @@ void LoadPlayer(void)
 	//Stats
 	player.speed = 500;
 	player.life = 0;
-	player.gold = 300;
+	player.gold = 150;
 	artifactCount = 0;
 
 	//Sprite
@@ -156,6 +156,18 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 		else if (player.invFrame > 1)
 		{
 			player.invFrame -= _dt;
+		}
+
+		//Effectx
+		{
+			if (player.invFrame < 0)
+			{
+				player.anims[HAND]->rate = 1 / 8.0f;
+			}
+			else
+			{
+				player.anims[HAND]->rate = 1 / 32.0f;
+			}
 		}
 
 		//Turn frame
@@ -300,11 +312,11 @@ void PlayerShoot(float _dt)
 		if (player.anims[HAND]->frameNum == 1 && player.fireRate)
 		{
 			//Tha shoot
-			AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 90), 1000, sfFalse);
+			AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 90), 1000, sfFalse, sfFalse);
 			if (effects[SAW])
 			{
-				AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 120), 1000, sfFalse);
-				AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 70), 1000, sfFalse);
+				AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 120), 1000, sfFalse, sfFalse);
+				AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 70), 1000, sfFalse, sfFalse);
 			}
 		}
 		player.turnFrame = 0.3f;
@@ -352,8 +364,14 @@ void GainLife(int _life)
 
 void LoseGold(int _gold)
 {
-	player.gold -= _gold;
-	UpdateGold(player.gold);
+	for (int i = 0; i < _gold; i++)
+	{
+		if (player.gold > 0)
+		{
+			player.gold--;
+			UpdateGold(player.gold);
+		}
+	}
 }
 
 void GainGold(int _gold)
@@ -408,7 +426,6 @@ void PlayerTransition(int _num)
 	default:
 		break;
 	}
-	//SZDQ
 }
 
 int GetHP(void)

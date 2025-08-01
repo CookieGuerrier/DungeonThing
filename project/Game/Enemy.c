@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 Enemy enemy[100];
-sfTexture* enemyTexture[6];
+sfTexture* enemyTexture[7];
 sfTexture* shadowTexture;
 int enemyCount;
 
@@ -15,6 +15,7 @@ void LoadEnemy(void)
 	markerCount = 0;
 	enemyTexture[REA_BASE] = sfTexture_createFromFile("Assets/Texture/Enemy/rea_base.png", NULL);
 	enemyTexture[REA_SHOTGUN] = sfTexture_createFromFile("Assets/Texture/Enemy/rea_shotgun.png", NULL);
+	enemyTexture[REA_CLOTH] = sfTexture_createFromFile("Assets/Texture/Enemy/rea_cloth.png", NULL);
 	enemyTexture[SLIME] = sfTexture_createFromFile("Assets/Texture/Enemy/slime.png", NULL);
 	enemyTexture[TORMENTED_SOUL] = sfTexture_createFromFile("Assets/Texture/Enemy/tormented_soul.png", NULL);
 	enemyTexture[BIG_CRAB] = sfTexture_createFromFile("Assets/Texture/Enemy/big_crab.png", NULL);
@@ -62,6 +63,23 @@ void LoadEnemyAnimation(Enemy* _enemy)
 
 		first = (sfIntRect){ 0,  75 * 3, size.x / 8, size.y / 4 };
 		_enemy->anims[DEATH_E] = CreateAnim(enemyTexture[REA_SHOTGUN], first, 4, 1 / 12.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfFalse);
+		_enemy->anims[DEATH_E]->aimOffset = (sfVector2f){ 0 };
+		_enemy->anims[DEATH_E]->events = malloc(sizeof(AnimEvent));
+	}break;
+	case REA_CLOTH: {
+		sfVector2u size = sfTexture_getSize(enemyTexture[REA_CLOTH]);
+		sfIntRect first = { 0, 0, size.x / 8, size.y / 4 };
+		_enemy->anims[IDLE_E] = CreateAnim(enemyTexture[REA_CLOTH], first, 6, 1 / 8.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfTrue);
+		_enemy->anims[IDLE_E]->aimOffset = (sfVector2f){ 0 };
+		_enemy->anims[IDLE_E]->events = malloc(sizeof(AnimEvent));
+
+		first = (sfIntRect){ 0, 75 * 2, size.x / 8, size.y / 4 };
+		_enemy->anims[WALK_E] = CreateAnim(enemyTexture[REA_CLOTH], first, 8, 1 / 8.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfTrue);
+		_enemy->anims[WALK_E]->aimOffset = (sfVector2f){ 0 };
+		_enemy->anims[WALK_E]->events = malloc(sizeof(AnimEvent));
+
+		first = (sfIntRect){ 0,  75 * 3, size.x / 8, size.y / 4 };
+		_enemy->anims[DEATH_E] = CreateAnim(enemyTexture[REA_CLOTH], first, 4, 1 / 12.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 16.f, (float)size.y / 8.f }, sfFalse);
 		_enemy->anims[DEATH_E]->aimOffset = (sfVector2f){ 0 };
 		_enemy->anims[DEATH_E]->events = malloc(sizeof(AnimEvent));
 	}break;
@@ -150,6 +168,9 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 			case REA_SHOTGUN:
 				sfRectangleShape_setPosition(enemy[i].collider, (sfVector2f) { pos.x + 2, pos.y + 2 });
 				break;
+			case REA_CLOTH:
+				sfRectangleShape_setPosition(enemy[i].collider, (sfVector2f) { pos.x + 2, pos.y + 2 });
+				break;
 			case SLIME:
 				sfRectangleShape_setPosition(enemy[i].collider, (sfVector2f) { pos.x + 2, pos.y + 20 });
 				break;
@@ -205,14 +226,15 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 				{
 				case REA_BASE:
 				case REA_SHOTGUN:
+				case REA_CLOTH:
 				case SLIME:
-					AddNugget(hitbox, 1);
+					AddNugget(hitbox, 2);
 					break;
 				case BIG_CRAB:
-					AddNugget(hitbox, 5);
+					AddNugget(hitbox, 8);
 					break;
 				case TORMENTED_SOUL:
-					AddNugget(hitbox, 2);
+					AddNugget(hitbox, 8);
 					break;
 				}
 				enemy[i].isDead = sfTrue;
@@ -279,6 +301,8 @@ void CleanupEnemy(void)
 	enemyTexture[REA_BASE] = NULL;
 	sfTexture_destroy(enemyTexture[REA_SHOTGUN]);
 	enemyTexture[REA_SHOTGUN] = NULL;
+	sfTexture_destroy(enemyTexture[REA_CLOTH]);
+	enemyTexture[REA_CLOTH] = NULL;
 	sfTexture_destroy(enemyTexture[SLIME]);
 	enemyTexture[SLIME] = NULL;
 	sfTexture_destroy(enemyTexture[TORMENTED_SOUL]);
@@ -321,19 +345,26 @@ void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
 			temp.life = 5;
 			temp.speed = 150;
 			ran = (float)(rand() % 11 - 5);
-			temp.fireRate = 1.8f + (ran / 10);
+			temp.fireRate = (ran / 10);
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 60 });
 			break;
 		case REA_SHOTGUN:
 			temp.life = 5;
 			temp.speed = 150;
 			ran = (float)(rand() % 11 - 5);
-			temp.fireRate = 2.2f + (ran / 10);
+			temp.fireRate = (ran / 10);
+			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 60 });
+			break;
+		case REA_CLOTH:
+			temp.life = 5;
+			temp.speed = 150;
+			ran = (float)(rand() % 11 - 5);
+			temp.fireRate = (ran / 10);
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 60 });
 			break;
 		case SLIME:
 			temp.life = 3;
-			temp.speed = 600;
+			temp.speed = 800;
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 40 });
 			break;
 		case TORMENTED_SOUL:
@@ -432,7 +463,7 @@ void DeleteMarker(int _ID)
 
 void EnemyMove(int _ID, float _dt)
 {
-	if (!enemy[_ID].isShooting && enemy[_ID].fireRate < 0.7f)
+	if (!enemy[_ID].isShooting && enemy[_ID].fireRate < 0.7f || enemy[_ID].type == REA_CLOTH)
 	{
 		sfVector2f pos = sfSprite_getPosition(enemy[_ID].sprite);
 		sfFloatRect hitbox = sfSprite_getGlobalBounds(enemy[_ID].sprite);
@@ -454,6 +485,7 @@ void EnemyMove(int _ID, float _dt)
 		switch (enemy[_ID].type)
 		{
 		case REA_BASE:
+		case REA_SHOTGUN:
 			enemy[_ID].playerRot = LookToDirection(GetPlayerPos(), pos) + 90;
 			radian = enemy[_ID].playerRot * (float)(M_PI / 180);
 			switch (enemy[_ID].state)
@@ -471,20 +503,11 @@ void EnemyMove(int _ID, float _dt)
 			enemy[_ID].velocity.x = (float)(sin(radian));
 			enemy[_ID].velocity.y = (float)(-cos(radian));
 			break;
-		case REA_SHOTGUN:
+		case REA_CLOTH:
 			enemy[_ID].playerRot = LookToDirection(GetPlayerPos(), pos) + 90;
 			radian = enemy[_ID].playerRot * (float)(M_PI / 180);
-			switch (enemy[_ID].state)
-			{
-			case 1:
-				radian -= 45;
-				break;
-			case 2:
-				radian += 45;
-				break;
-			}
-			enemy[_ID].velocity.x = (float)(sin(radian));
-			enemy[_ID].velocity.y = (float)(-cos(radian));
+			enemy[_ID].velocity.x = (float)(sin(radian) * enemy[_ID].misc);
+			enemy[_ID].velocity.y = (float)(-cos(radian) * enemy[_ID].misc);
 			break;
 		case SLIME:
 			if (enemy[_ID].stateTimer <= 0)
@@ -608,7 +631,7 @@ void EnemyShoot(int _ID, float _dt)
 		pos = sfSprite_getPosition(enemy[_ID].sprite);
 		if (enemy[_ID].fireRate <= 0)
 		{
-			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 600, sfTrue);
+			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 600, sfTrue, sfFalse);
 			if (enemy[_ID].fireThing < 2)
 			{
 				enemy[_ID].isShooting = sfTrue;
@@ -619,7 +642,7 @@ void EnemyShoot(int _ID, float _dt)
 			{
 				enemy[_ID].isShooting = sfFalse;
 				float ran = (float)(rand() % 11 - 5);
-				enemy[_ID].fireRate = 1.8f + (ran / 10);
+				enemy[_ID].fireRate = 2.8f + (ran / 10);
 				enemy[_ID].fireThing = 0;
 			}
 		}
@@ -628,12 +651,21 @@ void EnemyShoot(int _ID, float _dt)
 		pos = sfSprite_getPosition(enemy[_ID].sprite);
 		if (enemy[_ID].fireRate <= 0)
 		{
-			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 300, sfTrue);
-			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) + 20, 300, sfTrue);
-			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) - 20, 300, sfTrue);
+			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 400, sfTrue, sfFalse);
+			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) + 40, 400, sfTrue, sfFalse);
+			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) - 40, 400, sfTrue, sfFalse);
 			enemy[_ID].isShooting = sfFalse;
 			float ran = (float)(rand() % 11 - 5);
-			enemy[_ID].fireRate = 2.2f + (ran / 10);
+			enemy[_ID].fireRate = 3.2f + (ran / 10);
+		}
+		break;
+	case REA_CLOTH:
+		pos = sfSprite_getPosition(enemy[_ID].sprite);
+		if (enemy[_ID].fireRate <= 0 )
+		{
+			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 600, sfTrue, sfFalse);
+			enemy[_ID].isShooting = sfFalse;
+			enemy[_ID].fireRate = 0.3f;
 		}
 		break;
 	case BIG_CRAB:
@@ -666,7 +698,10 @@ void EnemyHurt(int _ID, int _dmg)
 	sfFloatRect hitbox = sfSprite_getGlobalBounds(enemy[_ID].sprite);
 	if (enemy[_ID].life > 0 && enemy[_ID].type != TORMENTED_SOUL)
 	{
-		enemy[_ID].life -= _dmg;
+		if (_dmg >= 0)
+		{
+			enemy[_ID].life -= _dmg;
+		}
 		enemy[_ID].hurtFrame = 0.02f;
 
 		switch (enemy[_ID].type)

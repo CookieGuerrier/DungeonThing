@@ -65,7 +65,7 @@ void CleanupMoney(void)
 
 void AddNugget(sfFloatRect _hitbox, int _num)
 {
-	if (nuggetCount < 200)
+	if (nuggetCount < 199)
 	{
 		for (int i = 0; i < _num; i++)
 		{

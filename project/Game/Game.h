@@ -14,6 +14,7 @@
 #include "Camera.h"
 #include "Shop.h"
 #include "MiniMap.h"
+#include "Camera.h"
 
 typedef struct GameData
 {
@@ -27,5 +28,10 @@ void MousePressedGame(sfRenderWindow* _renderWindow, sfMouseButtonEvent _mouse);
 void UpdateGame(float _dt, sfRenderWindow* _window);
 void DrawGame(sfRenderWindow* _renderWindow);
 void CleanupGame(void);
+
+void LoadPauseMenu(void);
+void UpdatePauseMenu(float _dt, sfRenderWindow* _window);
+void DrawPauseMenu(sfRenderWindow* _window);
+void CleanupPauseMenu(void);
 
 #endif // !GAME_H

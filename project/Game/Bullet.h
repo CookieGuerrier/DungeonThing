@@ -21,7 +21,7 @@ void UpdateBullet(float _dt, sfRenderWindow* _window);
 void DrawBullet(sfRenderWindow* _window, sfBool _debug);
 void CleanupBullet(void);
 
-void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire);
+void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire, sfBool _bigBullet);
 void DeleteBullet(int _ID);
 
 #endif // !BULLET_H

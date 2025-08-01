@@ -17,7 +17,7 @@ typedef struct MainData
 void Load(MainData* const _mainData);
 void PollEvent(MainData* const _mainData);
 void KeyPressed(sfRenderWindow* const _renderWindow, sfKeyEvent _key);
-void MousePressed(sfRenderWindow* const _renderWindow,sfMouseButtonEvent _mouse);
+void MousePressed(sfRenderWindow* const _renderWindow, sfMouseButtonEvent _mouse);
 void Update(MainData* const _mainData);
 void Draw(MainData* const _mainData);
 void Cleanup(MainData* const _mainData);
@@ -139,7 +139,8 @@ void Draw(MainData* const _mainData)
 	default:
 		break;
 	}
-
+	SetView(1, _mainData->renderWindow);
+	DrawVeil(_mainData->renderWindow);
 	sfRenderWindow_display(_mainData->renderWindow);
 }
 

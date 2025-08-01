@@ -20,10 +20,10 @@ typedef struct GameHUD
 	sfText* text;
 }GameHUD;
 
-void LoadGameHUD(void);
+void LoadGameHUD(sfFont* font);
 void UpdateGameHUD(float _dt);
 void DrawGameHUD(sfRenderWindow* _window, sfBool _debug);
-void CleanupGameHUD(void);
+void CleanupGameHUD(sfFont* font);
 
 void AddLife(void);
 void DeleteLife(void);

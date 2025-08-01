@@ -9,10 +9,11 @@ typedef enum ShopType
 {
 	//Artifacts
 	SAW,
-	ANNOYING_ROCK,
+	CONTRACT,
 	BOOMERANG,
 	BLUE_GEL,
 	CHRONO,
+	STAMP,
 
 	//Heal 
 	POTION,

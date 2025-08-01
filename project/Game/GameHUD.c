@@ -5,14 +5,12 @@ ArtifactSlot slot[3];
 GameHUD gameHUD[1];
 int currentLife;
 
-
-
 sfTexture* lifeTexture[3];
 sfTexture* textureSlot;
 sfTexture* goldTexture;
-sfFont* font;
 
-void LoadGameHUD(void)
+
+void LoadGameHUD(sfFont* font)
 {
 	font = sfFont_createFromFile("Assets/Font/font.ttf");
 	currentLife = 0;
@@ -44,7 +42,7 @@ void LoadGameHUD(void)
 	sfSprite_setTexture(slot[0].sprite, textureSlot, sfTrue);
 	hitbox = sfSprite_getGlobalBounds(lifePoints[0].sprite);
 	sfSprite_setOrigin(slot[0].sprite, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
-	sfSprite_setPosition(slot[0].sprite, (sfVector2f) { -720.f, 990.f});
+	sfSprite_setPosition(slot[0].sprite, (sfVector2f) { -720.f, 990.f });
 	slot[1].sprite = sfSprite_create();
 	sfSprite_setTexture(slot[1].sprite, textureSlot, sfTrue);
 	hitbox = sfSprite_getGlobalBounds(lifePoints[1].sprite);
@@ -91,7 +89,7 @@ void DrawGameHUD(sfRenderWindow* _window, sfBool _debug)
 	sfRenderWindow_drawText(_window, gameHUD[0].text, NULL);
 }
 
-void CleanupGameHUD(void)
+void CleanupGameHUD(sfFont* font)
 {
 	for (int i = 0; i < 3; i++)
 	{

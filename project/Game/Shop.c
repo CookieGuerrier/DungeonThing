@@ -1,10 +1,10 @@
 #include "Shop.h"
 
-sfTexture* textureItems[7];
+sfTexture* textureItems[8];
 sfFont* font;
 sfText* description;
 ItemShop itemShop[3];
-int price[7];
+int price[8];
 
 sfBool test;
 
@@ -13,18 +13,19 @@ void LoadShop(void)
 	textureItems[POTION] = sfTexture_createFromFile("Assets/Texture/Shop Items/potion.png", NULL);
 	textureItems[BIG_POTION] = sfTexture_createFromFile("Assets/Texture/Shop Items/bigPotion.png", NULL);
 	textureItems[SAW] = sfTexture_createFromFile("Assets/Texture/Shop Items/saw.png", NULL);
-	textureItems[ANNOYING_ROCK] = sfTexture_createFromFile("Assets/Texture/Shop Items/rock.png", NULL);
+	textureItems[CONTRACT] = sfTexture_createFromFile("Assets/Texture/Shop Items/contract.png", NULL);
 	textureItems[BOOMERANG] = sfTexture_createFromFile("Assets/Texture/Shop Items/boomerang.png", NULL);
 	textureItems[BLUE_GEL] = sfTexture_createFromFile("Assets/Texture/Shop Items/blue_gel.png", NULL);
 	textureItems[CHRONO] = sfTexture_createFromFile("Assets/Texture/Shop Items/chrono.png", NULL);
+	textureItems[STAMP] = sfTexture_createFromFile("Assets/Texture/Shop Items/stamp.png", NULL);
 	font = sfFont_createFromFile("Assets/Font/font.ttf");
 
 	//Price
 	price[POTION] = 10;
 	price[BIG_POTION] = 20;
 	price[SAW] = 70;
-	price[ANNOYING_ROCK] = 0;
-	price[BOOMERANG] = 50;
+	price[CONTRACT] = 30;
+	price[BOOMERANG] = 30;
 	price[BLUE_GEL] = 30;
 	price[CHRONO] = 50;
 
@@ -52,12 +53,12 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 {
 	if (!test)
 	{
-		UpdateSlot(GetArtifactCount(), textureItems[SAW]);
-		SetArtifact(SAW);
-		//UpdateSlot(GetArtifactCount(), textureItems[CHRONO]);
-		//SetArtifact(CHRONO);
-		UpdateSlot(GetArtifactCount(), textureItems[BLUE_GEL]);
-		SetArtifact(BLUE_GEL);
+		//UpdateSlot(GetArtifactCount(), textureItems[SAW]);
+		//SetArtifact(SAW);
+		UpdateSlot(GetArtifactCount(), textureItems[STAMP]);
+		SetArtifact(STAMP);
+		UpdateSlot(GetArtifactCount(), textureItems[CONTRACT]);
+		SetArtifact(CONTRACT);
 		test = sfTrue;
 	}
 
@@ -90,10 +91,10 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 						switch (itemShop[i].type)
 						{
 						case POTION:
-							GainLife(1);
+							GainLife(2);
 							break;
 						case BIG_POTION:
-							GainLife(2);
+							GainLife(4);
 							break;
 						default:
 							break;
@@ -195,16 +196,16 @@ void ItemDescription(void)
 		switch (itemShop[closest].type)
 		{
 		case POTION:
-			sfText_setString(description, "POTION\nGain half a heart");
+			sfText_setString(description, "POTION\nHeals a heart");
 			break;
 		case BIG_POTION:
-			sfText_setString(description, "BIG POTION\nGain a full heart");
+			sfText_setString(description, "BIG POTION\n Heals two hearts");
 			break;
 		case SAW:
 			sfText_setString(description, "SAW\nFire two more bullets on the sides");
 			break;
-		case ANNOYING_ROCK:
-			sfText_setString(description, "ROCK?\nMaybe something is inside");
+		case CONTRACT:
+			sfText_setString(description, "CONTRACT\nYou do more damage with less hearts, but less with more hearts. \nYou also gain half a heart every time you hit an enemy 15 times.");
 			break;
 		case BOOMERANG:
 			sfText_setString(description, "BOOMERANG\nBullets come back to deal more damage");
@@ -214,6 +215,9 @@ void ItemDescription(void)
 			break;
 		case CHRONO:
 			sfText_setString(description, "CHRONO\nDoes more damage depending on bullet speed");
+			break;
+		case STAMP:
+			sfText_setString(description, "STAMP\nWhen taking damage, your fire rate quadruples for a few seconds");
 			break;
 		}
 		sfFloatRect hitbox = sfText_getGlobalBounds(description);

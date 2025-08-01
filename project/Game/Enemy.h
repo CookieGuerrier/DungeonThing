@@ -9,6 +9,7 @@ typedef enum TypeEnemy
 {
 	REA_BASE,
 	REA_SHOTGUN,
+	REA_CLOTH,
 	SLIME,
 	TORMENTED_SOUL,
 	BIG_CRAB,

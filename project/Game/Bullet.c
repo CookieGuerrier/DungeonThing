@@ -3,10 +3,12 @@
 Bullet bullet[300];
 int bulletCount;
 sfTexture* textureBullet;
+int hitCount;
 
 void LoadBullet(void)
 {
 	bulletCount = 0;
+	hitCount = 0; 
 	textureBullet = sfTexture_createFromFile("Assets/Texture/Player/bullet.png", NULL);
 }
 
@@ -14,12 +16,11 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 {
 	for (int i = 0; i < bulletCount; i++)
 	{
-		sfSprite_move(bullet[i].sprite, (sfVector2f) { bullet[i].velocity.x* (_dt * bullet[i].speed), bullet[i].velocity.y* (_dt * bullet[i].speed) });
-
+		sfSprite_move(bullet[i].sprite, (sfVector2f) { bullet[i].velocity.x* (_dt * bullet[i].speed), bullet[i].velocity.y* (_dt * bullet[i].speed) }); 
 		//Wall collision
 		sfFloatRect hitbox = sfSprite_getGlobalBounds(bullet[i].sprite);
 
-		//Enemy Collision
+		//Enemy Collision 
 		if (!bullet[i].friendlyFire)
 		{
 			//Effects
@@ -41,7 +42,19 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 						}
 						if (GetEffect(CHRONO))
 						{
-							bullet[i].dmg += abs(bullet[i].speed / 2000);
+							bullet[i].dmg += abs(bullet[i].speed / 1000);
+						}
+						if (GetEffect(CONTRACT))
+						{
+							if (hitCount >= 15)
+							{
+								GainLife(1);
+								hitCount = 0;
+							}
+							else
+							{
+								hitCount++;
+							}
 						}
 
 						EnemyHurt(y, bullet[i].dmg);
@@ -102,7 +115,7 @@ void CleanupBullet(void)
 	textureBullet = NULL;
 }
 
-void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire)
+void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire, sfBool _bigBullet)
 {
 	if (bulletCount < 300)
 	{
@@ -110,6 +123,10 @@ void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire)
 
 		temp.sprite = sfSprite_create();
 		sfSprite_setTexture(temp.sprite, textureBullet, sfTrue);
+		if (_bigBullet)
+		{
+			sfSprite_setScale(temp.sprite, (sfVector2f) { 2, 2 });
+		}
 		sfSprite_setPosition(temp.sprite, _pos);
 		sfSprite_setRotation(temp.sprite, _rot + 91);
 
@@ -129,9 +146,21 @@ void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire)
 		}
 		else
 		{
+			//Effects
 			if (GetEffect(BLUE_GEL))
 			{
-				temp.bounce = 3;
+				temp.bounce += 2;
+			}
+			if (GetEffect(CONTRACT))
+			{
+				if (GetHP() >= 3)
+				{
+					temp.dmg -= GetHP() - 3; 
+				}
+				else if (GetHP() < 3)
+				{
+					temp.dmg += (3 - GetHP());
+				}
 			}
 		}
 		temp.speed = _speed;
