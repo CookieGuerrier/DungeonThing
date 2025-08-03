@@ -20,8 +20,9 @@ void SetCamera(sfVector2f _pos);
 
 sfView* GetView(void);
 sfView* GetHUDView(void);
-void SetView(int _num, sfRenderWindow* _window);
+int GetOpacity(void);
 
+void SetView(int _num, sfRenderWindow* _window);
 void SetDamageCamera(void);
 void SetOpacityVeil(int _value, int _speed);
 

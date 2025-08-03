@@ -78,7 +78,7 @@ void UpdateCamera(sfRenderWindow* _window, float _dt)
 		newOpacity -= opacitySpeed;
 		sfRectangleShape_setFillColor(veil, (sfColor) { 0, 0, 0, newOpacity });
 	}
-	else if(opacity > newOpacity)
+	else if (opacity > newOpacity)
 	{
 		newOpacity += opacitySpeed;
 		sfRectangleShape_setFillColor(veil, (sfColor) { 0, 0, 0, newOpacity });
@@ -131,6 +131,11 @@ sfView* GetView(void)
 sfView* GetHUDView(void)
 {
 	return hudView;
+}
+
+int GetOpacity(void)
+{
+	return newOpacity;
 }
 
 void SetView(int _num, sfRenderWindow* _window)

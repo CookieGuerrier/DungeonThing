@@ -10,6 +10,11 @@ int artifactCount;
 ShopType artifact[6];
 sfBool effects[6];
 
+float rollTimer;
+float rollCooldown;
+
+float startTimer;
+
 sfRectangleShape* temp;
 
 void LoadPlayer(void)
@@ -19,6 +24,7 @@ void LoadPlayer(void)
 	player.life = 0;
 	player.gold = 150;
 	artifactCount = 0;
+	startTimer = 1;
 
 	//Sprite
 	player.sprite = sfSprite_create();
@@ -38,7 +44,7 @@ void LoadPlayer(void)
 
 	LoadPlayerAnims();
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		effects[i] = sfFalse;
 	}
@@ -57,23 +63,30 @@ void LoadPlayer(void)
 	hitbox = sfSprite_getGlobalBounds(player.spriteShadow);
 	sfSprite_setOrigin(player.spriteShadow, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
 	sfSprite_setPosition(player.sprite, GetSpawnPoint());
+
+	player.anims[ROLL]->frameNum = player.anims[ROLL]->frameMax;
 }
 
 void LoadPlayerAnims(void)
 {
-	player.anims = calloc(3, sizeof(Anim*));
+	player.anims = calloc(4, sizeof(Anim*));
 	if (player.anims != NULL)
 	{
 		sfVector2u size = sfTexture_getSize(texturePlayer);
-		sfIntRect first = { 0, 0, size.x / 8, size.y / 3 };
-		player.anims[IDLE] = CreateAnim(texturePlayer, first, 6, 1 / 4.0f, player.sprite, (sfVector2f) { (float)size.x / 14.f, (float)size.y / 6.f }, sfTrue);
+		sfIntRect first = { 0, 0, size.x / 8, size.y / 4 };
+		player.anims[IDLE] = CreateAnim(texturePlayer, first, 6, 1 / 4.0f, player.sprite, (sfVector2f) { (float)size.x / 14.f, (float)size.y / 8.f }, sfTrue);
 		player.anims[IDLE]->aimOffset = (sfVector2f){ 0 };
 		player.anims[IDLE]->events = malloc(sizeof(AnimEvent));
 
-		first = (sfIntRect){ 0, 80 * 2, size.x / 8, size.y / 3 };
-		player.anims[WALK] = CreateAnim(texturePlayer, first, 8, 1 / 12.0f, player.sprite, (sfVector2f) { (float)size.x / 14.f, (float)size.y / 6.f }, sfTrue);
+		first = (sfIntRect){ 0, 80 * 2, size.x / 8, size.y / 4 };
+		player.anims[WALK] = CreateAnim(texturePlayer, first, 8, 1 / 12.0f, player.sprite, (sfVector2f) { (float)size.x / 14.f, (float)size.y / 8.f }, sfTrue);
 		player.anims[WALK]->aimOffset = (sfVector2f){ 0 };
 		player.anims[WALK]->events = malloc(sizeof(AnimEvent));
+
+		first = (sfIntRect){ 0, 80 * 3, size.x / 8, size.y / 4 };
+		player.anims[ROLL] = CreateAnim(texturePlayer, first, 8, 1 / 16.0f, player.sprite, (sfVector2f) { (float)size.x / 14.f, (float)size.y / 8.f }, sfFalse);
+		player.anims[ROLL]->aimOffset = (sfVector2f){ 0 };
+		player.anims[ROLL]->events = malloc(sizeof(AnimEvent));
 
 		size = sfTexture_getSize(textureHand);
 		first = (sfIntRect){ 0, 0, size.x / 4, size.y };
@@ -85,12 +98,12 @@ void LoadPlayerAnims(void)
 
 void UpdatePlayer(float _dt, sfRenderWindow* _window)
 {
-	//if (player.life < 0)
-	{
-		sfVector2i renderMouse = sfMouse_getPositionRenderWindow(_window);
-		mousePos = sfRenderWindow_mapPixelToCoords(_window, renderMouse, GetView());
-		sfVector2f pos = sfSprite_getPosition(player.sprite);
+	sfVector2i renderMouse = sfMouse_getPositionRenderWindow(_window);
+	mousePos = sfRenderWindow_mapPixelToCoords(_window, renderMouse, GetView());
+	sfVector2f pos = sfSprite_getPosition(player.sprite);
 
+	if (startTimer < 0)
+	{
 		//Move
 		if (sfKeyboard_isKeyPressed(sfKeyZ) && !sfKeyboard_isKeyPressed(sfKeyS))
 		{
@@ -130,7 +143,7 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 			{
 				sfFloatRect enemy = GetEnemyHitBox(y);
 				sfFloatRect hitbox = GetPlayerHitbox();
-				if (sfFloatRect_intersects(&enemy, &hitbox, NULL))
+				if (sfFloatRect_intersects(&enemy, &hitbox, NULL) && rollTimer <= 0.3f)
 				{
 					LoseLife(1);
 				}
@@ -138,7 +151,7 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 		}
 
 		//Inv frame
-		if (player.invFrame > 0 && player.invFrame < 1)
+		if (player.invFrame >= 0 && player.invFrame < 1)
 		{
 			player.invFrame -= _dt;
 			if ((int)(player.invFrame * 10) % 2 == 0)
@@ -160,13 +173,16 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 
 		//Effectx
 		{
-			if (player.invFrame < 0)
+			if (GetEffect(STAMP))
 			{
-				player.anims[HAND]->rate = 1 / 8.0f;
-			}
-			else
-			{
-				player.anims[HAND]->rate = 1 / 32.0f;
+				if (player.invFrame < 0)
+				{
+					player.anims[HAND]->rate = 1 / 8.0f;
+				}
+				else
+				{
+					player.anims[HAND]->rate = 1 / 32.0f;
+				}
 			}
 		}
 
@@ -176,10 +192,30 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 			player.turnFrame -= _dt;
 		}
 
-		//Movements
-		pos = sfSprite_getPosition(player.sprite);
-		sfRectangleShape_setPosition(player.collider, (sfVector2f) { pos.x, pos.y + 5 });
-		sfSprite_setPosition(player.spriteShadow, (sfVector2f) { pos.x, pos.y });
+		if (rollTimer < 0)
+		{
+			player.speed = 500;
+		}
+		else
+		{
+			rollTimer -= _dt;
+			player.speed -= 20;
+		}
+
+		//Roll
+		if (rollTimer > 0)
+		{
+			rollTimer -= _dt;
+			player.speed -= 10;
+		}
+		else
+		{
+			player.speed = 500;
+		}
+		if (rollCooldown > 0)
+		{
+			rollCooldown -= _dt;
+		}
 
 		//Animations
 		if (player.hurtFrame > 0)
@@ -188,13 +224,20 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 		}
 		else
 		{
-			if (player.velocity.x == 0 && player.velocity.y == 0)
+			if (rollTimer < 0 && IsFinishedAnim(player.anims[ROLL]))
 			{
-				UpdateAnim(_dt, player.anims[IDLE]);
+				if (player.velocity.x == 0 && player.velocity.y == 0)
+				{
+					UpdateAnim(_dt, player.anims[IDLE]);
+				}
+				else
+				{
+					UpdateAnim(_dt, player.anims[WALK]);
+				}
 			}
 			else
 			{
-				UpdateAnim(_dt, player.anims[WALK]);
+				UpdateAnim(_dt, player.anims[ROLL]);
 			}
 		}
 		if (sfMouse_isButtonPressed(sfMouseLeft) || player.anims[HAND]->frameNum != 0)
@@ -207,13 +250,26 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 			player.anims[HAND]->frameNum = 1;
 		}
 	}
+	else
+	{
+		startTimer -= _dt;
+	}
+
+	//Movements
+	pos = sfSprite_getPosition(player.sprite);
+	sfRectangleShape_setPosition(player.collider, (sfVector2f) { pos.x, pos.y + 5 });
+	sfSprite_setPosition(player.spriteShadow, (sfVector2f) { pos.x, pos.y });
 }
 
 void DrawPlayer(sfRenderWindow* _window, sfBool _debug)
 {
 	sfRenderWindow_drawSprite(_window, player.spriteShadow, NULL);
 	sfRenderWindow_drawSprite(_window, player.sprite, NULL);
-	sfRenderWindow_drawSprite(_window, player.spriteHand, NULL);
+
+	if (rollTimer <= 0)
+	{
+		sfRenderWindow_drawSprite(_window, player.spriteHand, NULL);
+	}
 
 	if (_debug)
 	{
@@ -306,7 +362,7 @@ void PlayerMove(float _dt, sfRenderWindow* _window, sfKeyCode _key)
 
 void PlayerShoot(float _dt)
 {
-	if (player.anims[HAND]->frameNum == 1 && player.fireRate)
+	if (player.anims[HAND]->frameNum == 1 && player.fireRate && rollTimer <= 0)
 	{
 		sfVector2f pos = sfSprite_getPosition(player.spriteHand);
 		if (player.anims[HAND]->frameNum == 1 && player.fireRate)
@@ -333,6 +389,17 @@ void PlayerShoot(float _dt)
 	else if (player.anims[HAND]->frameNum != 1)
 	{
 		player.fireRate = sfTrue;
+	}
+}
+
+void PlayerRoll(void)
+{
+	if (rollTimer <= 0 && rollCooldown <= 0 && startTimer <= 0)
+	{
+		rollTimer = 1;
+		rollCooldown = 1.05f;
+		player.speed += 500;
+		ResetAnim(player.anims[ROLL]);
 	}
 }
 
@@ -461,4 +528,9 @@ int GetArtifactCount(void)
 sfBool GetEffect(int _artifact)
 {
 	return effects[_artifact];
+}
+
+float GetRoll(void)
+{
+	return rollTimer;
 }

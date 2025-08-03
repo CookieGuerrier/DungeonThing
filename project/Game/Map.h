@@ -27,7 +27,8 @@ typedef enum ElementType
 	BATTLE,
 	EXIT,
 	SHOP,
-	START
+	START,
+	SPECIAL
 }ElementType;
 
 typedef enum BattleType
@@ -41,6 +42,7 @@ typedef enum BattleType
 	SNIPER_SPOT,
 	LINES,
 	FOUR_SMALL_ROCKS,
+	MIDDLE_PIT,
 	MAX_LEVEL
 }BattleType;
 

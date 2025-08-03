@@ -10,11 +10,14 @@ Buttons button[4];
 sfTexture* selectionText;
 int selection;
 
+sfBool toMenu;
+
 void LoadGame(sfRenderWindow* _window)
 {
 	pauseState = sfFalse;
+	toMenu = sfFalse;
 	selection = 0;
-	SetOpacityVeil(0, 10);
+	SetOpacityVeil(0, 5);
 	LoadWall();
 	LoadObject();
 	LoadMoney();
@@ -50,16 +53,21 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _key)
 		}
 		break;
 	case sfKeySpace:
-		switch (GetSelection())
+		if (pauseState)
 		{
-		case 2:
-			CleanupGame();
-			LoadMenu();
-			SetGameState(MENU);
-			break;
-		case 3:
-			sfRenderWindow_close(_renderWindow);
-			break;
+			switch (GetSelection())
+			{
+			case 2:
+				toMenu = sfTrue;
+				break;
+			case 3:
+				sfRenderWindow_close(_renderWindow);
+				break;
+			}
+		}
+		else
+		{
+			PlayerRoll();
 		}
 		break;
 	case sfKeyZ:
@@ -98,9 +106,7 @@ void MousePressedGame(sfRenderWindow* _renderWindow, sfMouseButtonEvent _mouse)
 			switch (GetSelection())
 			{
 			case 2:
-				CleanupGame();
-				LoadMenu();
-				SetGameState(MENU);
+				toMenu = sfTrue;
 				break;
 			case 3:
 				sfRenderWindow_close(_renderWindow);
@@ -114,26 +120,41 @@ void MousePressedGame(sfRenderWindow* _renderWindow, sfMouseButtonEvent _mouse)
 
 void UpdateGame(float _dt, sfRenderWindow* _window)
 {
-	if (!pauseState)
+	if (toMenu)
 	{
-		UpdateWall(_dt, _window);
-		UpdateObject(_dt, _window);
-		UpdateMap(_dt, _window);
-		UpdateMoney(_dt, _window);
-		UpdateShop(_dt, _window);
+		SetOpacityVeil(255, 5);
 
-		UpdateBullet(_dt, _window);
-		UpdatePlayer(_dt, _window);
-		UpdateMiniMap(_window, _dt);
-
-		UpdateEnemy(_dt, _window);
-
-		UpdateGameHUD(_dt);
+		if (GetOpacity() == 255)
+		{
+			CleanupGame();
+			LoadMenu();
+			SetGameState(MENU);
+		}
 	}
 	else
 	{
-		UpdatePauseMenu(_dt, _window);
+		if (!pauseState)
+		{
+			UpdateWall(_dt, _window);
+			UpdateObject(_dt, _window);
+			UpdateMap(_dt, _window);
+			UpdateMoney(_dt, _window);
+			UpdateShop(_dt, _window);
+
+			UpdateBullet(_dt, _window);
+			UpdatePlayer(_dt, _window);
+			UpdateMiniMap(_window, _dt);
+
+			UpdateEnemy(_dt, _window);
+
+			UpdateGameHUD(_dt);
+		}
+		else
+		{
+			UpdatePauseMenu(_dt, _window);
+		}
 	}
+	
 }
 
 void DrawGame(sfRenderWindow* _window)
@@ -149,13 +170,14 @@ void DrawGame(sfRenderWindow* _window)
 	DrawBullet(_window, debugMode);
 	DrawPlayer(_window, debugMode);
 
-
 	SetView(1, _window);
 	DrawGameHUD(_window, debugMode);
 
 	SetView(2, _window);
 	DrawMiniMap(_window, debugMode);
 
+	SetView(1, _window);
+	DrawVeil(_window);
 	if (pauseState)
 	{
 		DrawPauseMenu(_window);

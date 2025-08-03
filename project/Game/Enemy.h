@@ -11,9 +11,10 @@ typedef enum TypeEnemy
 	REA_SHOTGUN,
 	REA_CLOTH,
 	SLIME,
-	TORMENTED_SOUL,
+	BAT,
 	BIG_CRAB,
-	TINY_CRAB
+	TORMENTED_SOUL,
+	TINY_CRAB,
 }TypeEnemy;
 
 typedef enum TextureEnemy
@@ -70,6 +71,7 @@ void DeleteMarker(int _ID);
 void EnemyMove(int _ID, float _dt);
 void EnemyShoot(int _ID, float _dt);
 void EnemyHurt(int _ID, int _dmg);
+void EnemyDeath(int _ID, float _dt);
 
 int GetEnemyCount(void);
 sfFloatRect GetEnemyHitBox(int _ID);

@@ -1,10 +1,13 @@
 #include "Menu.h"
 
 MenuData menuData;
+sfBool toGame;
 
 void LoadMenu(void)
 {
 	LoadMenuHUD();
+	SetOpacityVeil(0, 5);
+	toGame = sfFalse;
 }
 
 void KeyPressedMenu(sfRenderWindow* _renderWindow, sfKeyEvent _key)
@@ -19,9 +22,7 @@ void KeyPressedMenu(sfRenderWindow* _renderWindow, sfKeyEvent _key)
 		switch (GetSelection())
 		{
 		case 0:
-			CleanupMenu();
-			LoadGame(_renderWindow);
-			SetGameState(GAME);
+			toGame = sfTrue;
 			break;
 		case 3:
 			sfRenderWindow_close(_renderWindow);
@@ -50,9 +51,7 @@ void MousePressedMenu(sfRenderWindow* _renderWindow, sfMouseButtonEvent _mouse)
 			switch (GetSelection())
 			{
 			case 0:
-				CleanupMenu();
-				LoadGame(_renderWindow);
-				SetGameState(GAME);
+				toGame = sfTrue;
 				break;
 			case 3:
 				sfRenderWindow_close(_renderWindow);
@@ -66,13 +65,30 @@ void MousePressedMenu(sfRenderWindow* _renderWindow, sfMouseButtonEvent _mouse)
 
 void UpdateMenu(float _dt, sfRenderWindow* _window)
 {
-	UpdateMenuHUD(_dt, _window);
+	if (toGame)
+	{
+		SetOpacityVeil(255, 5);
+
+		if (GetOpacity() == 255)
+		{
+			CleanupMenu();
+			LoadGame(_window);
+			SetGameState(GAME);
+		}
+	}
+	else
+	{
+		UpdateMenuHUD(_dt, _window);
+	}
 }
 
 void DrawMenu(sfRenderWindow* _renderWindow)
 {
 	SetView(0, _renderWindow);
 	DrawMenuHUD(_renderWindow);
+
+	SetView(1, _renderWindow);
+	DrawVeil(_renderWindow);
 }
 
 void CleanupMenu(void)

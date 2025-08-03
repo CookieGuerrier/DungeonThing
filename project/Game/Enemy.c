@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 Enemy enemy[100];
-sfTexture* enemyTexture[7];
+sfTexture* enemyTexture[8];
 sfTexture* shadowTexture;
 int enemyCount;
 
@@ -17,6 +17,7 @@ void LoadEnemy(void)
 	enemyTexture[REA_SHOTGUN] = sfTexture_createFromFile("Assets/Texture/Enemy/rea_shotgun.png", NULL);
 	enemyTexture[REA_CLOTH] = sfTexture_createFromFile("Assets/Texture/Enemy/rea_cloth.png", NULL);
 	enemyTexture[SLIME] = sfTexture_createFromFile("Assets/Texture/Enemy/slime.png", NULL);
+	enemyTexture[BAT] = sfTexture_createFromFile("Assets/Texture/Enemy/bat.png", NULL);
 	enemyTexture[TORMENTED_SOUL] = sfTexture_createFromFile("Assets/Texture/Enemy/tormented_soul.png", NULL);
 	enemyTexture[BIG_CRAB] = sfTexture_createFromFile("Assets/Texture/Enemy/big_crab.png", NULL);
 	enemyTexture[TINY_CRAB] = sfTexture_createFromFile("Assets/Texture/Enemy/tiny_crab.png", NULL);
@@ -100,6 +101,23 @@ void LoadEnemyAnimation(Enemy* _enemy)
 		_enemy->anims[DEATH_E]->aimOffset = (sfVector2f){ 0 };
 		_enemy->anims[DEATH_E]->events = malloc(sizeof(AnimEvent));
 	}break;
+	case BAT: {
+		sfVector2u size = sfTexture_getSize(enemyTexture[BAT]);
+		sfIntRect first = { 0, 0, size.x / 5, size.y / 4 };
+		_enemy->anims[IDLE_E] = CreateAnim(enemyTexture[BAT], first, 4, 1 / 12.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 10.f, (float)size.y / 12.f }, sfTrue);
+		_enemy->anims[IDLE_E]->aimOffset = (sfVector2f){ 0 };
+		_enemy->anims[IDLE_E]->events = malloc(sizeof(AnimEvent));
+
+		first = (sfIntRect){ 0, 60 * 2, size.x / 5, size.y / 4 };
+		_enemy->anims[WALK_E] = CreateAnim(enemyTexture[BAT], first, 4, 1 / 12.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 10.f, (float)size.y / 12.f }, sfTrue);
+		_enemy->anims[WALK_E]->aimOffset = (sfVector2f){ 0 };
+		_enemy->anims[WALK_E]->events = malloc(sizeof(AnimEvent));
+
+		first = (sfIntRect){ 0,  60 * 3, size.x / 5, size.y / 4 };
+		_enemy->anims[DEATH_E] = CreateAnim(enemyTexture[BAT], first, 5, 1 / 8.0f, _enemy->sprite, (sfVector2f) { (float)size.x / 10.f, (float)size.y / 12.f }, sfFalse);
+		_enemy->anims[DEATH_E]->aimOffset = (sfVector2f){ 0 };
+		_enemy->anims[DEATH_E]->events = malloc(sizeof(AnimEvent));
+	}break;
 	case TORMENTED_SOUL: {
 		sfVector2u size = sfTexture_getSize(enemyTexture[TORMENTED_SOUL]);
 		sfIntRect first = { 0, 0, size.x / 8, size.y / 2 };
@@ -159,7 +177,6 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 		{
 			//Collider
 			sfVector2f pos = sfSprite_getPosition(enemy[i].sprite);
-			sfSprite_setPosition(enemy[i].spriteShadow, (sfVector2f) { pos.x + 2, pos.y + 2 });
 			switch (enemy[i].type)
 			{
 			case REA_BASE:
@@ -172,6 +189,9 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 				sfRectangleShape_setPosition(enemy[i].collider, (sfVector2f) { pos.x + 2, pos.y + 2 });
 				break;
 			case SLIME:
+				sfRectangleShape_setPosition(enemy[i].collider, (sfVector2f) { pos.x + 2, pos.y + 20 });
+				break;
+			case BAT:
 				sfRectangleShape_setPosition(enemy[i].collider, (sfVector2f) { pos.x + 2, pos.y + 20 });
 				break;
 			case TORMENTED_SOUL:
@@ -214,45 +234,11 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 					UpdateAnim(_dt, enemy[i].anims[WALK_E]);
 				}
 			}
+			sfSprite_setPosition(enemy[i].spriteShadow, (sfVector2f) { pos.x + 2, pos.y + 2 });
 		}
 		else
 		{
-			//Death
-			if (!enemy[i].isDead)
-			{
-				RemoveEnemyCurrent();
-				sfFloatRect hitbox = GetEnemyHitBox(i);
-				switch (enemy[i].type)
-				{
-				case REA_BASE:
-				case REA_SHOTGUN:
-				case REA_CLOTH:
-				case SLIME:
-					AddNugget(hitbox, 2);
-					break;
-				case BIG_CRAB:
-					AddNugget(hitbox, 8);
-					break;
-				case TORMENTED_SOUL:
-					AddNugget(hitbox, 8);
-					break;
-				}
-				enemy[i].isDead = sfTrue;
-			}
-			if (enemy[i].color > 160)
-			{
-				enemy[i].color--;
-				sfSprite_setColor(enemy[i].sprite, (sfColor) { enemy[i].color, enemy[i].color, enemy[i].color, 255 });
-
-			}
-			if (enemy[i].type != TINY_CRAB)
-			{
-				UpdateAnim(_dt, enemy[i].anims[DEATH_E]);
-			}
-			else
-			{
-				DeleteEnemy(i);
-			}
+			EnemyDeath(i, _dt);
 		}
 	}
 
@@ -305,6 +291,8 @@ void CleanupEnemy(void)
 	enemyTexture[REA_CLOTH] = NULL;
 	sfTexture_destroy(enemyTexture[SLIME]);
 	enemyTexture[SLIME] = NULL;
+	sfTexture_destroy(enemyTexture[BAT]);
+	enemyTexture[BAT] = NULL;
 	sfTexture_destroy(enemyTexture[TORMENTED_SOUL]);
 	enemyTexture[TORMENTED_SOUL] = NULL;
 	sfTexture_destroy(enemyTexture[BIG_CRAB]);
@@ -342,30 +330,35 @@ void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
 		switch (_type)
 		{
 		case REA_BASE:
-			temp.life = 5;
+			temp.life = 7;
 			temp.speed = 150;
 			ran = (float)(rand() % 11 - 5);
 			temp.fireRate = (ran / 10);
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 60 });
 			break;
 		case REA_SHOTGUN:
-			temp.life = 5;
+			temp.life = 7;
 			temp.speed = 150;
 			ran = (float)(rand() % 11 - 5);
 			temp.fireRate = (ran / 10);
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 60 });
 			break;
 		case REA_CLOTH:
-			temp.life = 5;
+			temp.life = 7;
 			temp.speed = 150;
 			ran = (float)(rand() % 11 - 5);
 			temp.fireRate = (ran / 10);
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 60 });
 			break;
 		case SLIME:
-			temp.life = 3;
+			temp.life = 5;
 			temp.speed = 800;
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 40 });
+			break;
+		case BAT:
+			temp.life = 5;
+			temp.speed = 600;
+			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 80, 60 });
 			break;
 		case TORMENTED_SOUL:
 			temp.life = 1;
@@ -373,12 +366,12 @@ void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 60, 85 });
 			break;
 		case BIG_CRAB:
-			temp.life = 12;
+			temp.life = 15;
 			temp.speed = 80;
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 180, 75 });
 			break;
 		case TINY_CRAB:
-			temp.life = 1;
+			temp.life = 2;
 			temp.speed = 150;
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 45, 20 });
 			break;
@@ -529,6 +522,15 @@ void EnemyMove(int _ID, float _dt)
 				enemy[_ID].velocity.y = (float)(-cos(radian) * enemy[_ID].misc);
 			}
 			break;
+		case BAT:
+			if (GetDistanceVector2f(pos, GetPlayerPos()) >= 350 || enemy[_ID].velocity.y == 0 || enemy[_ID].velocity.x == 0)
+			{
+				enemy[_ID].playerRot = LookToDirection(GetPlayerPos(), pos) + 90;
+			}
+			radian = enemy[_ID].playerRot * (float)(M_PI / 180);
+			enemy[_ID].velocity.x = (float)(sin(radian));
+			enemy[_ID].velocity.y = (float)(-cos(radian));
+			break;
 		case TORMENTED_SOUL:
 			enemy[_ID].playerRot = LookToDirection(GetPlayerPos(), pos) + 90;
 			radian = enemy[_ID].playerRot * (float)(M_PI / 180);
@@ -550,19 +552,13 @@ void EnemyMove(int _ID, float _dt)
 		case TINY_CRAB:
 			enemy[_ID].playerRot = LookToDirection(GetPlayerPos(), pos) + 90;
 			radian = enemy[_ID].playerRot * (float)(M_PI / 180);
-			switch (enemy[_ID].state)
-			{
-			case 1:
-				radian -= 20;
-				break;
-			}
-			enemy[_ID].velocity.x = (float)(sin(radian) * enemy[_ID].misc);
-			enemy[_ID].velocity.y = (float)(-cos(radian) * enemy[_ID].misc);
+			enemy[_ID].velocity.x = (float)(sin(radian) * 2);
+			enemy[_ID].velocity.y = (float)(-cos(radian) * 2);
 			break;
 		}
 
 		//Collision
-		if (enemy[_ID].type != TORMENTED_SOUL)
+		if (enemy[_ID].type != TORMENTED_SOUL && enemy[_ID].type != BAT)
 		{
 			if (enemy[_ID].velocity.x > 0)
 			{
@@ -661,7 +657,7 @@ void EnemyShoot(int _ID, float _dt)
 		break;
 	case REA_CLOTH:
 		pos = sfSprite_getPosition(enemy[_ID].sprite);
-		if (enemy[_ID].fireRate <= 0 )
+		if (enemy[_ID].fireRate <= 0)
 		{
 			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 600, sfTrue, sfFalse);
 			enemy[_ID].isShooting = sfFalse;
@@ -675,11 +671,7 @@ void EnemyShoot(int _ID, float _dt)
 		{
 			AddEnemy(TINY_CRAB, pos, enemy[_ID].id);
 			AddEnemyCurrent();
-			AddEnemy(TINY_CRAB, pos, enemy[_ID].id);
-			AddEnemyCurrent();
-			AddEnemy(TINY_CRAB, pos, enemy[_ID].id);
-			AddEnemyCurrent();
-			enemy[_ID].misc = 8.f;
+			enemy[_ID].misc = 3.f;
 		}
 		else
 		{
@@ -707,24 +699,69 @@ void EnemyHurt(int _ID, int _dmg)
 		switch (enemy[_ID].type)
 		{
 		case REA_BASE:
-			sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 75, 75, 75 });
-			break;
 		case REA_SHOTGUN:
+		case REA_CLOTH:
 			sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 75, 75, 75 });
 			break;
 		case SLIME:
 			sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 60, 60, 60 });
 			break;
+		case BAT:
+			sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 60, 150, 60 });
+			break;
 		case BIG_CRAB:
 			sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 95, 220, 95 });
 			break;
-		}		
-		pos.y -= 50 + hitbox.height /2 ;
+		case TINY_CRAB:
+			sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 45, 20, 20 });
+			break;
+		}
+		pos.y -= 50 + hitbox.height / 2;
 		AddMarker(pos, _dmg);
 	}
 	else
 	{
 		AddMarker(pos, 0);
+	}
+}
+
+void EnemyDeath(int _ID, float _dt)
+{
+	if (!enemy[_ID].isDead)
+	{
+		RemoveEnemyCurrent();
+		sfFloatRect hitbox = GetEnemyHitBox(_ID);
+		switch (enemy[_ID].type)
+		{
+		case REA_BASE:
+		case REA_SHOTGUN:
+		case REA_CLOTH:
+		case SLIME:
+		case BAT:
+			AddNugget(hitbox, 2);
+			break;
+		case BIG_CRAB:
+			AddNugget(hitbox, 8);
+			break;
+		case TORMENTED_SOUL:
+			AddNugget(hitbox, 8);
+			break;
+		}
+		enemy[_ID].isDead = sfTrue;
+	}
+	if (enemy[_ID].color > 160)
+	{
+		enemy[_ID].color--;
+		sfSprite_setColor(enemy[_ID].sprite, (sfColor) { enemy[_ID].color, enemy[_ID].color, enemy[_ID].color, 255 });
+
+	}
+	if (enemy[_ID].type != TINY_CRAB)
+	{
+		UpdateAnim(_dt, enemy[_ID].anims[DEATH_E]);
+	}
+	else
+	{
+		DeleteEnemy(_ID);
 	}
 }
 
