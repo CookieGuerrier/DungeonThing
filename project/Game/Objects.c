@@ -2,7 +2,7 @@
 
 Object object[300];
 sfTexture* textureObject[9];
-sfTexture* shadowTexture;
+sfTexture* textureShadow;
 int objectCount;
 
 int wall1, wall2, wall3, wall4;
@@ -20,7 +20,7 @@ void LoadObject(void)
 	textureObject[BIG_HOLE] = sfTexture_createFromFile("Assets/Texture/Objects/bigHole.png", NULL);
 	textureObject[LONG_HOLE] = sfTexture_createFromFile("Assets/Texture/Objects/longHole.png", NULL);
 	textureObject[ROCK] = sfTexture_createFromFile("Assets/Texture/Objects/rock.png", NULL);
-	shadowTexture = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
+	textureShadow = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
 
 	AddObject((sfVector2f) { 0, 0 }, 0, WALL_BATTLERL);
 	AddObject((sfVector2f) { 0, 0 }, 0, WALL_BATTLERL);
@@ -66,8 +66,8 @@ void CleanupObject(void)
 		sfTexture_destroy(textureObject[i]);
 		textureObject[i] = NULL;
 	}
-	sfTexture_destroy(shadowTexture);
-	shadowTexture = NULL;
+	sfTexture_destroy(textureShadow);
+	textureShadow = NULL;
 }
 
 void AddObject(sfVector2f _pos, float _rot, ObjectType _type)
@@ -95,7 +95,7 @@ void AddObject(sfVector2f _pos, float _rot, ObjectType _type)
 		{
 		case POT:
 			obj.shadow = sfSprite_create();
-			sfSprite_setTexture(obj.shadow, shadowTexture, sfTrue);
+			sfSprite_setTexture(obj.shadow, textureShadow, sfTrue);
 			hitbox = sfSprite_getGlobalBounds(obj.shadow);
 			sfSprite_setOrigin(obj.shadow, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
 			sfSprite_setPosition(obj.shadow, (sfVector2f) { _pos.x, _pos.y - 15 });

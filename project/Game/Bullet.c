@@ -8,7 +8,7 @@ int hitCount;
 void LoadBullet(void)
 {
 	bulletCount = 0;
-	hitCount = 0; 
+	hitCount = 0;
 	textureBullet = sfTexture_createFromFile("Assets/Texture/Player/bullet.png", NULL);
 }
 
@@ -16,84 +16,108 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 {
 	for (int i = 0; i < bulletCount; i++)
 	{
-		sfSprite_move(bullet[i].sprite, (sfVector2f) { bullet[i].velocity.x* (_dt * bullet[i].speed), bullet[i].velocity.y* (_dt * bullet[i].speed) }); 
-		//Wall collision
-		sfFloatRect hitbox = sfSprite_getGlobalBounds(bullet[i].sprite);
-
-		//Enemy Collision 
-		if (!bullet[i].friendlyFire)
+		if (!bullet[i].death)
 		{
-			//Effects
-			if (GetEffect(BOOMERANG) && bullet[i].speed > -2000)
-			{
-				bullet[i].speed -= 50;
-			}
+			sfSprite_move(bullet[i].sprite, (sfVector2f) { bullet[i].velocity.x* (_dt * bullet[i].speed), bullet[i].velocity.y* (_dt * bullet[i].speed) });
+			//Wall collision
+			sfFloatRect hitbox = sfSprite_getGlobalBounds(bullet[i].sprite);
 
-			for (int y = 0; y < GetEnemyCount(); y++)
+			//Enemy Collision 
+			if (!bullet[i].friendlyFire)
 			{
-				if (IsEnemyAlive(y))
+				//Effects
+				if (GetEffect(BOOMERANG) && bullet[i].speed > -2000)
 				{
-					sfFloatRect enemy = GetEnemyHitBox(y);
-					if (sfFloatRect_intersects(&enemy, &hitbox, NULL))
+					bullet[i].speed -= 50;
+				}
+
+				for (int y = 0; y < GetEnemyCount(); y++)
+				{
+					if (IsEnemyAlive(y))
 					{
-						if (bullet[i].speed < 0)
+						sfFloatRect enemy = GetEnemyHitBox(y);
+						if (sfFloatRect_intersects(&enemy, &hitbox, NULL))
 						{
-							bullet[i].dmg++;
-						}
-						if (GetEffect(CHRONO))
-						{
-							bullet[i].dmg += abs(bullet[i].speed / 1000);
-						}
-						if (GetEffect(CONTRACT))
-						{
-							if (hitCount >= 20)
+							//Effects
+							if (bullet[i].speed < 0)
 							{
-								GainLife(1);
-								hitCount = 0;
+								bullet[i].dmg++;
 							}
-							else
+							if (GetEffect(CHRONO))
 							{
-								hitCount++;
+								bullet[i].dmg += abs(bullet[i].speed / 1000) - 1;
 							}
-						}
+							if (GetEffect(CONTRACT))
+							{
+								if (hitCount >= 20)
+								{
+									GainLife(1);
+									hitCount = 0;
+								}
+								else if (GetEnemyHurtFrame(y) <= 0)
+								{
+									hitCount++;
+								}
+							}
+							if (GetEffect(PASSPORT))
+							{
+								bullet[i].dmg = 1;
+							}
+							if (GetEffect(COWBOY_HAT))
+							{
+								RopeEnemy(y);
+							}
 
-						EnemyHurt(y, bullet[i].dmg);
-						DeleteBullet(i);
+							//Collis
+							EnemyHurt(y, bullet[i].dmg);
+							if (!GetEffect(PASSPORT))
+							{
+								bullet[i].death = sfTrue;
+							}
+						}
 					}
-				}
-			}
-		}
-		else
-		{
-			sfFloatRect player = GetPlayerHitbox();
-			if (sfFloatRect_intersects(&player, &hitbox, NULL) && GetRoll() <= 0.3f)
-			{
-				LoseLife(1);
-				DeleteBullet(i);
-			}
-		}
-		//printf("%d\n", bullet[i].speed);
-
-		if (BulletCollision(hitbox, &bullet[i].velocity) || GetBulletMap(hitbox) != GetCurrentMap())
-		{
-			if (bullet[i].bounce > 0)
-			{
-				bullet[i].bounce--;
-				if (bullet[i].speed < 0)
-				{
-					bullet[i].speed -= 1000;
-				}
-				else
-				{
-					bullet[i].speed += 1000;
 				}
 			}
 			else
 			{
-				DeleteBullet(i);
+				sfFloatRect player = GetPlayerHitbox();
+				if (sfFloatRect_intersects(&player, &hitbox, NULL) && GetRoll() <= 0.3f)
+				{
+					LoseLife(1);
+					bullet[i].death = sfTrue;
+				}
+			}
+
+			if (BulletCollision(hitbox, &bullet[i].velocity) || GetBulletMap(hitbox) != GetCurrentMap())
+			{
+				if (bullet[i].bounce > 0)
+				{
+					bullet[i].bounce--;
+					if (bullet[i].speed < 0)
+					{
+						bullet[i].speed -= 1000;
+					}
+					else
+					{
+						bullet[i].speed += 1000;
+					}
+				}
+				else
+				{
+					bullet[i].death = sfTrue;
+				}
 			}
 		}
+		else if (!IsFinishedAnim(bullet[i].anims[0]))
+		{
+			UpdateAnim(_dt, bullet[i].anims[0]);
+		}
+		else
+		{
+			DeleteBullet(i);
+		}
 	}
+
 }
 
 void DrawBullet(sfRenderWindow* _window, sfBool _debug)
@@ -155,15 +179,31 @@ void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire, sf
 			{
 				if (GetHP() >= 3)
 				{
-					temp.dmg -= GetHP() - 3; 
+					temp.dmg -= GetHP() - 3;
 				}
 				else if (GetHP() < 3)
 				{
 					temp.dmg += (3 - GetHP());
 				}
 			}
+			if (GetEffect(BATTERY))
+			{
+				sfSprite_setScale(temp.sprite, (sfVector2f) { 2, 2 });
+				temp.dmg += 3;
+				temp.speed += 1000;
+			}
 		}
-		temp.speed = _speed;
+
+		temp.anims = calloc(1, sizeof(Anim*));
+		if (temp.anims != NULL)
+		{
+			sfVector2u size = sfTexture_getSize(textureBullet);
+			sfIntRect first = { 0, 0, size.x / 5, size.y };
+			temp.anims[0] = CreateAnim(textureBullet, first, 5, 1 / 32.0f, temp.sprite, (sfVector2f) { (float)size.x / 14.f, (float)size.y / 8.f }, sfFalse);
+			temp.anims[0]->aimOffset = (sfVector2f){ 0 };
+			temp.anims[0]->events = malloc(sizeof(AnimEvent));
+		}
+		temp.speed += _speed;
 
 		bullet[bulletCount] = temp;
 		bulletCount++;

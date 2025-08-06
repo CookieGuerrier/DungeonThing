@@ -14,6 +14,9 @@ typedef enum ShopType
 	BLUE_GEL,
 	CHRONO,
 	STAMP,
+	BATTERY,
+	PASSPORT,
+	COWBOY_HAT,
 
 	//Heal 
 	POTION,

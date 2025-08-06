@@ -37,8 +37,8 @@ typedef struct Enemy
 	int life;
 	sfBool isDead;
 	sfVector2f velocity;
-	float speed;
 	sfBool isShooting;
+	float speed;
 	int color;
 
 	float fireRate;
@@ -48,12 +48,14 @@ typedef struct Enemy
 	float misc;
 	int state;
 	float playerRot;
+	float nerf;
 }Enemy;
 
 typedef struct Marker
 {
 	sfText* text;
 	int alpha;
+	int dmg;
 }Marker;
 
 void LoadEnemy(void);
@@ -72,10 +74,11 @@ void EnemyMove(int _ID, float _dt);
 void EnemyShoot(int _ID, float _dt);
 void EnemyHurt(int _ID, int _dmg);
 void EnemyDeath(int _ID, float _dt);
+sfVector2f RopeEnemy(int _ID);
 
 int GetEnemyCount(void);
 sfFloatRect GetEnemyHitBox(int _ID);
 sfBool IsEnemyAlive(int _ID);
 int GetEnemyMap(int _ID);
-sfVector2f GetClosestEnemy(sfVector2f _pos);
+float GetEnemyHurtFrame(int _ID);
 #endif // !ENEMY_H

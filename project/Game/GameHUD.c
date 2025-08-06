@@ -2,13 +2,15 @@
 
 LifePoints lifePoints[3];
 ArtifactSlot slot[3];
-GameHUD gameHUD[1];
+GameHUD gameHUD;
 int currentLife;
 
 sfTexture* lifeTexture[3];
 sfTexture* textureSlot;
 sfTexture* goldTexture;
 
+sfBool hit[2];
+float size[2];
 
 void LoadGameHUD(sfFont* font)
 {
@@ -57,24 +59,42 @@ void LoadGameHUD(sfFont* font)
 	GainLife(6);
 
 	//Gold
-	gameHUD[0].sprite = sfSprite_create();
-	sfSprite_setTexture(gameHUD[0].sprite, goldTexture, sfTrue);
-	hitbox = sfSprite_getGlobalBounds(gameHUD[0].sprite);
-	sfSprite_setOrigin(gameHUD[0].sprite, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
-	sfSprite_setPosition(gameHUD[0].sprite, (sfVector2f) { -400, 150 });
+	gameHUD.sprite = sfSprite_create();
+	sfSprite_setTexture(gameHUD.sprite, goldTexture, sfTrue);
+	hitbox = sfSprite_getGlobalBounds(gameHUD.sprite);
+	sfSprite_setOrigin(gameHUD.sprite, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
+	sfSprite_setPosition(gameHUD.sprite, (sfVector2f) { -400, 150 });
 
-	gameHUD[0].text = sfText_create();
-	sfText_setFont(gameHUD[0].text, font);
-	sfText_setOutlineColor(gameHUD[0].text, sfBlack);
-	sfText_setOutlineThickness(gameHUD[0].text, 2);
-	sfText_setCharacterSize(gameHUD[0].text, 50);
-	sfText_setString(gameHUD[0].text, "0");
-	sfText_setPosition(gameHUD[0].text, (sfVector2f) { -350, 110 });
+	gameHUD.text = sfText_create();
+	sfText_setFont(gameHUD.text, font);
+	sfText_setOutlineColor(gameHUD.text, sfBlack);
+	sfText_setOutlineThickness(gameHUD.text, 2);
+	sfText_setCharacterSize(gameHUD.text, 50);
+	sfText_setString(gameHUD.text, "0");
+	sfText_setPosition(gameHUD.text, (sfVector2f) { -350, 110 });
+
+	size[1] = 1;
 }
 
 void UpdateGameHUD(float _dt)
 {
+	if (hit[0] && currentLife > 0)
+	{
+		sfSprite_setScale(lifePoints[currentLife - 1].sprite, (sfVector2f) { 1 * size[0], 1 * size[0]});
+		if (size[0] > 1)
+			size[0] -= 0.05f;
+		else
+			hit[0] = sfFalse;
+	}
 
+	if (hit[1])
+	{
+		sfText_setCharacterSize(gameHUD.text, 50 * size[1]);
+		if (size[1] > 1)
+			size[1] -= 0.05f;
+		else
+			hit[1] = sfFalse;
+	}
 }
 
 void DrawGameHUD(sfRenderWindow* _window, sfBool _debug)
@@ -85,8 +105,8 @@ void DrawGameHUD(sfRenderWindow* _window, sfBool _debug)
 		sfRenderWindow_drawSprite(_window, slot[i].sprite, NULL);
 	}
 
-	sfRenderWindow_drawSprite(_window, gameHUD[0].sprite, NULL);
-	sfRenderWindow_drawText(_window, gameHUD[0].text, NULL);
+	sfRenderWindow_drawSprite(_window, gameHUD.sprite, NULL);
+	sfRenderWindow_drawText(_window, gameHUD.text, NULL);
 }
 
 void CleanupGameHUD(sfFont* font)
@@ -109,10 +129,10 @@ void CleanupGameHUD(sfFont* font)
 	font = NULL;
 
 	//Other
-	sfSprite_destroy(gameHUD[0].sprite);
-	gameHUD[0].sprite = NULL;
-	sfText_destroy(gameHUD[0].text);
-	gameHUD[0].text = NULL;
+	sfSprite_destroy(gameHUD.sprite);
+	gameHUD.sprite = NULL;
+	sfText_destroy(gameHUD.text);
+	gameHUD.text = NULL;
 }
 
 void AddLife(void)
@@ -126,6 +146,8 @@ void AddLife(void)
 	{
 		sfSprite_setTexture(lifePoints[currentLife - 1].sprite, lifeTexture[0], sfTrue);
 	}
+	hit[0] = sfTrue;
+	size[0] = 1.8f;
 }
 
 void DeleteLife(void)
@@ -139,6 +161,9 @@ void DeleteLife(void)
 	{
 		sfSprite_setTexture(lifePoints[currentLife - 1].sprite, lifeTexture[1], sfTrue);
 	}
+
+	hit[0] = sfTrue;
+	size[0] = 1.8f;
 }
 
 void UpdateText(sfText* const _text, int _value)
@@ -151,10 +176,17 @@ void UpdateText(sfText* const _text, int _value)
 
 void UpdateGold(int _value)
 {
-	UpdateText(gameHUD[0].text, _value);
+	UpdateText(gameHUD.text, _value);
+	hit[1] = sfTrue;
+	if (size[1] < 2.5f)
+	{
+		size[1] += 0.3f;
+	}
 }
 
 void UpdateSlot(int _ID, sfTexture* _texture)
 {
 	sfSprite_setTexture(slot[_ID].sprite, _texture, sfTrue);
+	sfFloatRect hitbox = sfSprite_getGlobalBounds(slot[_ID].sprite);
+	sfSprite_move(slot[_ID].sprite, (sfVector2f) { -(hitbox.width / 2), });
 }

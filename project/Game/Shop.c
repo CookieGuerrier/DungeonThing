@@ -1,11 +1,11 @@
 #include "Shop.h"
 
-sfTexture* textureItems[8];
+sfTexture* textureItems[11];
 sfFont* font;
 sfText* description;
 ItemShop itemShop[6];
 int itemCount;
-int price[8];
+int price[11];
 
 sfBool test;
 
@@ -20,17 +20,23 @@ void LoadShop(void)
 	textureItems[BLUE_GEL] = sfTexture_createFromFile("Assets/Texture/Shop Items/blue_gel.png", NULL);
 	textureItems[CHRONO] = sfTexture_createFromFile("Assets/Texture/Shop Items/chrono.png", NULL);
 	textureItems[STAMP] = sfTexture_createFromFile("Assets/Texture/Shop Items/stamp.png", NULL);
+	textureItems[BATTERY] = sfTexture_createFromFile("Assets/Texture/Shop Items/battery.png", NULL);
+	textureItems[PASSPORT] = sfTexture_createFromFile("Assets/Texture/Shop Items/passport.png", NULL);
+	textureItems[COWBOY_HAT] = sfTexture_createFromFile("Assets/Texture/Shop Items/cowboy_hat.png", NULL);
 	font = sfFont_createFromFile("Assets/Font/font.ttf");
 
 	//Price
 	price[POTION] = 10;
 	price[BIG_POTION] = 20;
-	price[SAW] = 70;
-	price[CONTRACT] = 30;
-	price[BOOMERANG] = 30;
-	price[BLUE_GEL] = 30;
+	price[SAW] = 50;
+	price[CONTRACT] = 50;
+	price[BOOMERANG] = 50;
+	price[BLUE_GEL] = 50;
 	price[CHRONO] = 50;
 	price[STAMP] = 50;
+	price[BATTERY] = 50;
+	price[PASSPORT] = 50;
+	price[COWBOY_HAT] = 50;
 
 	description = sfText_create();
 	sfText_setFont(description, font);
@@ -44,12 +50,12 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 {
 	if (!test)
 	{
-		//UpdateSlot(GetArtifactCount(), textureItems[SAW]);
-		//SetArtifact(SAW);
-		UpdateSlot(GetArtifactCount(), textureItems[BLUE_GEL]);
-		SetArtifact(BLUE_GEL);
-		UpdateSlot(GetArtifactCount(), textureItems[SAW]);
-		SetArtifact(SAW);
+		//UpdateSlot(GetArtifactCount(), textureItems[PASSPORT]);
+		//SetArtifact(PASSPORT);
+		//UpdateSlot(GetArtifactCount(), textureItems[CONTRACT]);
+		//SetArtifact(CONTRACT);
+		UpdateSlot(GetArtifactCount(), textureItems[COWBOY_HAT]);
+		SetArtifact(COWBOY_HAT);
 		test = sfTrue;
 	}
 
@@ -65,7 +71,7 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 			{
 				if (GetMoney() >= price[itemShop[i].type])
 				{
-					if (itemShop[i].type < 6)
+					if (itemShop[i].type < 9)
 					{
 						if (GetArtifactCount() < 3 && !GetEffect(itemShop[i].type))
 						{
@@ -233,6 +239,15 @@ void ItemDescription(void)
 			break;
 		case STAMP:
 			sfText_setString(description, "STAMP\nWhen taking damage, your fire rate quadruples for a few seconds");
+			break;
+		case BATTERY:
+			sfText_setString(description, "BATTERY\nNeed to hold the fire button to shoot bullets\nBullets are bigger, faster and deal more damage");
+			break;
+		case PASSPORT:
+			sfText_setString(description, "PASSPORT\nBullets can go through enemies, but it will never deal more than 1 damage");
+			break;
+		case COWBOY_HAT:
+			sfText_setString(description, "COWBOY HAT\nHitting an enemy close enough will attach a rope to them\nRoped enemies won't be able to move and receive double damage");
 			break;
 		}
 		sfFloatRect hitbox = sfText_getGlobalBounds(description);

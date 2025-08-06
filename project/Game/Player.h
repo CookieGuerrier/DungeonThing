@@ -41,6 +41,7 @@ void LoadPlayer(void);
 void LoadPlayerAnims(void);
 void UpdatePlayer(float _dt, sfRenderWindow* _window);
 void DrawPlayer(sfRenderWindow* _window, sfBool _debug);
+void DrawRope(sfRenderWindow* _window);
 void CleanupPlayer(void);
 
 void PlayerMove(float _dt, sfRenderWindow* _window, sfKeyCode _key);
@@ -54,6 +55,7 @@ void GainLife(int _life);
 void LoseGold(int _gold);
 void GainGold(int _gold);
 void SetArtifact(int _artifact);
+void SetRope(sfVector2f _dis);
 
 int GetHP(void);
 int GetMoney(void);

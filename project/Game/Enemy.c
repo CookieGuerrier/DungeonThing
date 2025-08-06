@@ -2,15 +2,19 @@
 
 Enemy enemy[100];
 sfTexture* enemyTexture[8];
-sfTexture* shadowTexture;
+sfTexture* textureShadow;
 int enemyCount;
 
 sfFont* font;
-Marker marker[15];
+Marker marker[50];
 int markerCount;
+
+int enemyRoped;
+float closestDis;
 
 void LoadEnemy(void)
 {
+	int enemyRoped = 999;
 	enemyCount = 0;
 	markerCount = 0;
 	enemyTexture[REA_BASE] = sfTexture_createFromFile("Assets/Texture/Enemy/rea_base.png", NULL);
@@ -21,7 +25,7 @@ void LoadEnemy(void)
 	enemyTexture[TORMENTED_SOUL] = sfTexture_createFromFile("Assets/Texture/Enemy/tormented_soul.png", NULL);
 	enemyTexture[BIG_CRAB] = sfTexture_createFromFile("Assets/Texture/Enemy/big_crab.png", NULL);
 	enemyTexture[TINY_CRAB] = sfTexture_createFromFile("Assets/Texture/Enemy/tiny_crab.png", NULL);
-	shadowTexture = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
+	textureShadow = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
 
 	font = sfFont_createFromFile("Assets/Font/font.ttf");
 }
@@ -247,8 +251,8 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 	{
 		sfText_move(marker[i].text, (sfVector2f) { 0, -2 });
 		marker[i].alpha -= 10;
-		sfText_setFillColor(marker[i].text, (sfColor) { 255, 255, 255, marker[i].alpha });
-		sfText_setOutlineColor(marker[i].text, (sfColor) { 255, 255, 255, marker[i].alpha });
+		sfText_setFillColor(marker[i].text, (sfColor) { 255, 255 - (50 * (marker[i].dmg - 1)), 255 - (50 * (marker[i].dmg - 1)), marker[i].alpha });
+		sfText_setOutlineColor(marker[i].text, (sfColor) { 0, 0, 0, marker[i].alpha });
 		if (marker[i].alpha <= 0)
 		{
 			DeleteMarker(i);
@@ -352,12 +356,12 @@ void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
 			break;
 		case SLIME:
 			temp.life = 5;
-			temp.speed = 800;
+			temp.speed = 900;
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 40, 40 });
 			break;
 		case BAT:
 			temp.life = 5;
-			temp.speed = 600;
+			temp.speed = 700;
 			sfRectangleShape_setSize(temp.collider, (sfVector2f) { 80, 60 });
 			break;
 		case TORMENTED_SOUL:
@@ -386,7 +390,7 @@ void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
 
 		//Shadow
 		temp.spriteShadow = sfSprite_create();
-		sfSprite_setTexture(temp.spriteShadow, shadowTexture, sfTrue);
+		sfSprite_setTexture(temp.spriteShadow, textureShadow, sfTrue);
 		hitbox = sfSprite_getGlobalBounds(temp.spriteShadow);
 		sfSprite_setOrigin(temp.spriteShadow, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
 
@@ -422,21 +426,25 @@ void DeleteEnemy(int _ID)
 
 void AddMarker(sfVector2f _pos, int _dmg)
 {
-	Marker temp = { 0 };
-	temp.text = sfText_create();
-	sfText_setFont(temp.text, font);
-	sfText_setOutlineThickness(temp.text, 1);
-	sfText_setCharacterSize(temp.text, 50);
-	temp.alpha = 255;
+	if (markerCount < 49)
+	{
+		Marker temp = { 0 };
+		temp.text = sfText_create();
+		sfText_setFont(temp.text, font);
+		sfText_setOutlineThickness(temp.text, 1);
+		sfText_setCharacterSize(temp.text, 50 + (5 * _dmg));
+		temp.dmg = _dmg;
+		temp.alpha = 255;
 
-	char string[5];
-	sprintf_s(string, sizeof(string), "%d", _dmg);
-	sfText_setString(temp.text, string);
+		char string[5];
+		sprintf_s(string, sizeof(string), "%d", _dmg);
+		sfText_setString(temp.text, string);
 
-	sfText_setPosition(temp.text, _pos);
+		sfText_setPosition(temp.text, (sfVector2f) { _pos.x, _pos.y + (10 * markerCount) });
 
-	marker[markerCount] = temp;
-	markerCount++;
+		marker[markerCount] = temp;
+		markerCount++;
+	}
 }
 
 void DeleteMarker(int _ID)
@@ -590,9 +598,17 @@ void EnemyMove(int _ID, float _dt)
 			}
 		}
 
-		if (GetDistanceVector2f(pos, GetPlayerPos()) > 30)
+		if (GetDistanceVector2f(pos, GetPlayerPos()) > 30 || enemy[_ID].type == BAT || enemy[_ID].type == SLIME)
 		{
-			sfSprite_move(enemy[_ID].sprite, (sfVector2f) { enemy[_ID].velocity.x* enemy[_ID].speed* _dt, enemy[_ID].velocity.y* enemy[_ID].speed* _dt });
+			if (GetEffect(COWBOY_HAT))
+			{
+				if (enemyRoped != _ID)
+					sfSprite_move(enemy[_ID].sprite, (sfVector2f) { enemy[_ID].velocity.x* enemy[_ID].speed* _dt, enemy[_ID].velocity.y* enemy[_ID].speed* _dt });
+				else if (closestDis > 375)
+					sfSprite_move(enemy[_ID].sprite, (sfVector2f) { enemy[_ID].velocity.x* enemy[_ID].speed* _dt, enemy[_ID].velocity.y* enemy[_ID].speed* _dt });
+			}
+			else
+				sfSprite_move(enemy[_ID].sprite, (sfVector2f) { enemy[_ID].velocity.x* enemy[_ID].speed* _dt, enemy[_ID].velocity.y* enemy[_ID].speed* _dt });
 		}
 	}
 	else
@@ -659,7 +675,7 @@ void EnemyShoot(int _ID, float _dt)
 		pos = sfSprite_getPosition(enemy[_ID].sprite);
 		if (enemy[_ID].fireRate <= 0)
 		{
-			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 600, sfTrue, sfFalse);
+			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 16 - 10), 600, sfTrue, sfFalse);
 			enemy[_ID].isShooting = sfFalse;
 			enemy[_ID].fireRate = 0.3f;
 		}
@@ -669,7 +685,10 @@ void EnemyShoot(int _ID, float _dt)
 		pos.y += 45;
 		if (enemy[_ID].misc <= 0)
 		{
-			AddEnemy(TINY_CRAB, pos, enemy[_ID].id);
+			if (!ObjectCollision(pos))
+			{
+				AddEnemy(TINY_CRAB, pos, enemy[_ID].id);
+			}
 			AddEnemyCurrent();
 			enemy[_ID].misc = 3.f;
 		}
@@ -686,42 +705,52 @@ void EnemyShoot(int _ID, float _dt)
 
 void EnemyHurt(int _ID, int _dmg)
 {
-	sfVector2f pos = sfSprite_getPosition(enemy[_ID].sprite);
-	sfFloatRect hitbox = sfSprite_getGlobalBounds(enemy[_ID].sprite);
-	if (enemy[_ID].life > 0 && enemy[_ID].type != TORMENTED_SOUL)
+	if (enemy[_ID].hurtFrame <= 0)
 	{
-		if (_dmg >= 0)
+		sfVector2f pos = sfSprite_getPosition(enemy[_ID].sprite);
+		sfFloatRect hitbox = sfSprite_getGlobalBounds(enemy[_ID].sprite);
+		if (enemy[_ID].life > 0)
 		{
-			enemy[_ID].life -= _dmg;
-		}
-		enemy[_ID].hurtFrame = 0.02f;
+			if (_ID == enemyRoped && GetDistanceVector2f(pos, GetPlayerPos()) < 300 && !GetEffect(PASSPORT))
+			{
+				_dmg *= 2;
+			}
+			if (_dmg >= 0 && enemy[_ID].type != TORMENTED_SOUL)
+			{
+				enemy[_ID].life -= _dmg;
+			}
+			if (GetEffect(PASSPORT))
+				enemy[_ID].hurtFrame = 0.10f;
+			else
+				enemy[_ID].hurtFrame = 0.02f;
 
-		switch (enemy[_ID].type)
-		{
-		case REA_BASE:
-		case REA_SHOTGUN:
-		case REA_CLOTH:
-			sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 75, 75, 75 });
-			break;
-		case SLIME:
-			sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 60, 60, 60 });
-			break;
-		case BAT:
-			sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 60, 150, 60 });
-			break;
-		case BIG_CRAB:
-			sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 95, 220, 95 });
-			break;
-		case TINY_CRAB:
-			sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 45, 20, 20 });
-			break;
+			switch (enemy[_ID].type)
+			{
+			case REA_BASE:
+			case REA_SHOTGUN:
+			case REA_CLOTH:
+				sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 75, 75, 75 });
+				break;
+			case SLIME:
+				sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 60, 60, 60 });
+				break;
+			case BAT:
+				sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 60, 150, 60 });
+				break;
+			case BIG_CRAB:
+				sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 95, 220, 95 });
+				break;
+			case TINY_CRAB:
+				sfSprite_setTextureRect(enemy[_ID].sprite, (sfIntRect) { 0, 20, 45, 20 });
+				break;
+			}
+			pos.y -= 50 + hitbox.height / 2;
+			AddMarker(pos, _dmg);
 		}
-		pos.y -= 50 + hitbox.height / 2;
-		AddMarker(pos, _dmg);
-	}
-	else
-	{
-		AddMarker(pos, 0);
+		else
+		{
+			AddMarker(pos, 0);
+		}
 	}
 }
 
@@ -800,19 +829,22 @@ int GetEnemyMap(int _ID)
 	return count;
 }
 
-sfVector2f GetClosestEnemy(sfVector2f _pos)
+float GetEnemyHurtFrame(int _ID)
 {
-	float closestPos = 10000;
-	sfVector2f finalPos = { 0 };
-	for (int i = 0; i < enemyCount; i++)
+	return enemy[_ID].hurtFrame;
+}
+
+sfVector2f RopeEnemy(int _ID)
+{
+	enemyRoped = _ID;
+	if (_ID < enemyCount)
 	{
-		sfVector2f pos = sfSprite_getPosition(enemy[i].sprite);
-		float newPos = GetDistanceVector2f(pos, _pos);
-		if (newPos < closestPos)
+		sfVector2f pos = sfRectangleShape_getPosition(enemy[_ID].collider);
+		if (enemy[_ID].type != TINY_CRAB)
 		{
-			closestPos = newPos;
-			finalPos = pos;
+			SetRope(pos);
 		}
+		return pos;
 	}
-	return finalPos;
+	return (sfVector2f) { 0 };
 }

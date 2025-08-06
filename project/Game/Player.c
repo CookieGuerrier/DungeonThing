@@ -1,17 +1,22 @@
 #include "Player.h"
 
 Player player;
+sfSprite* rope;
 sfTexture* texturePlayer;
 sfTexture* textureHand;
-sfTexture* shadowTexture;
+sfTexture* textureShadow;
+sfTexture* textureRope;
 sfVector2f mousePos;
 
 int artifactCount;
-ShopType artifact[6];
-sfBool effects[6];
+ShopType artifact[9];
+sfBool effects[9];
 
+float chargeTimer;
 float rollTimer;
 float rollCooldown;
+sfVector2f enemyPos;
+sfBool ropeActive;
 
 float startTimer;
 
@@ -30,9 +35,11 @@ void LoadPlayer(void)
 	player.sprite = sfSprite_create();
 	player.spriteHand = sfSprite_create();
 	player.spriteShadow = sfSprite_create();
+	rope = sfSprite_create();
 	texturePlayer = sfTexture_createFromFile("Assets/Texture/Player/player.png", NULL);
 	textureHand = sfTexture_createFromFile("Assets/Texture/Player/hand.png", NULL);
-	shadowTexture = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
+	textureShadow = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
+	textureRope = sfTexture_createFromFile("Assets/Texture/Player/rope.png", NULL);
 
 	sfSprite_setTexture(player.sprite, texturePlayer, sfTrue);
 	sfSprite_setTextureRect(player.sprite, (sfIntRect) { 0, 0, 80 + 80 * IDLE, 80 + 80 * IDLE });
@@ -42,9 +49,13 @@ void LoadPlayer(void)
 	hitbox = sfSprite_getGlobalBounds(player.spriteHand);
 	sfSprite_setOrigin(player.spriteHand, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
 
+	//Rope
+	sfSprite_setTexture(rope, textureRope, sfTrue);
+	hitbox = sfSprite_getGlobalBounds(rope);
+	sfSprite_setOrigin(rope, (sfVector2f) { hitbox.left, hitbox.height / 2 });
 	LoadPlayerAnims();
 
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 9; i++)
 	{
 		effects[i] = sfFalse;
 	}
@@ -59,7 +70,7 @@ void LoadPlayer(void)
 	sfRectangleShape_setOrigin(player.collider, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
 
 	//Shadow
-	sfSprite_setTexture(player.spriteShadow, shadowTexture, sfTrue);
+	sfSprite_setTexture(player.spriteShadow, textureShadow, sfTrue);
 	hitbox = sfSprite_getGlobalBounds(player.spriteShadow);
 	sfSprite_setOrigin(player.spriteShadow, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
 	sfSprite_setPosition(player.sprite, GetSpawnPoint());
@@ -171,7 +182,7 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 			player.invFrame -= _dt;
 		}
 
-		//Effectx
+		//Effect
 		{
 			if (GetEffect(STAMP))
 			{
@@ -240,14 +251,65 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 				UpdateAnim(_dt, player.anims[ROLL]);
 			}
 		}
-		if (sfMouse_isButtonPressed(sfMouseLeft) || player.anims[HAND]->frameNum != 0)
+
+		if (GetEffect(BATTERY))
 		{
-			UpdateAnim(_dt, player.anims[HAND]);
-			player.turnFrame = 0.3f;
+			sfSprite_setColor(player.spriteHand, (sfColor) { 255, 255 - (int)(chargeTimer * 200), 255 - (int)(chargeTimer * 200), 255 });
+			if (sfMouse_isButtonPressed(sfMouseLeft) && chargeTimer < 1)
+			{
+				player.anims[HAND]->frameNum = 0;
+				if (GetEffect(STAMP) && player.invFrame > 0)
+				{
+					chargeTimer += _dt * 12;
+				}
+				else
+				{
+					chargeTimer += _dt * 3;
+				}
+			}
+			else if (!sfMouse_isButtonPressed(sfMouseLeft) && chargeTimer >= 1)
+			{
+				UpdateAnim(_dt, player.anims[HAND]);
+				player.turnFrame = 0.3f;
+				if (player.anims[HAND]->frameNum == 1)
+				{
+					chargeTimer = 0;
+				}
+			}
+			else if (!sfMouse_isButtonPressed(sfMouseLeft))
+			{
+				player.anims[HAND]->frameNum = 0;
+				chargeTimer = 0;
+			}
 		}
-		if (sfMouse_isButtonPressed(sfMouseLeft) && player.anims[HAND]->frameNum == 0)
+		else
 		{
-			player.anims[HAND]->frameNum = 1;
+			if (sfMouse_isButtonPressed(sfMouseLeft) || player.anims[HAND]->frameNum != 0)
+			{
+				UpdateAnim(_dt, player.anims[HAND]);
+				player.turnFrame = 0.3f;
+			}
+			if (sfMouse_isButtonPressed(sfMouseLeft) && player.anims[HAND]->frameNum == 0)
+			{
+				player.anims[HAND]->frameNum = 1;
+			}
+		}
+
+		//Rope
+		if (GetEffect(COWBOY_HAT))
+		{
+			sfSprite_setPosition(rope, pos);
+			sfSprite_setRotation(rope, LookToDirection(enemyPos, pos));
+			if (GetDistanceVector2f(enemyPos, pos) < 300 && ropeActive)
+			{
+				sfSprite_setTextureRect(rope, (sfIntRect) { 0, 0, (int)GetDistanceVector2f(enemyPos, pos), 10 });
+			}
+			else
+			{
+				ropeActive = sfFalse;
+				sfSprite_setTextureRect(rope, (sfIntRect) { 0, 0, 0, 10 });
+				RopeEnemy(9999);
+			}
 		}
 	}
 	else
@@ -277,6 +339,14 @@ void DrawPlayer(sfRenderWindow* _window, sfBool _debug)
 	}
 }
 
+void DrawRope(sfRenderWindow* _window)
+{
+	if (GetEffect(COWBOY_HAT))
+	{
+		sfRenderWindow_drawSprite(_window, rope, NULL);
+	}
+}
+
 void CleanupPlayer(void)
 {
 	sfSprite_destroy(player.sprite);
@@ -289,8 +359,12 @@ void CleanupPlayer(void)
 	textureHand = NULL;
 	sfSprite_destroy(player.spriteShadow);
 	player.spriteShadow = NULL;
-	sfTexture_destroy(shadowTexture);
-	shadowTexture = NULL;
+	sfTexture_destroy(textureShadow);
+	textureShadow = NULL;
+	sfSprite_destroy(rope);
+	rope = NULL;
+	sfTexture_destroy(textureRope);
+	textureRope = NULL;
 	sfRectangleShape_destroy(player.collider);
 	player.collider = NULL;
 }
@@ -394,7 +468,7 @@ void PlayerShoot(float _dt)
 
 void PlayerRoll(void)
 {
-	if (rollTimer <= 0 && rollCooldown <= 0 && startTimer <= 0)
+	if (rollTimer <= 0 && rollCooldown <= 0 && startTimer <= 0 && (player.velocity.y != 0 || player.velocity.x != 0))
 	{
 		rollTimer = 1;
 		rollCooldown = 1.05f;
@@ -452,6 +526,12 @@ void SetArtifact(int _artifact)
 	artifact[artifactCount] = _artifact;
 	effects[_artifact] = sfTrue;
 	artifactCount++;
+}
+
+void SetRope(sfVector2f _dis)
+{
+	enemyPos = _dis;
+	ropeActive = sfTrue;
 }
 
 void LoseLife(int _life)

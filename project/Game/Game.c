@@ -165,6 +165,7 @@ void DrawGame(sfRenderWindow* _window)
 	DrawWall(_window, debugMode);
 	DrawShop(_window, debugMode);
 
+	DrawRope(_window);
 	DrawEnemy(_window, debugMode);
 	DrawMoney(_window, debugMode);
 	DrawBullet(_window, debugMode);

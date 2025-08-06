@@ -294,6 +294,8 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 
 	//Type of stuff
 	int ran;
+	int saved = 0;
+	int saved2 = 0;
 	switch (temp.element)
 	{
 	case BATTLE:
@@ -312,14 +314,30 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		ran = rand() % 1 + POTION;
 		AddItem(ran, (sfVector2f) { _pos.x + hitbox.width / 2 - 250, _pos.y + hitbox.height / 2 + 20 }, sfFalse);
 		//Ran
-		ran = rand() % 6;
+		ran = rand() % 9;
+		saved = ran;
 		AddItem(ran, (sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 + 20 }, sfFalse);
 		//Arti
-		ran = rand() % 6;
+		ran = rand() % 9;
+		if (ran == saved)
+		{
+			if (ran == 8)
+				ran = 0;
+			else
+				ran++;
+		}
+		saved2 = ran;
 		AddItem(ran, (sfVector2f) { _pos.x + hitbox.width / 2 + 250, _pos.y + hitbox.height / 2 + 20 }, sfFalse);
 		break;
 	case SPECIAL:
-		ran = rand() % 6;
+		ran = rand() % 9;
+		if (ran == saved || ran == saved2)
+		{
+			if (ran == 8)
+				ran = 0;
+			else
+				ran++;
+		}
 		AddItem(ran, (sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 + 20 }, sfTrue);
 		break;
 	default:
