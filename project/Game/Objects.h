@@ -3,6 +3,7 @@
 
 #include "Common.h"
 #include "Walls.h"
+#include "Animator.h"
 
 typedef enum ObjectType
 {
@@ -14,7 +15,8 @@ typedef enum ObjectType
 	STATUE,
 	BIG_HOLE,
 	LONG_HOLE,
-	ROCK
+	ROCK,
+	TORCH
 }ObjectType;
 
 typedef struct Object
@@ -23,6 +25,7 @@ typedef struct Object
 	sfSprite* shadow;
 	int wallID;
 	ObjectType type;
+	Anim** anims;
 }Object;
 
 void LoadObject(void);

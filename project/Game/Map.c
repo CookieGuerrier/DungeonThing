@@ -393,6 +393,17 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 			}
 		}
 	}
+	
+	if (_type == D || _type == LRD || _type == LR || _type == L || _type == R)
+	{
+		AddObject((sfVector2f) { hitbox.left + hitbox.width / 2 + 500, hitbox.top + 35 }, 0, TORCH);
+		AddObject((sfVector2f) { hitbox.left + hitbox.width / 2 - 520, hitbox.top + 35 }, 0, TORCH);
+	}
+	else
+	{
+		AddObject((sfVector2f) { hitbox.left + hitbox.width / 2 + 100, hitbox.top + 35 }, 0, TORCH);
+		AddObject((sfVector2f) { hitbox.left + hitbox.width / 2 - 120, hitbox.top + 35 }, 0, TORCH);
+	}
 
 	map[mapCount] = temp;
 	mapCount++;
@@ -491,6 +502,7 @@ void CreateLevel(int _pathLength)
 			map[i].d = sfFalse;
 		}
 	}
+
 }
 
 void CreateBattle(BattleType _type, sfFloatRect _hitbox)

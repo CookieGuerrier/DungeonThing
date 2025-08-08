@@ -1,7 +1,7 @@
 #include "Objects.h"
 
 Object object[300];
-sfTexture* textureObject[9];
+sfTexture* textureObject[10];
 sfTexture* textureShadow;
 int objectCount;
 
@@ -20,6 +20,7 @@ void LoadObject(void)
 	textureObject[BIG_HOLE] = sfTexture_createFromFile("Assets/Texture/Objects/bigHole.png", NULL);
 	textureObject[LONG_HOLE] = sfTexture_createFromFile("Assets/Texture/Objects/longHole.png", NULL);
 	textureObject[ROCK] = sfTexture_createFromFile("Assets/Texture/Objects/rock.png", NULL);
+	textureObject[TORCH] = sfTexture_createFromFile("Assets/Texture/Objects/torch.png", NULL);
 	textureShadow = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
 
 	AddObject((sfVector2f) { 0, 0 }, 0, WALL_BATTLERL);
@@ -32,16 +33,14 @@ void UpdateObject(float _dt, sfRenderWindow* _window)
 {
 	for (int i = 0; i < objectCount; i++)
 	{
-		if (object[i].type == WALL_BATTLERL || object[i].type == WALL_BATTLEUD)
+		if (object[i].type == TORCH)
 		{
-			sfVector2f pos = sfSprite_getPosition(object[i].sprite);
-			sfFloatRect hitbox = sfSprite_getGlobalBounds(object[i].sprite);
-			MoveWall(i, (sfVector2f) { pos.x - hitbox.width / 2, pos.y - hitbox.height / 2 });
+			UpdateAnim(_dt, object[i].anims[0]);
 		}
 	}
 }
 
-void DrawObject(sfRenderWindow* _window, sfBool _debug)	
+void DrawObject(sfRenderWindow* _window, sfBool _debug)
 {
 	for (int i = 0; i < objectCount; i++)
 	{
@@ -61,7 +60,7 @@ void CleanupObject(void)
 		objectCount++;
 	}
 
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		sfTexture_destroy(textureObject[i]);
 		textureObject[i] = NULL;
@@ -119,6 +118,17 @@ void AddObject(sfVector2f _pos, float _rot, ObjectType _type)
 			sfSprite_setTextureRect(obj.sprite, (sfIntRect) { 0 + 60 * ran, 0, 60, 60 });
 			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width / 3, hitbox.height }, sfFalse, objectCount);
 			break;
+		case TORCH:
+			obj.anims = calloc(4, sizeof(Anim*));
+			if (obj.anims != NULL)
+			{
+				sfVector2u size = sfTexture_getSize(textureObject[TORCH]);
+				sfIntRect first = { 0, 0, size.x / 3, size.y };
+				obj.anims[0] = CreateAnim(textureObject[TORCH], first, 3, 1 / 6.0f, obj.sprite, (sfVector2f) { (float)size.x / 14.f, (float)size.y / 8.f }, sfTrue);
+				obj.anims[0]->aimOffset = (sfVector2f){ 0 };
+				obj.anims[0]->events = malloc(sizeof(AnimEvent));
+			}
+			break;
 		}
 
 		object[objectCount] = obj;
@@ -149,4 +159,11 @@ void DeleteObject(int _ID)
 void MoveObject(int _ID, sfVector2f _pos)
 {
 	sfSprite_setPosition(object[_ID].sprite, _pos);
+
+	if (object[_ID].type == WALL_BATTLERL || object[_ID].type == WALL_BATTLEUD)
+	{
+		sfVector2f pos = sfSprite_getPosition(object[_ID].sprite);
+		sfFloatRect hitbox = sfSprite_getGlobalBounds(object[_ID].sprite);
+		MoveWall(_ID, (sfVector2f) { pos.x - hitbox.width / 2, pos.y - hitbox.height / 2 });
+	}
 }
