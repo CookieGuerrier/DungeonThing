@@ -25,6 +25,7 @@ void LoadGame(sfRenderWindow* _window)
 	LoadEnemy();
 	LoadShop();
 	LoadMiniMap();
+	LoadOverlay();
 	LoadMap(_window);
 
 	LoadPlayer();
@@ -161,6 +162,7 @@ void DrawGame(sfRenderWindow* _window)
 {
 	SetView(0, _window);
 	DrawMap(_window, debugMode);
+	DrawOverlay(_window, debugMode);
 	DrawObject(_window, debugMode);
 	DrawWall(_window, debugMode);
 	DrawShop(_window, debugMode);
@@ -189,6 +191,7 @@ void CleanupGame(void)
 {
 	CleanupWall();
 	CleanupObject();
+	CleanupOverlay();
 	CleanupMap();
 	CleanupMoney();
 	CleanupShop();

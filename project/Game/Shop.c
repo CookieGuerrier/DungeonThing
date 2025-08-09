@@ -50,12 +50,12 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 {
 	if (!test)
 	{
-		//UpdateSlot(GetArtifactCount(), textureItems[PASSPORT]);
-		//SetArtifact(PASSPORT);
-		//UpdateSlot(GetArtifactCount(), textureItems[CONTRACT]);
-		//SetArtifact(CONTRACT);
-		UpdateSlot(GetArtifactCount(), textureItems[COWBOY_HAT]);
-		SetArtifact(COWBOY_HAT);
+		UpdateSlot(GetArtifactCount(), textureItems[CHRONO]);
+		SetArtifact(CHRONO);
+		UpdateSlot(GetArtifactCount(), textureItems[SAW]);
+		SetArtifact(SAW);
+		UpdateSlot(GetArtifactCount(), textureItems[BLUE_GEL]);
+		SetArtifact(BLUE_GEL);
 		test = sfTrue;
 	}
 
@@ -155,7 +155,6 @@ void CleanupShop(void)
 void AddItem(ShopType _type, sfVector2f _position, sfBool _free)
 {
 	ItemShop temp = { 0 };
-
 	temp.sprite = sfSprite_create();
 	sfSprite_setTexture(temp.sprite, textureItems[_type], sfTrue);
 	sfFloatRect hitbox = sfSprite_getGlobalBounds(temp.sprite);

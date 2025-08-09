@@ -99,6 +99,9 @@
     <ClCompile Include="MenuHUD.c">
       <Filter>Fichiers sources\HUD</Filter>
     </ClCompile>
+    <ClCompile Include="OverlayMap.c">
+      <Filter>Fichiers sources\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="MenuHUD.h">
       <Filter>Fichiers d%27en-tête\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="OverlayMap.h">
+      <Filter>Fichiers d%27en-tête\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

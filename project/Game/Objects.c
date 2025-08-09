@@ -44,7 +44,7 @@ void DrawObject(sfRenderWindow* _window, sfBool _debug)
 {
 	for (int i = 0; i < objectCount; i++)
 	{
-		if (object[i].type == POT)
+		if (object[i].type == POT || object[i].type == ROCK)
 		{
 			sfRenderWindow_drawSprite(_window, object[i].shadow, NULL);
 		}
@@ -116,6 +116,12 @@ void AddObject(sfVector2f _pos, float _rot, ObjectType _type)
 		case ROCK:
 			ran = rand() % 3;
 			sfSprite_setTextureRect(obj.sprite, (sfIntRect) { 0 + 60 * ran, 0, 60, 60 });
+			obj.shadow = sfSprite_create();
+			sfSprite_setTexture(obj.shadow, textureShadow, sfTrue);
+			sfSprite_setScale(obj.shadow, (sfVector2f) { 0.9f, 1 });
+			hitbox = sfSprite_getGlobalBounds(obj.shadow);
+			sfSprite_setOrigin(obj.shadow, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
+			sfSprite_setPosition(obj.shadow, (sfVector2f) { _pos.x - 65, _pos.y - 5 });
 			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width / 3, hitbox.height }, sfFalse, objectCount);
 			break;
 		case TORCH:
@@ -140,7 +146,7 @@ void DeleteObject(int _ID)
 {
 	sfSprite_destroy(object[_ID].sprite);
 	object[_ID].sprite = NULL;
-	if (object[_ID].type == POT)
+	if (object[_ID].type == POT || object[_ID].type == ROCK)
 	{
 		sfSprite_destroy(object[_ID].shadow);
 		object[_ID].shadow = NULL;

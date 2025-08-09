@@ -152,6 +152,7 @@
     <ClCompile Include="MiniMap.c" />
     <ClCompile Include="Money.c" />
     <ClCompile Include="Objects.c" />
+    <ClCompile Include="OverlayMap.c" />
     <ClCompile Include="Player.c" />
     <ClCompile Include="Shop.c" />
     <ClCompile Include="Walls.c" />
@@ -173,6 +174,7 @@
     <ClInclude Include="MiniMap.h" />
     <ClInclude Include="Money.h" />
     <ClInclude Include="Objects.h" />
+    <ClInclude Include="OverlayMap.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Shop.h" />
     <ClInclude Include="Walls.h" />

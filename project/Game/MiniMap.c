@@ -1,7 +1,7 @@
 #include "MiniMap.h"
 
 MiniMap mini[30];
-sfTexture* texture[5];
+sfTexture* textureMiniMap[5];
 int miniCount;
 int current;
 
@@ -9,11 +9,11 @@ void LoadMiniMap(void)
 {
 	miniCount = 0;
 	current = 0;
-	texture[BATTLE] = sfTexture_createFromFile("Assets/Texture/MiniMap/battle.png", NULL);
-	texture[EXIT] = sfTexture_createFromFile("Assets/Texture/MiniMap/end.png", NULL);
-	texture[SHOP] = sfTexture_createFromFile("Assets/Texture/MiniMap/shop.png", NULL);
-	texture[START] = sfTexture_createFromFile("Assets/Texture/MiniMap/start.png", NULL);
-	texture[SPECIAL] = sfTexture_createFromFile("Assets/Texture/MiniMap/special.png", NULL);
+	textureMiniMap[BATTLE] = sfTexture_createFromFile("Assets/Texture/MiniMap/battle.png", NULL);
+	textureMiniMap[EXIT] = sfTexture_createFromFile("Assets/Texture/MiniMap/end.png", NULL);
+	textureMiniMap[SHOP] = sfTexture_createFromFile("Assets/Texture/MiniMap/shop.png", NULL);
+	textureMiniMap[START] = sfTexture_createFromFile("Assets/Texture/MiniMap/start.png", NULL);
+	textureMiniMap[SPECIAL] = sfTexture_createFromFile("Assets/Texture/MiniMap/special.png", NULL);
 }
 
 void UpdateMiniMap(sfRenderWindow* _window, float _dt)
@@ -42,8 +42,8 @@ void CleanupMiniMap(void)
 
 	for (int i = 0; i < 4; i++)
 	{
-		sfTexture_destroy(texture[i]);
-		texture[i] = NULL;
+		sfTexture_destroy(textureMiniMap[i]);
+		textureMiniMap[i] = NULL;
 	}
 }
 
@@ -54,7 +54,7 @@ void AddMiniMap(sfVector2f _position, int _type)
 		MiniMap temp = { 0 };
 
 		temp.sprite = sfSprite_create(); 
-		sfSprite_setTexture(temp.sprite, texture[_type], sfTrue);
+		sfSprite_setTexture(temp.sprite, textureMiniMap[_type], sfTrue);
 
 		sfFloatRect hitbox = sfSprite_getGlobalBounds(temp.sprite);
 		sfSprite_setOrigin(temp.sprite, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });

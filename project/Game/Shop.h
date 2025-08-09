@@ -9,8 +9,8 @@ typedef enum ShopType
 {
 	//Artifacts
 	SAW,
-	CONTRACT,
 	BOOMERANG,
+	CONTRACT,
 	BLUE_GEL,
 	CHRONO,
 	STAMP,

@@ -14,7 +14,7 @@
 #include "Camera.h"
 #include "Shop.h"
 #include "MiniMap.h"
-#include "Camera.h"
+#include "OverlayMap.h"
 
 typedef struct GameData
 {

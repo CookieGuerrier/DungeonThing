@@ -171,20 +171,20 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 			element = START;
 		}
 		//Shop
-		else if (!placed[SHOP])
+		else if (!placed[SPECIAL])
 		{
-			placed[SHOP] = sfTrue;
-			element = SHOP;
+			placed[SPECIAL] = sfTrue;
+			element = SPECIAL;
 		}
 		else if (!placed[EXIT])
 		{
 			placed[EXIT] = sfTrue;
 			element = EXIT;
 		}
-		else if (!placed[SPECIAL])
+		else if (!placed[SHOP])
 		{
-			placed[SPECIAL] = sfTrue;
-			element = SPECIAL;
+			placed[SHOP] = sfTrue;
+			element = SHOP;
 		}
 	}
 
@@ -294,8 +294,7 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 
 	//Type of stuff
 	int ran;
-	int saved = 0;
-	int saved2 = 0;
+	int saved = 100;
 	switch (temp.element)
 	{
 	case BATTLE:
@@ -307,6 +306,7 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		MoveCamera((sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 }, 2);
 		PositionMini(mapCount);
 		mapStart = mapCount;
+		AddOverlay((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 }, 1);
 		break;
 	case SHOP:
 		AddObject((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 - 150 }, 0, STATUE);
@@ -318,27 +318,19 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		saved = ran;
 		AddItem(ran, (sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 + 20 }, sfFalse);
 		//Arti
-		ran = rand() % 9;
-		if (ran == saved)
+		do
 		{
-			if (ran == 8)
-				ran = 0;
-			else
-				ran++;
-		}
-		saved2 = ran;
+			ran = rand() % 9;
+		} while (ran == saved);
 		AddItem(ran, (sfVector2f) { _pos.x + hitbox.width / 2 + 250, _pos.y + hitbox.height / 2 + 20 }, sfFalse);
 		break;
 	case SPECIAL:
-		ran = rand() % 9;
-		if (ran == saved || ran == saved2)
+		do
 		{
-			if (ran == 8)
-				ran = 0;
-			else
-				ran++;
-		}
-		AddItem(ran, (sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 + 20 }, sfTrue);
+			ran = rand() % 9;
+		} while (ran == saved);
+		AddItem(ran, (sfVector2f) { _pos.x + hitbox.width / 2 , _pos.y + hitbox.height / 2 + 20 }, sfTrue);
+		AddOverlay((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 },0);
 		break;
 	default:
 		break;
@@ -393,7 +385,7 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 			}
 		}
 	}
-	
+
 	if (_type == D || _type == LRD || _type == LR || _type == L || _type == R)
 	{
 		AddObject((sfVector2f) { hitbox.left + hitbox.width / 2 + 500, hitbox.top + 35 }, 0, TORCH);
@@ -512,15 +504,7 @@ void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 	switch (_type)
 	{
 	case EMPTY:
-		ran = rand() % 2;
-		if (ran == 0)
-		{
-			EnemyPlacements(0, _hitbox);
-		}
-		else
-		{
-			EnemyPlacements(1, _hitbox);
-		}
+		EnemyPlacements(rand() % 2, _hitbox);
 		break;
 	case CROSS:
 		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 - 580, _hitbox.top + _hitbox.height / 2 - 280 }, 0, BIG_HOLE);
@@ -578,15 +562,7 @@ void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 				AddObject((sfVector2f) { _hitbox.left + _hitbox.width - 500 + 60 * i, _hitbox.top + _hitbox.height - 300 - 60 * j }, 0, ROCK);
 			}
 		}
-		ran = rand() % 2;
-		if (ran == 0)
-		{
-			EnemyPlacements(0, _hitbox);
-		}
-		else
-		{
-			EnemyPlacements(1, _hitbox);
-		}
+		EnemyPlacements(rand() % 2, _hitbox);
 		break;
 	case ROCK_LINE:
 		for (int i = 0; i < 11; i++)
@@ -616,15 +592,7 @@ void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 		AddObject((sfVector2f) { _hitbox.left + _hitbox.width - 500 + 60, _hitbox.top + 300 + 60 }, 0, ROCK);
 		AddObject((sfVector2f) { _hitbox.left + 500 + 60, _hitbox.top + _hitbox.height - 300 - 60 }, 0, ROCK);
 		AddObject((sfVector2f) { _hitbox.left + _hitbox.width - 500 + 60, _hitbox.top + _hitbox.height - 300 - 60 }, 0, ROCK);
-		ran = rand() % 2;
-		if (ran == 0)
-		{
-			EnemyPlacements(0, _hitbox);
-		}
-		else
-		{
-			EnemyPlacements(1, _hitbox);
-		}
+		EnemyPlacements(rand() % 2, _hitbox);
 		break;
 	case MIDDLE_PIT:
 		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 }, 0, BIG_HOLE);
@@ -653,21 +621,13 @@ void AddEnemyCurrent(void)
 void CreateBattleBorder(sfVector2f _pos, MapType _type)
 {
 	if (_type == L || _type == LR || _type == LRU || _type == LRUD || _type == LRD)
-	{
 		MoveObject(1, (sfVector2f) { _pos.x + 20, _pos.y + SCREEN_HEIGHT / 2 });
-	}
 	if (_type == R || _type == LR || _type == LRU || _type == LRUD || _type == LRD)
-	{
 		MoveObject(0, (sfVector2f) { _pos.x + SCREEN_WIDTH - 20, _pos.y + SCREEN_HEIGHT / 2 });
-	}
 	if (_type == D || _type == LRD || _type == LRUD)
-	{
 		MoveObject(2, (sfVector2f) { _pos.x + SCREEN_WIDTH / 2, _pos.y + SCREEN_HEIGHT });
-	}
 	if (_type == U || _type == LRU || _type == LRUD)
-	{
 		MoveObject(3, (sfVector2f) { _pos.x + SCREEN_WIDTH / 2, _pos.y + 10 });
-	}
 }
 
 void EnemyPlacements(int _ID, sfFloatRect _hitbox)
@@ -755,9 +715,7 @@ int GetCurrentMap(void)
 		sfFloatRect pHitbox = GetPlayerHitbox();
 		sfFloatRect hitbox = sfSprite_getGlobalBounds(map[i].sprite);
 		if (sfFloatRect_intersects(&pHitbox, &hitbox, NULL))
-		{
 			return i;
-		}
 	}
 	return mapStart;
 }
@@ -769,9 +727,7 @@ int GetBulletMap(sfFloatRect _hitbox)
 		sfFloatRect pHitbox = _hitbox;
 		sfFloatRect hitbox = sfSprite_getGlobalBounds(map[i].sprite);
 		if (sfFloatRect_intersects(&pHitbox, &hitbox, NULL))
-		{
 			return i;
-		}
 	}
 	return mapStart;
 }
