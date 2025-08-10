@@ -100,3 +100,13 @@ void DeleteNugget(int _ID)
 
 	nuggetCount--;
 }
+
+void ClearNugget(void)
+{
+	for (int i = 0; i < nuggetCount; i++)
+	{
+		DeleteNugget(i);
+		nuggetCount++;
+	}
+	nuggetCount= 0;
+}

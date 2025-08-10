@@ -18,5 +18,6 @@ void CleanupMoney(void);
 
 void AddNugget(sfFloatRect _hitbox, int _num);
 void DeleteNugget(int _ID);
+void ClearNugget(void);
 
 #endif // !MONEY_H

@@ -16,7 +16,8 @@ typedef enum ObjectType
 	BIG_HOLE,
 	LONG_HOLE,
 	ROCK,
-	TORCH
+	TORCH,
+	EXIT_HOLE
 }ObjectType;
 
 typedef struct Object
@@ -35,7 +36,9 @@ void CleanupObject(void);
 
 void AddObject(sfVector2f _pos, float _rot, ObjectType _type);
 void DeleteObject(int _ID);
+void ClearObject(void);
 
 void MoveObject(int _ID, sfVector2f _pos);
+void SetExitActive(void);
 
 #endif // !OBJECT_H

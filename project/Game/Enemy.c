@@ -175,6 +175,7 @@ void LoadEnemyAnimation(Enemy* _enemy)
 
 void UpdateEnemy(float _dt, sfRenderWindow* _window)
 {
+
 	for (int i = 0; i < enemyCount; i++)
 	{
 		if (enemy[i].life > 0)
@@ -221,21 +222,22 @@ void UpdateEnemy(float _dt, sfRenderWindow* _window)
 					EnemyMove(i, _dt);
 					EnemyShoot(i, _dt);
 				}
-			}
-			//Animations
-			if (enemy[i].hurtFrame > 0)
-			{
-				enemy[i].hurtFrame -= _dt;
-			}
-			else
-			{
-				if (enemy[i].velocity.x == 0 && enemy[i].velocity.y == 0)
+
+				//Animations
+				if (enemy[i].hurtFrame > 0)
 				{
-					UpdateAnim(_dt, enemy[i].anims[IDLE_E]);
+					enemy[i].hurtFrame -= _dt;
 				}
 				else
 				{
-					UpdateAnim(_dt, enemy[i].anims[WALK_E]);
+					if (enemy[i].velocity.x == 0 && enemy[i].velocity.y == 0)
+					{
+						UpdateAnim(_dt, enemy[i].anims[IDLE_E]);
+					}
+					else
+					{
+						UpdateAnim(_dt, enemy[i].anims[WALK_E]);
+					}
 				}
 			}
 			sfSprite_setPosition(enemy[i].spriteShadow, (sfVector2f) { pos.x + 2, pos.y + 2 });
@@ -422,6 +424,16 @@ void DeleteEnemy(int _ID)
 	}
 
 	enemyCount--;
+}
+
+void ClearEnemy(void)
+{
+	for (int i = 0; i < enemyCount; i++)
+	{
+		DeleteEnemy(i);
+		enemyCount++;
+	}
+	enemyCount = 0;
 }
 
 void AddMarker(sfVector2f _pos, int _dmg)
@@ -688,8 +700,8 @@ void EnemyShoot(int _ID, float _dt)
 			if (!ObjectCollision(pos))
 			{
 				AddEnemy(TINY_CRAB, pos, enemy[_ID].id);
+				AddEnemyCurrent();
 			}
-			AddEnemyCurrent();
 			enemy[_ID].misc = 3.f;
 		}
 		else

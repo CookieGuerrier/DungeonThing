@@ -40,6 +40,7 @@ void CleanupShop(void);
 
 void AddItem(ShopType _type, sfVector2f _position, sfBool _free);
 void DeleteItem(int _ID);
+void ClearShop(void);
 void ItemDescription(void);
 
 #endif // !SHOP_H

@@ -66,6 +66,7 @@ void CleanupEnemy(void);
 
 void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap);
 void DeleteEnemy(int _ID);
+void ClearEnemy(void);
 
 void AddMarker(sfVector2f _pos, int _dmg);
 void DeleteMarker(int _ID);

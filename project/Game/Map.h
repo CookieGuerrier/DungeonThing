@@ -75,6 +75,8 @@ void AddEnemyCurrent(void);
 void CreateBattleBorder(sfVector2f _pos, MapType _type);
 void EnemyPlacements(int _ID, sfFloatRect _hitbox);
 
+void ClearLevel(void);
+
 sfVector2f GetSpawnPoint(void);
 void SetCameraMap(int _ID, sfRenderWindow* _window);
 int GetCurrentMap(void);

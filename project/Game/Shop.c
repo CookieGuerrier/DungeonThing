@@ -147,6 +147,7 @@ void CleanupShop(void)
 	for (int i = 0; i < itemCount; i++)
 	{
 		DeleteItem(i);
+		itemCount++;
 	}
 	sfText_destroy(description);
 	description = NULL;
@@ -188,6 +189,17 @@ void DeleteItem(int _ID)
 
 	sfText_destroy(itemShop[_ID].text);
 	itemShop[_ID].text = NULL;
+	itemCount--;
+}
+
+void ClearShop(void)
+{
+	for (int i = 0; i < itemCount; i++)
+	{
+		DeleteItem(i);
+		itemCount++;
+	}
+	itemCount = 0;
 }
 
 void ItemDescription(void)

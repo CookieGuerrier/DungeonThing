@@ -227,3 +227,13 @@ void DeleteBullet(int _ID)
 		bulletCount--;
 	}
 }
+
+void ClearBullet(void)
+{
+	for (int i = 0; i < bulletCount; i++)
+	{
+		DeleteBullet(i);
+		bulletCount++;
+	}
+	bulletCount = 0;
+}

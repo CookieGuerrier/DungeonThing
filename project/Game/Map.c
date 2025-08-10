@@ -75,6 +75,10 @@ void UpdateMap(float _dt, sfRenderWindow* _window)
 				battle = sfTrue;
 			}
 		}
+		else if (map[mapCurrent].element == EXIT)
+		{
+			SetExitActive();
+		}
 	}
 	else
 	{
@@ -331,6 +335,9 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		} while (ran == saved);
 		AddItem(ran, (sfVector2f) { _pos.x + hitbox.width / 2 , _pos.y + hitbox.height / 2 + 20 }, sfTrue);
 		AddOverlay((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 },0);
+		break;
+	case EXIT:
+		AddObject((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2  }, 0, EXIT_HOLE);
 		break;
 	default:
 		break;
@@ -694,6 +701,15 @@ void EnemyPlacements(int _ID, sfFloatRect _hitbox)
 		}
 		break;
 	}
+}
+
+void ClearLevel(void)
+{
+	ClearEnemy();
+	ClearObject();
+	ClearBullet();
+	ClearNugget();
+	ClearShop();
 }
 
 sfVector2f GetSpawnPoint(void)

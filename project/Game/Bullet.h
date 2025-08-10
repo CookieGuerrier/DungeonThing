@@ -25,5 +25,6 @@ void CleanupBullet(void);
 
 void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire, sfBool _bigBullet);
 void DeleteBullet(int _ID);
+void ClearBullet(void);
 
 #endif // !BULLET_H
