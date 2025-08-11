@@ -74,12 +74,12 @@ void DeleteWall(int _ID)
 
 void ClearWall(void)
 {
-	for (int i = 0; i < wallCount; i++)
+	for (int i = 4; i < wallCount; i++)
 	{
 		DeleteWall(i);
 		wallCount++;
 	}
-	wallCount = 0;
+	wallCount = 4;
 }
 
 void MoveWall(int _ID, sfVector2f _pos)

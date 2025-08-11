@@ -198,6 +198,7 @@ void ClearObject(void)
 		objectCount++;
 	}
 	objectCount = 4;
+	exitActive = sfFalse;
 }
 
 void MoveObject(int _ID, sfVector2f _pos)

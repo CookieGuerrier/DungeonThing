@@ -110,8 +110,10 @@ void UpdateMap(float _dt, sfRenderWindow* _window)
 	}
 	else if (GetOpacity() == 255)
 	{
-		SetOpacityVeil(0, 5);
 		ClearLevel();
+		SetOpacityVeil(0, 5);
+		CreateLevel(1);
+		SetPlayerPosition();
 	}
 }
 
@@ -731,6 +733,12 @@ void ClearLevel(void)
 		mapCount++;
 	}
 	mapCount = 0;
+	mapStart = 0;
+	battleDelay = 0.5f;
+	for (int i = 0; i < 5; i++)
+	{
+		placed[i] = sfFalse;
+	}
 }
 
 void SetMapCreation(void)

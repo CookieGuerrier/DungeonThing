@@ -93,6 +93,7 @@ void ClearMiniMap(void)
 		miniCount++;
 	}
 	miniCount = 0;
+	current = 0;
 }
 
 void PositionMini(int _ID)

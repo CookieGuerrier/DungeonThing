@@ -49,6 +49,7 @@ void PlayerShoot(float _dt);
 void PlayerRoll(void);
 void HandThing(sfVector2f _pos);
 void PlayerTransition(int _num);
+void SetPlayerPosition(void);
 
 void LoseLife(int _life);
 void GainLife(int _life);

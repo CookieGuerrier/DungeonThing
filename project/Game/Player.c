@@ -575,6 +575,11 @@ void PlayerTransition(int _num)
 	}
 }
 
+void SetPlayerPosition(void)
+{
+	sfSprite_setPosition(player.sprite, GetSpawnPoint());
+}
+
 int GetHP(void)
 {
 	return player.life;
