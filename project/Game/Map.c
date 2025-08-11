@@ -13,8 +13,11 @@ int enemyCurrent;
 sfBool battle;
 float battleDelay;
 
+sfBool mapCreation;
+
 void LoadMap(sfRenderWindow* _window)
 {
+	mapCreation = sfFalse;
 	mapStart = 0;
 	battleDelay = 0.5f;
 
@@ -39,68 +42,76 @@ void LoadMap(sfRenderWindow* _window)
 
 void UpdateMap(float _dt, sfRenderWindow* _window)
 {
-	if (mapCurrent != GetCurrentMap())
+	if (mapCreation)
 	{
-		SetCameraMap(GetCurrentMap(), _window);
-		mapCurrent = GetCurrentMap();
-		PositionMini(mapCurrent);
-		if (map[mapCurrent].element == BATTLE)
+		if (mapCurrent != GetCurrentMap())
 		{
-			//Battle start
-			enemyCurrent = GetEnemyMap(mapCurrent);
-			sfFloatRect hitbox = sfSprite_getGlobalBounds(map[mapCurrent].sprite);
+			SetCameraMap(GetCurrentMap(), _window);
+			mapCurrent = GetCurrentMap();
+			PositionMini(mapCurrent);
+			if (map[mapCurrent].element == BATTLE)
+			{
+				//Battle start
+				enemyCurrent = GetEnemyMap(mapCurrent);
+				sfFloatRect hitbox = sfSprite_getGlobalBounds(map[mapCurrent].sprite);
 
-			if (GetPlayerPos().x < (hitbox.left + 300))
-			{
-				PlayerTransition(2);
-			}
-			else if (GetPlayerPos().x > (hitbox.left + hitbox.width - 300))
-			{
-				PlayerTransition(3);
-			}
-			else if (GetPlayerPos().y > (hitbox.top + 300))
-			{
-				PlayerTransition(1);
-			}
-			else if (GetPlayerPos().y < (hitbox.top + hitbox.height - 300))
-			{
-				PlayerTransition(0);
-			}
-
-
-			if (enemyCurrent > 0)
-			{
-				sfVector2f pos = sfSprite_getPosition(map[mapCurrent].sprite);
-				CreateBattleBorder(pos, map[mapCurrent].type);
-				battle = sfTrue;
-			}
-		}
-		else if (map[mapCurrent].element == EXIT)
-		{
-			SetExitActive();
-		}
-	}
-	else
-	{
-		if (battle)
-		{
-			if (enemyCurrent <= 0)
-			{
-				MoveObject(0, (sfVector2f) { 0, 0 });
-				MoveObject(1, (sfVector2f) { 0, 0 });
-				MoveObject(2, (sfVector2f) { 0, 0 });
-				MoveObject(3, (sfVector2f) { 0, 0 });
-				battleDelay = 0.5f;
-				battle = sfFalse;
-			}
-			else
-			{
-				if (battleDelay > 0)
+				if (GetPlayerPos().x < (hitbox.left + 300))
 				{
-					battleDelay -= _dt;
+					PlayerTransition(2);
+				}
+				else if (GetPlayerPos().x > (hitbox.left + hitbox.width - 300))
+				{
+					PlayerTransition(3);
+				}
+				else if (GetPlayerPos().y > (hitbox.top + 300))
+				{
+					PlayerTransition(1);
+				}
+				else if (GetPlayerPos().y < (hitbox.top + hitbox.height - 300))
+				{
+					PlayerTransition(0);
+				}
+
+
+				if (enemyCurrent > 0)
+				{
+					sfVector2f pos = sfSprite_getPosition(map[mapCurrent].sprite);
+					CreateBattleBorder(pos, map[mapCurrent].type);
+					battle = sfTrue;
+				}
+			}
+			else if (map[mapCurrent].element == EXIT)
+			{
+				SetExitActive();
+			}
+		}
+		else
+		{
+			if (battle)
+			{
+				if (enemyCurrent <= 0)
+				{
+					MoveObject(0, (sfVector2f) { 0, 0 });
+					MoveObject(1, (sfVector2f) { 0, 0 });
+					MoveObject(2, (sfVector2f) { 0, 0 });
+					MoveObject(3, (sfVector2f) { 0, 0 });
+					battleDelay = 0.5f;
+					battle = sfFalse;
+				}
+				else
+				{
+					if (battleDelay > 0)
+					{
+						battleDelay -= _dt;
+					}
 				}
 			}
 		}
+	}
+	else if (GetOpacity() == 255)
+	{
+		SetOpacityVeil(0, 5);
+		ClearLevel();
 	}
 }
 
@@ -613,6 +624,7 @@ void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 	{
 		AddEnemy(TORMENTED_SOUL, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 }, mapCount);
 	}
+	mapCreation = sfTrue;
 }
 
 void RemoveEnemyCurrent(void)
@@ -705,11 +717,26 @@ void EnemyPlacements(int _ID, sfFloatRect _hitbox)
 
 void ClearLevel(void)
 {
+	ClearWall();
 	ClearEnemy();
 	ClearObject();
 	ClearBullet();
 	ClearNugget();
+	ClearOverlay();
 	ClearShop();
+	ClearMiniMap();
+	for (int i = 0; i < mapCount; i++)
+	{
+		DeleteMap(i);
+		mapCount++;
+	}
+	mapCount = 0;
+}
+
+void SetMapCreation(void)
+{
+	mapCreation = sfFalse;
+	SetOpacityVeil(255, 5);
 }
 
 sfVector2f GetSpawnPoint(void)

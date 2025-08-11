@@ -1,17 +1,2 @@
-﻿  Bullet.c
-  Enemy.c
-  Game.c
-  GameHUD.c
-C:\Users\Noé\Documents\GitHub\DungeonThing\project\Game\GameHUD.c(92,44): warning C4244: 'fonction' : conversion de 'float' en 'unsigned int', perte possible de données
-  Map.c
-  Menu.c
-  MenuHUD.c
-  MiniMap.c
-  Money.c
-  Objects.c
-  Player.c
-  Shop.c
-  Walls.c
-  main.c
-  Génération de code en cours...
+﻿  Objects.c
   Game.vcxproj -> C:\Users\Noé\Documents\GitHub\DungeonThing\project\x64\Debug\Game.exe

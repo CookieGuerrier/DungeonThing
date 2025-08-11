@@ -21,6 +21,7 @@ void CleanupWall(void);
 
 void AddWall(sfVector2f _pos, sfBool _rotate, sfVector2f _size, sfBool _bulletThrough, int _object);
 void DeleteWall(int _ID);
+void ClearWall(void);
 void MoveWall(int _ID, sfVector2f _pos);
 
 sfBool BulletCollision(sfFloatRect _hitbox, sfVector2f* _vel);

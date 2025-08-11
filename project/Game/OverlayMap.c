@@ -62,3 +62,13 @@ void DeleteOverlay(int _ID)
 
 	overlayCount--;
 }
+
+void ClearOverlay(void)
+{
+	for (int i = 0; i < overlayCount; i++)
+	{
+		DeleteOverlay(i);
+		overlayCount++;
+	}
+	overlayCount = 0;
+}

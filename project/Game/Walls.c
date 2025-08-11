@@ -72,6 +72,16 @@ void DeleteWall(int _ID)
 	wallCount--;
 }
 
+void ClearWall(void)
+{
+	for (int i = 0; i < wallCount; i++)
+	{
+		DeleteWall(i);
+		wallCount++;
+	}
+	wallCount = 0;
+}
+
 void MoveWall(int _ID, sfVector2f _pos)
 {
 	sfRectangleShape_setPosition(wall[_ID].collider, _pos);

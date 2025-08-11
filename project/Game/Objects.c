@@ -46,6 +46,12 @@ void UpdateObject(float _dt, sfRenderWindow* _window)
 			if (exitActive)
 			{
 				UpdateAnim(_dt, object[i].anims[0]);
+				sfFloatRect hitbox = sfSprite_getGlobalBounds(object[i].sprite);
+				sfFloatRect hitbox2 = GetPlayerHitbox();
+				if (sfFloatRect_intersects(&hitbox, &hitbox2, NULL))
+				{
+					SetMapCreation();
+				}
 			}
 		}
 	}
@@ -186,12 +192,12 @@ void DeleteObject(int _ID)
 
 void ClearObject(void)
 {
-	for (int i = 0; i < objectCount; i++)
+	for (int i = 4; i < objectCount; i++)
 	{
 		DeleteObject(i);
 		objectCount++;
 	}
-	objectCount = 0;
+	objectCount = 4;
 }
 
 void MoveObject(int _ID, sfVector2f _pos)

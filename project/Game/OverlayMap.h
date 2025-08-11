@@ -14,5 +14,6 @@ void CleanupOverlay(void);
 
 void AddOverlay(sfVector2f _pos, int _type);
 void DeleteOverlay(int _ID);
+void ClearOverlay(void);
 
 #endif // !OVERLAYMAP_H

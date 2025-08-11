@@ -17,6 +17,7 @@ void CleanupMiniMap(void);
 
 void AddMiniMap(sfVector2f _position, int _type);
 void DeleteMiniMap(int _ID);
+void ClearMiniMap(void);
 
 void PositionMini(int _ID);
 

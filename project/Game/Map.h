@@ -68,6 +68,7 @@ void CleanupMap(void);
 void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _element);
 void DeleteMap(int _ID);
 void CreateLevel(int _pathLength);
+void ClearLevel(void);
 
 void CreateBattle(BattleType _type, sfFloatRect _hitbox);
 void RemoveEnemyCurrent(void);
@@ -76,6 +77,7 @@ void CreateBattleBorder(sfVector2f _pos, MapType _type);
 void EnemyPlacements(int _ID, sfFloatRect _hitbox);
 
 void ClearLevel(void);
+void SetMapCreation(void);
 
 sfVector2f GetSpawnPoint(void);
 void SetCameraMap(int _ID, sfRenderWindow* _window);
