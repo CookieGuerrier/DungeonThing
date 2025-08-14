@@ -276,6 +276,10 @@ void DrawEnemy(sfRenderWindow* _window, sfBool _debug)
 			sfRenderWindow_drawRectangleShape(_window, enemy[i].collider, NULL);
 		}
 	}
+}
+
+void DrawMarker(sfRenderWindow* _window)
+{
 	for (int i = 0; i < markerCount; i++)
 	{
 		sfRenderWindow_drawText(_window, marker[i].text, NULL);

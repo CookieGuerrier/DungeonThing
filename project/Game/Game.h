@@ -11,6 +11,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Boss.h"
 #include "Camera.h"
 #include "Shop.h"
 #include "MiniMap.h"

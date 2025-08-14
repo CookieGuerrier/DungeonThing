@@ -321,6 +321,7 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 	case START:
 		SetCamera((sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
 		MoveCamera((sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 }, 2);
+		AddBoss(NAKROM, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
 		PositionMini(mapCount);
 		mapStart = mapCount;
 		AddOverlay((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 }, 1);

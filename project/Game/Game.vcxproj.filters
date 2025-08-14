@@ -102,6 +102,9 @@
     <ClCompile Include="OverlayMap.c">
       <Filter>Fichiers sources\Map</Filter>
     </ClCompile>
+    <ClCompile Include="Boss.c">
+      <Filter>Fichiers sources\Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -163,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="OverlayMap.h">
       <Filter>Fichiers d%27en-tête\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>Fichiers d%27en-tête\Entity</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

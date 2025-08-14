@@ -77,6 +77,48 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 						}
 					}
 				}
+
+				//Boss
+				sfFloatRect boss = GetBossHitbox();
+				if (sfFloatRect_intersects(&boss, &hitbox, NULL) && !GetBossDead())
+				{
+					//Effects
+					if (bullet[i].speed < 0)
+					{
+						bullet[i].dmg++;
+					}
+					if (GetEffect(CHRONO))
+					{
+						bullet[i].dmg += abs(bullet[i].speed / 1000) - 1;
+					}
+					if (GetEffect(CONTRACT))
+					{
+						if (hitCount >= 20)
+						{
+							GainLife(1);
+							hitCount = 0;
+						}
+						/*else if (GetEnemyHurtFrame(y) <= 0)
+						{
+							hitCount++;
+						}*/
+					}
+					if (GetEffect(PASSPORT))
+					{
+						bullet[i].dmg = 1;
+					}
+					if (GetEffect(COWBOY_HAT))
+					{
+						//RopeEnemy(y);
+					}
+
+					//Collis
+					HurtBoss(bullet[i].dmg);
+					if (!GetEffect(PASSPORT))
+					{
+						bullet[i].death = sfTrue;
+					}
+				}
 			}
 			else
 			{

@@ -112,6 +112,7 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 	sfVector2i renderMouse = sfMouse_getPositionRenderWindow(_window);
 	mousePos = sfRenderWindow_mapPixelToCoords(_window, renderMouse, GetView());
 	sfVector2f pos = sfSprite_getPosition(player.sprite);
+	sfFloatRect hitbox = GetPlayerHitbox();
 
 	if (startTimer < 0)
 	{
@@ -153,12 +154,18 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 			if (IsEnemyAlive(y))
 			{
 				sfFloatRect enemy = GetEnemyHitBox(y);
-				sfFloatRect hitbox = GetPlayerHitbox();
 				if (sfFloatRect_intersects(&enemy, &hitbox, NULL) && rollTimer <= 0.3f)
 				{
 					LoseLife(1);
 				}
 			}
+		}
+
+		//Boss collision
+		sfFloatRect boss = GetBossHitbox();
+		if (sfFloatRect_intersects(&boss, &hitbox, NULL) && rollTimer <= 0.3f && !GetBossDead())
+		{
+			LoseLife(1);
 		}
 
 		//Inv frame

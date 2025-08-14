@@ -9,6 +9,7 @@
 #include "Shop.h"
 #include "MiniMap.h"
 #include "OverlayMap.h"
+#include "Boss.h"
 
 typedef enum MapType
 {

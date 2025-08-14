@@ -23,6 +23,7 @@ void LoadGame(sfRenderWindow* _window)
 	LoadMoney();
 
 	LoadEnemy();
+	LoadBoss();
 	LoadShop();
 	LoadMiniMap();
 	LoadOverlay();
@@ -147,6 +148,7 @@ void UpdateGame(float _dt, sfRenderWindow* _window)
 			UpdateMiniMap(_window, _dt);
 
 			UpdateEnemy(_dt, _window);
+			UpdateBoss(_dt, _window);
 
 			UpdateGameHUD(_dt);
 		}
@@ -169,6 +171,8 @@ void DrawGame(sfRenderWindow* _window)
 
 	DrawRope(_window);
 	DrawEnemy(_window, debugMode);
+	DrawBoss(_window, debugMode);
+	DrawMarker(_window);
 	DrawMoney(_window, debugMode);
 	DrawBullet(_window, debugMode);
 	DrawPlayer(_window, debugMode);
@@ -199,6 +203,7 @@ void CleanupGame(void)
 	CleanupBullet();
 	CleanupPlayer();
 	CleanupEnemy();
+	CleanupBoss();
 	CleanupMiniMap();
 
 	CleanupGameHUD(font);

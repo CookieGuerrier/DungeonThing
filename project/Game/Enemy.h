@@ -62,6 +62,7 @@ void LoadEnemy(void);
 void LoadEnemyAnimation(Enemy* _enemy);
 void UpdateEnemy(float _dt, sfRenderWindow* _window);
 void DrawEnemy(sfRenderWindow* _window, sfBool _debug);
+void DrawMarker(sfRenderWindow* _window);
 void CleanupEnemy(void);
 
 void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap);
