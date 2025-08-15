@@ -33,6 +33,10 @@ typedef struct Nakrom
 	float fireRate;
 	float fireThing;
 	int fireState;
+	sfBool spawn;
+	int spawnMax;
+
+	float hurtFrame;
 }Nakrom;
 
 
@@ -41,11 +45,16 @@ void UpdateBoss(float _dt, sfRenderWindow* _window);
 void DrawBoss(sfRenderWindow* _window, sfBool _debug);
 void CleanupBoss(void);
 
-void AddBoss(Boss _boss, sfVector2f _position);
+void AddBoss(Boss _boss, sfVector2f _position, int _id);
 void DeleteBoss(void);
 
 void HurtBoss(int _dmg);
+void RopeBoss(void);
 
 sfFloatRect GetBossHitbox(void);
 sfBool GetBossDead(void);
+int GetBossHP(void);
+int GetBossActive(void);
+float GetBossHurtFrame(void);
+int GetBossID(void);
 #endif // !BOSS_H

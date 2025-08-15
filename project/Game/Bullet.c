@@ -98,18 +98,18 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 							GainLife(1);
 							hitCount = 0;
 						}
-						/*else if (GetEnemyHurtFrame(y) <= 0)
+						else if (GetBossHurtFrame() <= 0)
 						{
 							hitCount++;
-						}*/
+						}
+					}
+					if (GetEffect(COWBOY_HAT))
+					{
+						RopeBoss();
 					}
 					if (GetEffect(PASSPORT))
 					{
 						bullet[i].dmg = 1;
-					}
-					if (GetEffect(COWBOY_HAT))
-					{
-						//RopeEnemy(y);
 					}
 
 					//Collis
@@ -231,7 +231,7 @@ void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire, sf
 			if (GetEffect(BATTERY))
 			{
 				sfSprite_setScale(temp.sprite, (sfVector2f) { 2, 2 });
-				temp.dmg += 3;
+				temp.dmg += 2;
 				temp.speed += 1000;
 			}
 		}

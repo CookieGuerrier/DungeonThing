@@ -50,12 +50,12 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 {
 	if (!test)
 	{
-		UpdateSlot(GetArtifactCount(), textureItems[CHRONO]);
-		SetArtifact(CHRONO);
+		//UpdateSlot(GetArtifactCount(), textureItems[CHRONO]);
+		//SetArtifact(CHRONO);
+		UpdateSlot(GetArtifactCount(), textureItems[COWBOY_HAT]);
+		SetArtifact(COWBOY_HAT);
 		UpdateSlot(GetArtifactCount(), textureItems[SAW]);
 		SetArtifact(SAW);
-		UpdateSlot(GetArtifactCount(), textureItems[BLUE_GEL]);
-		SetArtifact(BLUE_GEL);
 		test = sfTrue;
 	}
 

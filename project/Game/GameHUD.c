@@ -12,6 +12,13 @@ sfTexture* goldTexture;
 sfBool hit[2];
 float size[2];
 
+//Bar
+sfTexture* barTexture[3];
+sfSprite* barSprite[3];
+int maxBossHP[3];
+float yellowBar;
+float totalLength;
+
 void LoadGameHUD(sfFont* font)
 {
 	font = sfFont_createFromFile("Assets/Font/font.ttf");
@@ -73,14 +80,33 @@ void LoadGameHUD(sfFont* font)
 	sfText_setString(gameHUD.text, "0");
 	sfText_setPosition(gameHUD.text, (sfVector2f) { -350, 110 });
 
+	//Bossbar
+	barTexture[0] = sfTexture_createFromFile("Assets/Texture/HUD/barBoss.png", NULL);
+	barTexture[1] = sfTexture_createFromFile("Assets/Texture/HUD/yellowBar.png", NULL);
+	barTexture[2] = sfTexture_createFromFile("Assets/Texture/HUD/redBar.png", NULL);
+
+	for (int i = 0; i < 3; i++)
+	{
+		barSprite[i] = sfSprite_create();
+		sfSprite_setTexture(barSprite[i], barTexture[i], sfTrue);
+		sfFloatRect hitbox = sfSprite_getGlobalBounds(barSprite[i]);
+		sfSprite_setOrigin(barSprite[i], (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
+		sfSprite_setPosition(barSprite[i], (sfVector2f) { 500, 950 });
+	}
+
 	size[1] = 1;
+
+	yellowBar = 942;
+	totalLength = 942;
+	maxBossHP[0] = 100;
 }
 
 void UpdateGameHUD(float _dt)
 {
+	//Visual stuff when you gain lose lives or money
 	if (hit[0] && currentLife > 0)
 	{
-		sfSprite_setScale(lifePoints[currentLife - 1].sprite, (sfVector2f) { 1 * size[0], 1 * size[0]});
+		sfSprite_setScale(lifePoints[currentLife - 1].sprite, (sfVector2f) { 1 * size[0], 1 * size[0] });
 		if (size[0] > 1)
 			size[0] -= 0.05f;
 		else
@@ -95,6 +121,19 @@ void UpdateGameHUD(float _dt)
 		else
 			hit[1] = sfFalse;
 	}
+
+	//Boss bar
+	sfFloatRect hitbox = sfSprite_getGlobalBounds(barSprite[2]);
+	float por = ((float)GetBossHP() / maxBossHP[GetBossActive()]) * 100;
+	float dim = (por * totalLength) / 100;
+
+
+	sfSprite_setTextureRect(barSprite[2], (sfIntRect) { 0, 0, (int)dim, (int)hitbox.height });
+	if (yellowBar > dim)
+	{
+		yellowBar--;
+	}
+	sfSprite_setTextureRect(barSprite[1], (sfIntRect) { 0, 0, (int) yellowBar, (int)hitbox.height });
 }
 
 void DrawGameHUD(sfRenderWindow* _window, sfBool _debug)
@@ -107,6 +146,14 @@ void DrawGameHUD(sfRenderWindow* _window, sfBool _debug)
 
 	sfRenderWindow_drawSprite(_window, gameHUD.sprite, NULL);
 	sfRenderWindow_drawText(_window, gameHUD.text, NULL);
+
+	if (GetBossID() == GetCurrentMap() && GetBossHP() > 0)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			sfRenderWindow_drawSprite(_window, barSprite[i], NULL);
+		}
+	}
 }
 
 void CleanupGameHUD(sfFont* font)

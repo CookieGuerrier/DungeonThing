@@ -175,7 +175,6 @@ void LoadEnemyAnimation(Enemy* _enemy)
 
 void UpdateEnemy(float _dt, sfRenderWindow* _window)
 {
-
 	for (int i = 0; i < enemyCount; i++)
 	{
 		if (enemy[i].life > 0)

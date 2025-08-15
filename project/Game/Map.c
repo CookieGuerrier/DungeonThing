@@ -11,6 +11,7 @@ int mapCurrent;
 int enemyCurrent;
 
 sfBool battle;
+sfBool boss;
 float battleDelay;
 
 sfBool mapCreation;
@@ -72,7 +73,6 @@ void UpdateMap(float _dt, sfRenderWindow* _window)
 					PlayerTransition(0);
 				}
 
-
 				if (enemyCurrent > 0)
 				{
 					sfVector2f pos = sfSprite_getPosition(map[mapCurrent].sprite);
@@ -82,7 +82,26 @@ void UpdateMap(float _dt, sfRenderWindow* _window)
 			}
 			else if (map[mapCurrent].element == EXIT)
 			{
-				SetExitActive();
+				sfFloatRect hitbox = sfSprite_getGlobalBounds(map[mapCurrent].sprite);
+				if (GetPlayerPos().x < (hitbox.left + 300))
+				{
+					PlayerTransition(2);
+				}
+				else if (GetPlayerPos().x > (hitbox.left + hitbox.width - 300))
+				{
+					PlayerTransition(3);
+				}
+				else if (GetPlayerPos().y > (hitbox.top + 300))
+				{
+					PlayerTransition(1);
+				}
+				else if (GetPlayerPos().y < (hitbox.top + hitbox.height - 300))
+				{
+					PlayerTransition(0);
+				}
+				sfVector2f pos = sfSprite_getPosition(map[mapCurrent].sprite);
+				CreateBattleBorder(pos, map[mapCurrent].type);
+				boss = sfTrue;
 			}
 		}
 		else
@@ -97,6 +116,26 @@ void UpdateMap(float _dt, sfRenderWindow* _window)
 					MoveObject(3, (sfVector2f) { 0, 0 });
 					battleDelay = 0.5f;
 					battle = sfFalse;
+				}
+				else
+				{
+					if (battleDelay > 0)
+					{
+						battleDelay -= _dt;
+					}
+				}
+			}
+			else if (boss)
+			{
+				if (GetBossHP() <= 0 && enemyCurrent <= 0)
+				{
+					MoveObject(0, (sfVector2f) { 0, 0 });
+					MoveObject(1, (sfVector2f) { 0, 0 });
+					MoveObject(2, (sfVector2f) { 0, 0 });
+					MoveObject(3, (sfVector2f) { 0, 0 });
+					battleDelay = 0.5f;
+					SetExitActive();
+					boss = sfFalse;
 				}
 				else
 				{
@@ -321,7 +360,6 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 	case START:
 		SetCamera((sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
 		MoveCamera((sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 }, 2);
-		AddBoss(NAKROM, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 });
 		PositionMini(mapCount);
 		mapStart = mapCount;
 		AddOverlay((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 }, 1);
@@ -351,6 +389,7 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		AddOverlay((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 },0);
 		break;
 	case EXIT:
+		AddBoss(NAKROM, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 },mapCount);
 		AddObject((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2  }, 0, EXIT_HOLE);
 		break;
 	default:
@@ -728,6 +767,7 @@ void ClearLevel(void)
 	ClearOverlay();
 	ClearShop();
 	ClearMiniMap();
+	DeleteBoss();
 	for (int i = 0; i < mapCount; i++)
 	{
 		DeleteMap(i);

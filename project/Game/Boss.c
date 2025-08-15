@@ -1,8 +1,9 @@
 #include "Boss.h"
 
 Boss activeBoss;
-sfTexture* bossTexture[3];
 Nakrom nakrom;
+sfTexture* bossTexture[3];
+int id;
 
 void LoadBoss(void)
 {
@@ -15,114 +16,152 @@ void UpdateBoss(float _dt, sfRenderWindow* _window)
 	sfFloatRect hitbox;
 	float radian = 0;
 	float playerRot = 0;
-	switch (activeBoss)
+	if (GetCurrentMap() == id)
 	{
-	case NAKROM:
-		//Nakrom
-		pos = sfSprite_getPosition(nakrom.sprite);
-		hitbox = sfSprite_getGlobalBounds(nakrom.sprite);
-		sfRectangleShape_setPosition(nakrom.collider, (sfVector2f) { pos.x, pos.y });
-		UpdateAnim(_dt, nakrom.anims[nakrom.state]);
-		if (nakrom.hp > 0)
+		if (GetBattleDelay() <= 0)
 		{
-			if (abs((int)(LookToDirection(GetPlayerPos(), sfSprite_getPosition(nakrom.sprite)))) < 90)
+			switch (activeBoss)
 			{
-				sfSprite_setScale(nakrom.sprite, (sfVector2f) { 1, 1 });
-			}
-			else
-			{
-				sfSprite_setScale(nakrom.sprite, (sfVector2f) { -1, 1 });
-			}
-		}
-		else
-		{
-			//Death
-			nakrom.state = DEATH_BOSS;
-			if (nakrom.color > 160)
-			{
-				nakrom.color--;
-				sfSprite_setColor(nakrom.sprite, (sfColor) { nakrom.color, nakrom.color, nakrom.color, 255 });
-
-			}
-		}
-
-		switch (nakrom.state)
-		{
-		case IDLE_BOSS:
-			//Movement
-			if (GetDistanceVector2f(pos, GetPlayerPos()) > 50)
-			{
-				playerRot = LookToDirection(GetPlayerPos(), pos) + 90;
-				radian = playerRot * (float)(M_PI / 180);
-				nakrom.velocity.x = (float)(sin(radian));
-				nakrom.velocity.y = (float)(-cos(radian));
-				sfSprite_move(nakrom.sprite, (sfVector2f) { nakrom.velocity.x * 50 * _dt, nakrom.velocity.y * 50 * _dt });
-			}
-			//Attack 1
-			if (nakrom.stateTimer < 0)
-			{
-				nakrom.anims[1]->frameNum = 0;
-				nakrom.stateTimer = 5;
-				nakrom.state = ATTACK_BOSS;
-			}
-			else
-			{
-				nakrom.stateTimer -= _dt;
-			}
-			//Classic shoot
-			switch (nakrom.fireState)
-			{
-			case 0:
-				if (nakrom.fireRate <= 0)
+			case NAKROM:
+				//Nakrom
+				pos = sfSprite_getPosition(nakrom.sprite);
+				hitbox = sfSprite_getGlobalBounds(nakrom.sprite);
+				sfRectangleShape_setPosition(nakrom.collider, (sfVector2f) { pos.x, pos.y });
+				UpdateAnim(_dt, nakrom.anims[nakrom.state]);
+				if (nakrom.hp > 0)
 				{
-					AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 600, sfTrue, sfFalse);
-					if (nakrom.fireThing < 2)
+					if (abs((int)(LookToDirection(GetPlayerPos(), sfSprite_getPosition(nakrom.sprite)))) < 90)
 					{
-						nakrom.fireRate = 0.2f;
-						nakrom.fireThing++;
+						sfSprite_setScale(nakrom.sprite, (sfVector2f) { 1, 1 });
 					}
 					else
 					{
-						nakrom.fireRate = 2;
-						nakrom.fireThing = 0;
+						sfSprite_setScale(nakrom.sprite, (sfVector2f) { -1, 1 });
+					}
+					if (nakrom.hurtFrame > 0)
+					{
+						nakrom.hurtFrame -= _dt;
+					}
+
+					if (nakrom.hp < 70 && nakrom.spawnMax < 1)
+					{
+						nakrom.spawnMax = 1;
+						nakrom.spawn = sfTrue;
+					}
+					else if (nakrom.hp < 40 && nakrom.spawnMax < 2)
+					{
+						nakrom.spawnMax = 2;
+						nakrom.spawn = sfTrue;
 					}
 				}
-				break;
-			case 1:
-				if (nakrom.fireRate <= 0)
+				else
 				{
-					AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 400, sfTrue, sfFalse);
-					AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) + 40, 400, sfTrue, sfFalse);
-					AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) - 40, 400, sfTrue, sfFalse);
-					nakrom.fireRate = 2;
+					//Death
+					nakrom.state = DEATH_BOSS;
+					if (nakrom.color > 160)
+					{
+						nakrom.color--;
+						sfSprite_setColor(nakrom.sprite, (sfColor) { nakrom.color, nakrom.color, nakrom.color, 255 });
+					}
 				}
-				break;
-			case 2:
-				if (nakrom.fireRate <= 0)
+
+				switch (nakrom.state)
 				{
-					AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 16 - 10), 600, sfTrue, sfFalse);
-					nakrom.fireRate = 0.1f;
+				case IDLE_BOSS:
+					//Movement
+					if (GetDistanceVector2f(pos, GetPlayerPos()) > 50)
+					{
+						playerRot = LookToDirection(GetPlayerPos(), pos) + 90;
+						radian = playerRot * (float)(M_PI / 180);
+						nakrom.velocity.x = (float)(sin(radian));
+						nakrom.velocity.y = (float)(-cos(radian));
+						sfSprite_move(nakrom.sprite, (sfVector2f) { nakrom.velocity.x * 50 * _dt, nakrom.velocity.y * 50 * _dt });
+					}
+					//Attack 1
+					if (nakrom.stateTimer < 0)
+					{
+						nakrom.anims[1]->frameNum = 0;
+						nakrom.anims[2]->frameNum = 0;
+						nakrom.stateTimer = 5;
+						if (nakrom.spawn)
+							nakrom.state = ATTACK2_BOSS;
+						else
+							nakrom.state = ATTACK_BOSS;
+					}
+					else
+					{
+						nakrom.stateTimer -= _dt;
+					}
+					//Classic shoot
+					switch (nakrom.fireState)
+					{
+					case 0:
+						if (nakrom.fireRate <= 0)
+						{
+							AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 600, sfTrue, sfFalse);
+							if (nakrom.fireThing < 2)
+							{
+								nakrom.fireRate = 0.2f;
+								nakrom.fireThing++;
+							}
+							else
+							{
+								nakrom.fireRate = 2;
+								nakrom.fireThing = 0;
+							}
+						}
+						break;
+					case 1:
+						if (nakrom.fireRate <= 0)
+						{
+							AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 400, sfTrue, sfFalse);
+							AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) + 40, 400, sfTrue, sfFalse);
+							AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) - 40, 400, sfTrue, sfFalse);
+							nakrom.fireRate = 2;
+						}
+						break;
+					case 2:
+						if (nakrom.fireRate <= 0)
+						{
+							AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 16 - 10), 600, sfTrue, sfFalse);
+							nakrom.fireRate = 0.1f;
+						}
+						break;
+					}
+					if (nakrom.fireRate > 0)
+						nakrom.fireRate -= _dt;
+					break;
+				case ATTACK_BOSS:
+					//Circle attack
+					if (IsFinishedAnim(nakrom.anims[1]))
+					{
+						for (int i = 0; i < 360; i += 6)
+						{
+							AddBullet(pos, (float)i, 400, sfTrue, sfFalse);
+						}
+						nakrom.state = IDLE_BOSS;
+						nakrom.fireState = rand() % 3;
+						nakrom.fireRate = 2;
+					}
+					break;
+				case ATTACK2_BOSS:
+					if (IsFinishedAnim(nakrom.anims[2]))
+					{
+						pos.y += 10;
+						pos.x -= 20;
+						AddEnemy(rand() % 3, pos, id);
+						AddEnemyCurrent();
+						pos.x += 40;
+						AddEnemy(rand() % 3, pos, id);
+						AddEnemyCurrent();
+						nakrom.spawn = sfFalse;
+						nakrom.state = IDLE_BOSS;
+					}
+					break;
 				}
 				break;
 			}
-			if (nakrom.fireRate > 0)
-				nakrom.fireRate -= _dt;
-			break;
-		case ATTACK_BOSS:
-			//Circle attack
-			if (IsFinishedAnim(nakrom.anims[1]))
-			{
-				for (int i = 0; i < 360; i += 6)
-				{
-					AddBullet(pos, (float)i, 400, sfTrue, sfFalse);
-				}
-				nakrom.state = IDLE_BOSS;
-				nakrom.fireState = rand() % 3;
-				nakrom.fireRate = 2;
-			}
-			break;
 		}
-		break;
 	}
 }
 
@@ -131,7 +170,6 @@ void DrawBoss(sfRenderWindow* _window, sfBool _debug)
 	sfRenderWindow_drawSprite(_window, nakrom.sprite, NULL);
 	if (_debug)
 		sfRenderWindow_drawRectangleShape(_window, nakrom.collider, NULL);
-
 }
 
 void CleanupBoss(void)
@@ -141,15 +179,17 @@ void CleanupBoss(void)
 		sfTexture_destroy(bossTexture[i]);
 		bossTexture[i] = NULL;
 	}
+	DeleteBoss();
 }
 
-void AddBoss(Boss _boss, sfVector2f _position)
+void AddBoss(Boss _boss, sfVector2f _position, int _id)
 {
+	id = _id;
 	activeBoss = _boss;
 	switch (_boss)
 	{
 	case NAKROM:
-		nakrom.hp = 10;
+		nakrom.hp = 100;
 		nakrom.color = 255;
 		nakrom.stateTimer = 5;
 
@@ -196,12 +236,6 @@ void AddBoss(Boss _boss, sfVector2f _position)
 
 void DeleteBoss(void)
 {
-	for (int i = 0; i < 3; i++)
-	{
-		sfTexture_destroy(bossTexture[i]);
-		bossTexture[i] = NULL;
-	}
-
 	switch (activeBoss)
 	{
 	case NAKROM:
@@ -215,21 +249,37 @@ void DeleteBoss(void)
 
 void HurtBoss(int _dmg)
 {
-	sfVector2f pos = { 0 };
-	sfFloatRect hitbox = { 0 };
-	switch (activeBoss)
+	if (nakrom.hurtFrame <= 0)
 	{
-	case NAKROM:
-		pos = sfSprite_getPosition(nakrom.sprite);
-		hitbox = sfSprite_getGlobalBounds(nakrom.sprite);
-		if (_dmg > 0)
+
+		sfVector2f pos = { 0 };
+		sfFloatRect hitbox = { 0 };
+		switch (activeBoss)
 		{
-			nakrom.hp -= _dmg;
+		case NAKROM:
+			pos = sfSprite_getPosition(nakrom.sprite);
+			hitbox = sfSprite_getGlobalBounds(nakrom.sprite);
+			if (GetEffect(COWBOY_HAT) && GetDistanceVector2f(pos, GetPlayerPos()) < 300 && !GetEffect(PASSPORT))
+			{
+				_dmg *= 2;
+			}
+			if (_dmg > 0)
+			{
+				nakrom.hp -= _dmg;
+				nakrom.hurtFrame = 0.10f;
+			}
+			break;
 		}
-		break;
+		pos.y -= 50 + hitbox.height / 2;
+		AddMarker(pos, _dmg);
 	}
-	pos.y -= 50 + hitbox.height / 2;
-	AddMarker(pos, _dmg);
+}
+
+void RopeBoss(void)
+{
+	sfVector2f pos = sfRectangleShape_getPosition(nakrom.collider);
+	SetRope(pos);
+	RopeEnemy(9999);
 }
 
 sfFloatRect GetBossHitbox(void)
@@ -247,10 +297,37 @@ sfBool GetBossDead(void)
 	switch (activeBoss)
 	{
 	case NAKROM:
-		if (IsFinishedAnim(nakrom.anims[3]))
-			return sfTrue;
-		else
-			return sfFalse;
+		return nakrom.hp <= 0;
 	}
 	return sfFalse;
+}
+
+int GetBossHP(void)
+{
+	switch (activeBoss)
+	{
+	case NAKROM:
+		return nakrom.hp;
+	}
+	return 0;
+}
+
+int GetBossActive(void)
+{
+	return activeBoss;
+}
+
+float GetBossHurtFrame(void)
+{
+	switch (activeBoss)
+	{
+	case NAKROM:
+		return nakrom.hurtFrame;
+	}
+	return 0;
+}
+
+int GetBossID(void)
+{
+	return id;
 }
