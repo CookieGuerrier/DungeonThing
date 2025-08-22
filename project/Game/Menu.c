@@ -46,7 +46,7 @@ void MousePressedMenu(sfRenderWindow* _renderWindow, sfMouseButtonEvent _mouse)
 	{
 	case sfMouseLeft:
 	{
-		if (IsMouseOnButton())
+		if (IsMouseOnButtonMenuHUD())
 		{
 			switch (GetSelection())
 			{

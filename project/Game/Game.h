@@ -35,4 +35,9 @@ void UpdatePauseMenu(float _dt, sfRenderWindow* _window);
 void DrawPauseMenu(sfRenderWindow* _window);
 void CleanupPauseMenu(void);
 
+void UpdateGameOverMenu(float _dt, sfRenderWindow* _window);
+void DrawGameOverMenu(sfRenderWindow* _window);
+void SetSelectionGameOver(int _sel);
+sfBool IsMouseOnButtonGame(void);
+
 #endif // !GAME_H

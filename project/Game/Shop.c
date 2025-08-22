@@ -50,12 +50,12 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 {
 	if (!test)
 	{
-		//UpdateSlot(GetArtifactCount(), textureItems[CHRONO]);
-		//SetArtifact(CHRONO);
-		UpdateSlot(GetArtifactCount(), textureItems[COWBOY_HAT]);
-		SetArtifact(COWBOY_HAT);
 		UpdateSlot(GetArtifactCount(), textureItems[SAW]);
 		SetArtifact(SAW);
+		UpdateSlot(GetArtifactCount(), textureItems[STAMP]);
+		SetArtifact(STAMP);
+		UpdateSlot(GetArtifactCount(), textureItems[BLUE_GEL]);
+		SetArtifact(BLUE_GEL);
 		test = sfTrue;
 	}
 
@@ -67,7 +67,7 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 			sfFloatRect hitbox = sfSprite_getGlobalBounds(itemShop[i].sprite);
 			sfFloatRect pHitbox = GetPlayerHitbox();
 
-			if (sfFloatRect_intersects(&hitbox, &pHitbox, NULL))
+			if (sfFloatRect_intersects(&hitbox, &pHitbox, NULL) && GetOpacity() == 0)
 			{
 				if (GetMoney() >= price[itemShop[i].type])
 				{
@@ -237,7 +237,7 @@ void ItemDescription(void)
 			sfText_setString(description, "SAW\nFire two more bullets on the sides");
 			break;
 		case CONTRACT:
-			sfText_setString(description, "CONTRACT\nYou do more damage with less hearts, but less with more hearts. \nYou also gain half a heart every time you hit an enemy 20 times.");
+			sfText_setString(description, "CONTRACT\nYou do more damage with less hearts, but less with more hearts.");
 			break;
 		case BOOMERANG:
 			sfText_setString(description, "BOOMERANG\nBullets come back to deal more damage");

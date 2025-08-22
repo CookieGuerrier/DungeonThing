@@ -15,12 +15,14 @@ sfBool boss;
 float battleDelay;
 
 sfBool mapCreation;
+int layerCount;
 
 void LoadMap(sfRenderWindow* _window)
 {
 	mapCreation = sfFalse;
 	mapStart = 0;
 	battleDelay = 0.5f;
+	layerCount = 1;
 
 	mapCount = 0;
 	mainTexture[R] = sfTexture_createFromFile("Assets/Texture/Map/rText.png", NULL);
@@ -151,7 +153,9 @@ void UpdateMap(float _dt, sfRenderWindow* _window)
 	{
 		ClearLevel();
 		SetOpacityVeil(0, 5);
-		CreateLevel(1);
+		layerCount++;
+		GainLife(2);
+;		CreateLevel(1);
 		SetPlayerPosition();
 	}
 }
@@ -385,12 +389,16 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		{
 			ran = rand() % 9;
 		} while (ran == saved);
-		AddItem(ran, (sfVector2f) { _pos.x + hitbox.width / 2 , _pos.y + hitbox.height / 2 + 20 }, sfTrue);
-		AddOverlay((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 },0);
+		AddItem(ran, (sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 + 20 }, sfTrue);
+		AddOverlay((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 }, 0);
 		break;
 	case EXIT:
-		AddBoss(NAKROM, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 },mapCount);
-		AddObject((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2  }, 0, EXIT_HOLE);
+		switch (layerCount)
+		{
+		case 2:
+			AddBoss(NAKROM, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 }, mapCount);
+		}
+		AddObject((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 }, 0, EXIT_HOLE);
 		break;
 	default:
 		break;
@@ -694,46 +702,58 @@ void CreateBattleBorder(sfVector2f _pos, MapType _type)
 void EnemyPlacements(int _ID, sfFloatRect _hitbox)
 {
 	int ran = 0;
+	int ranPos = 0;
+	int ranSav[4] = { 9 };
 	int max = 0;
+
+	int numEnemy = 2;
+	if (numEnemy < 5)
+		numEnemy += (abs)(layerCount / 2);
+
+	//Positions
+	sfVector2f posSides[4] = { 0 };
+	posSides[0] = (sfVector2f){ _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 - 300 };
+	posSides[1] = (sfVector2f){ _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 + 400 };
+	posSides[2] = (sfVector2f){ _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 + 400 };
+	posSides[3] = (sfVector2f){ _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 - 300 };
+
+	sfVector2f posCenter[4] = { 0 };
+	posCenter[0] = (sfVector2f){ _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 };
+	posCenter[1] = (sfVector2f){ _hitbox.left + _hitbox.width / 2 - 200, _hitbox.top + _hitbox.height / 2 };
+	posCenter[2] = (sfVector2f){ _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 + 200 };
+	posCenter[3] = (sfVector2f){ _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 - 200 };
+
 	switch (_ID)
 	{
 	case 0:
 		//Sides
-		ran = rand() % (6 - max);
-		if (ran == BIG_CRAB)
-			max++;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
-		ran = rand() % (6 - max);
-		if (ran == BIG_CRAB)
-			max++;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
-		ran = rand() % (6 - max);
-		if (ran == BIG_CRAB)
-			max++;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 800, _hitbox.top + _hitbox.height / 2 + 400 }, mapCount);
-		ran = rand() % (6 - max);
-		if (ran == BIG_CRAB)
-			max++;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 750, _hitbox.top + _hitbox.height / 2 - 300 }, mapCount);
+		for (size_t i = 0; i < numEnemy; i++)
+		{
+			do
+			{
+				ranPos = rand() % 4;
+			} while (ranPos == ranSav[0] || ranPos == ranSav[1] || ranPos == ranSav[2]);
+			ranSav[i] = ranPos;
+			ran = rand() % (6 - max);
+			if (ran == BIG_CRAB)
+				max++;
+			AddEnemy(ran, posSides[ranPos], mapCount);
+		}
 		break;
 	case 1:
 		//Center
-		ran = rand() % (6 - max);
-		if (ran == BIG_CRAB)
-			max++;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 + 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
-		ran = rand() % (6 - max);
-		if (ran == BIG_CRAB)
-			max++;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 200, _hitbox.top + _hitbox.height / 2 }, mapCount);
-		ran = rand() % (6 - max);
-		if (ran == BIG_CRAB)
-			max++;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 + 200 }, mapCount);
-		ran = rand() % (6 - max);
-		if (ran == BIG_CRAB)
-			max++;
-		AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 - 200 }, mapCount);
+		for (size_t i = 0; i < numEnemy; i++)
+		{
+			do
+			{
+				ranPos = rand() % 4;
+			} while (ranPos == ranSav[0] || ranPos == ranSav[1] || ranPos == ranSav[2]);
+			ranSav[i] = ranPos;
+			ran = rand() % (6 - max);
+			if (ran == BIG_CRAB)
+				max++;
+			AddEnemy(ran, posCenter[ranPos], mapCount);
+		}
 		break;
 	case 2:
 		//Close center
@@ -748,7 +768,7 @@ void EnemyPlacements(int _ID, sfFloatRect _hitbox)
 		break;
 	case 3:
 		//Line
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < numEnemy; i++)
 		{
 			ran = rand() % 3;
 			AddEnemy(ran, (sfVector2f) { _hitbox.left + _hitbox.width / 2 - 100 + 100 * i, _hitbox.top + _hitbox.height / 2 }, mapCount);
@@ -827,4 +847,9 @@ int GetBulletMap(sfFloatRect _hitbox)
 float GetBattleDelay(void)
 {
 	return battleDelay;
+}
+
+int GetLayerCount(void)
+{
+	return layerCount;
 }

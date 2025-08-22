@@ -15,7 +15,8 @@ typedef enum TexturePlayer
 	IDLE,
 	HAND,
 	WALK,
-	ROLL
+	ROLL,
+	DEATH
 }TexturePlayer;
 
 typedef struct Player
@@ -66,4 +67,5 @@ sfVector2f GetMousePos(void);
 int GetArtifactCount(void);
 sfBool GetEffect(int _artifact);
 float GetRoll(void);
+sfBool DeathFinished(void);
 #endif // !PLAYER_H

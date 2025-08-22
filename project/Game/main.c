@@ -139,6 +139,7 @@ void Draw(MainData* const _mainData)
 	default:
 		break;
 	}
+	DrawCursor(_mainData->renderWindow);
 	sfRenderWindow_display(_mainData->renderWindow);
 }
 

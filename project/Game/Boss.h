@@ -7,7 +7,8 @@
 
 typedef enum Boss
 {
-	NAKROM
+	NAKROM,
+	NONE
 }Boss;
 
 typedef enum TextureBoss

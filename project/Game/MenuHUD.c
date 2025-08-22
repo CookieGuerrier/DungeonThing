@@ -103,7 +103,7 @@ void CleanupMenuHUD(void)
 
 void SetSelection(int _sel)
 {
-	if (selection + _sel >= 0 && selection + _sel <= 3 && !IsMouseOnButton())
+	if (selection + _sel >= 0 && selection + _sel <= 3 && !IsMouseOnButtonMenuHUD())
 	{
 		selection += _sel;
 	}
@@ -114,7 +114,7 @@ int GetSelection(void)
 	return selection;
 }
 
-sfBool IsMouseOnButton(void)
+sfBool IsMouseOnButtonMenuHUD(void)
 {
 	sfFloatRect hit = sfText_getGlobalBounds(button[selection].text);
 	if (sfFloatRect_contains(&hit, mousePos.x, mousePos.y))

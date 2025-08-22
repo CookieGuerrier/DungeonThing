@@ -6,7 +6,7 @@ sfTexture* texturePlayer;
 sfTexture* textureHand;
 sfTexture* textureShadow;
 sfTexture* textureRope;
-sfVector2f mousePos;
+sfVector2f mousePosPlayer;
 
 int artifactCount;
 ShopType artifact[9];
@@ -62,7 +62,7 @@ void LoadPlayer(void)
 
 	//Collider
 	player.collider = sfRectangleShape_create();
-	sfRectangleShape_setSize(player.collider, (sfVector2f) { 40, 60 });
+	sfRectangleShape_setSize(player.collider, (sfVector2f) { 40, 40 });
 	sfRectangleShape_setOutlineThickness(player.collider, 3);
 	sfRectangleShape_setOutlineColor(player.collider, sfRed);
 	sfRectangleShape_setFillColor(player.collider, (sfColor) { 0, 0, 0, 0 });
@@ -80,24 +80,29 @@ void LoadPlayer(void)
 
 void LoadPlayerAnims(void)
 {
-	player.anims = calloc(4, sizeof(Anim*));
+	player.anims = calloc(5, sizeof(Anim*));
 	if (player.anims != NULL)
 	{
 		sfVector2u size = sfTexture_getSize(texturePlayer);
-		sfIntRect first = { 0, 0, size.x / 8, size.y / 4 };
-		player.anims[IDLE] = CreateAnim(texturePlayer, first, 6, 1 / 4.0f, player.sprite, (sfVector2f) { (float)size.x / 14.f, (float)size.y / 8.f }, sfTrue);
+		sfIntRect first = { 0, 0, size.x / 8, size.y / 5 };
+		player.anims[IDLE] = CreateAnim(texturePlayer, first, 6, 1 / 4.0f, player.sprite, (sfVector2f) { (float)size.x / 14.f, (float)size.y / 10.f }, sfTrue);
 		player.anims[IDLE]->aimOffset = (sfVector2f){ 0 };
 		player.anims[IDLE]->events = malloc(sizeof(AnimEvent));
 
-		first = (sfIntRect){ 0, 80 * 2, size.x / 8, size.y / 4 };
-		player.anims[WALK] = CreateAnim(texturePlayer, first, 8, 1 / 12.0f, player.sprite, (sfVector2f) { (float)size.x / 14.f, (float)size.y / 8.f }, sfTrue);
+		first = (sfIntRect){ 0, 80 * 2, size.x / 8, size.y / 5 };
+		player.anims[WALK] = CreateAnim(texturePlayer, first, 8, 1 / 12.0f, player.sprite, (sfVector2f) { (float)size.x / 14.f, (float)size.y / 10.f }, sfTrue);
 		player.anims[WALK]->aimOffset = (sfVector2f){ 0 };
 		player.anims[WALK]->events = malloc(sizeof(AnimEvent));
 
-		first = (sfIntRect){ 0, 80 * 3, size.x / 8, size.y / 4 };
-		player.anims[ROLL] = CreateAnim(texturePlayer, first, 8, 1 / 16.0f, player.sprite, (sfVector2f) { (float)size.x / 14.f, (float)size.y / 8.f }, sfFalse);
+		first = (sfIntRect){ 0, 80 * 3, size.x / 8, size.y / 5 };
+		player.anims[ROLL] = CreateAnim(texturePlayer, first, 8, 1 / 16.0f, player.sprite, (sfVector2f) { (float)size.x / 14.f, (float)size.y / 10.f }, sfFalse);
 		player.anims[ROLL]->aimOffset = (sfVector2f){ 0 };
 		player.anims[ROLL]->events = malloc(sizeof(AnimEvent));
+
+		first = (sfIntRect){ 0, 80 * 4, size.x / 8, size.y / 5 };
+		player.anims[DEATH] = CreateAnim(texturePlayer, first, 8, 1 / 8.0f, player.sprite, (sfVector2f) { (float)size.x / 14.f, (float)size.y / 10.f }, sfFalse);
+		player.anims[DEATH]->aimOffset = (sfVector2f){ 0 };
+		player.anims[DEATH]->events = malloc(sizeof(AnimEvent));
 
 		size = sfTexture_getSize(textureHand);
 		first = (sfIntRect){ 0, 0, size.x / 4, size.y };
@@ -110,218 +115,225 @@ void LoadPlayerAnims(void)
 void UpdatePlayer(float _dt, sfRenderWindow* _window)
 {
 	sfVector2i renderMouse = sfMouse_getPositionRenderWindow(_window);
-	mousePos = sfRenderWindow_mapPixelToCoords(_window, renderMouse, GetView());
+	mousePosPlayer = sfRenderWindow_mapPixelToCoords(_window, renderMouse, GetView());
 	sfVector2f pos = sfSprite_getPosition(player.sprite);
 	sfFloatRect hitbox = GetPlayerHitbox();
 
-	if (startTimer < 0)
+	if (player.life > 0)
 	{
-		//Move
-		if (sfKeyboard_isKeyPressed(sfKeyZ) && !sfKeyboard_isKeyPressed(sfKeyS))
+		if (startTimer < 0)
 		{
-			PlayerMove(_dt, _window, sfKeyZ);
-		}
-		else if (sfKeyboard_isKeyPressed(sfKeyS) && !sfKeyboard_isKeyPressed(sfKeyZ))
-		{
-			PlayerMove(_dt, _window, sfKeyS);
-		}
-		else
-		{
-			player.velocity.y = 0;
-		}
-		if (sfKeyboard_isKeyPressed(sfKeyQ) && !sfKeyboard_isKeyPressed(sfKeyD))
-		{
-			PlayerMove(_dt, _window, sfKeyQ);
-		}
-		else if (sfKeyboard_isKeyPressed(sfKeyD) && !sfKeyboard_isKeyPressed(sfKeyQ))
-		{
-			PlayerMove(_dt, _window, sfKeyD);
-		}
-		else
-		{
-			player.velocity.x = 0;
-		}
-
-		sfSprite_move(player.sprite, (sfVector2f) { player.velocity.x, player.velocity.y });
-
-		//Function
-		PlayerShoot(_dt);
-		HandThing(pos);
-
-		//Enemy Collision
-		for (int y = 0; y < GetEnemyCount(); y++)
-		{
-			if (IsEnemyAlive(y))
+			//Move
+			if (sfKeyboard_isKeyPressed(sfKeyZ) && !sfKeyboard_isKeyPressed(sfKeyS))
 			{
-				sfFloatRect enemy = GetEnemyHitBox(y);
-				if (sfFloatRect_intersects(&enemy, &hitbox, NULL) && rollTimer <= 0.3f)
-				{
-					LoseLife(1);
-				}
+				PlayerMove(_dt, _window, sfKeyZ);
 			}
-		}
-
-		//Boss collision
-		sfFloatRect boss = GetBossHitbox();
-		if (sfFloatRect_intersects(&boss, &hitbox, NULL) && rollTimer <= 0.3f && !GetBossDead())
-		{
-			LoseLife(1);
-		}
-
-		//Inv frame
-		if (player.invFrame >= 0 && player.invFrame < 1)
-		{
-			player.invFrame -= _dt;
-			if ((int)(player.invFrame * 10) % 2 == 0)
+			else if (sfKeyboard_isKeyPressed(sfKeyS) && !sfKeyboard_isKeyPressed(sfKeyZ))
 			{
-				sfSprite_setColor(player.sprite, (sfColor) { 255, 255, 255, 255 });
-				sfSprite_setColor(player.spriteHand, (sfColor) { 255, 255, 255, 255 });
+				PlayerMove(_dt, _window, sfKeyS);
 			}
 			else
 			{
-				sfSprite_setTextureRect(player.sprite, (sfIntRect) { 0, 0, 80 + 80 * IDLE, 80 + 80 * IDLE });
-				sfSprite_setColor(player.sprite, (sfColor) { 255, 255, 255, 0 });
-				sfSprite_setColor(player.spriteHand, (sfColor) { 255, 255, 255, 0 });
+				player.velocity.y = 0;
 			}
-		}
-		else if (player.invFrame > 1)
-		{
-			player.invFrame -= _dt;
-		}
-
-		//Effect
-		{
-			if (GetEffect(STAMP))
+			if (sfKeyboard_isKeyPressed(sfKeyQ) && !sfKeyboard_isKeyPressed(sfKeyD))
 			{
-				if (player.invFrame < 0)
-				{
-					player.anims[HAND]->rate = 1 / 8.0f;
-				}
-				else
-				{
-					player.anims[HAND]->rate = 1 / 32.0f;
-				}
+				PlayerMove(_dt, _window, sfKeyQ);
 			}
-		}
-
-		//Turn frame
-		if (player.turnFrame > 0)
-		{
-			player.turnFrame -= _dt;
-		}
-
-		if (rollTimer < 0)
-		{
-			player.speed = 500;
-		}
-		else
-		{
-			rollTimer -= _dt;
-			player.speed -= 20;
-		}
-
-		//Roll
-		if (rollTimer > 0)
-		{
-			rollTimer -= _dt;
-			player.speed -= 10;
-		}
-		else
-		{
-			player.speed = 500;
-		}
-		if (rollCooldown > 0)
-		{
-			rollCooldown -= _dt;
-		}
-
-		//Animations
-		if (player.hurtFrame > 0)
-		{
-			player.hurtFrame -= _dt;
-		}
-		else
-		{
-			if (rollTimer < 0 && IsFinishedAnim(player.anims[ROLL]))
+			else if (sfKeyboard_isKeyPressed(sfKeyD) && !sfKeyboard_isKeyPressed(sfKeyQ))
 			{
-				if (player.velocity.x == 0 && player.velocity.y == 0)
-				{
-					UpdateAnim(_dt, player.anims[IDLE]);
-				}
-				else
-				{
-					UpdateAnim(_dt, player.anims[WALK]);
-				}
+				PlayerMove(_dt, _window, sfKeyD);
 			}
 			else
 			{
-				UpdateAnim(_dt, player.anims[ROLL]);
+				player.velocity.x = 0;
 			}
-		}
 
-		if (GetEffect(BATTERY))
-		{
-			sfSprite_setColor(player.spriteHand, (sfColor) { 255, 255 - (int)(chargeTimer * 200), 255 - (int)(chargeTimer * 200), 255 });
-			if (sfMouse_isButtonPressed(sfMouseLeft) && chargeTimer < 1)
+			sfSprite_move(player.sprite, (sfVector2f) { player.velocity.x, player.velocity.y });
+
+			//Function
+			PlayerShoot(_dt);
+			HandThing(pos);
+
+			//Enemy Collision
+			for (int y = 0; y < GetEnemyCount(); y++)
 			{
-				player.anims[HAND]->frameNum = 0;
-				if (GetEffect(STAMP) && player.invFrame > 0)
+				if (IsEnemyAlive(y))
 				{
-					chargeTimer += _dt * 12;
+					sfFloatRect enemy = GetEnemyHitBox(y);
+					if (sfFloatRect_intersects(&enemy, &hitbox, NULL) && rollTimer <= 0.3f)
+					{
+						LoseLife(1);
+					}
+				}
+			}
+
+			//Boss collision
+			sfFloatRect boss = GetBossHitbox();
+			if (sfFloatRect_intersects(&boss, &hitbox, NULL) && rollTimer <= 0.3f && !GetBossDead())
+			{
+				LoseLife(1);
+			}
+
+			//Inv frame
+			if (player.invFrame >= 0 && player.invFrame < 1)
+			{
+				player.invFrame -= _dt;
+				if ((int)(player.invFrame * 10) % 2 == 0)
+				{
+					sfSprite_setColor(player.sprite, (sfColor) { 255, 255, 255, 255 });
+					sfSprite_setColor(player.spriteHand, (sfColor) { 255, 255, 255, 255 });
 				}
 				else
 				{
-					chargeTimer += _dt * 3;
+					sfSprite_setTextureRect(player.sprite, (sfIntRect) { 0, 0, 80 + 80 * IDLE, 80 + 80 * IDLE });
+					sfSprite_setColor(player.sprite, (sfColor) { 255, 255, 255, 0 });
+					sfSprite_setColor(player.spriteHand, (sfColor) { 255, 255, 255, 0 });
 				}
 			}
-			else if (!sfMouse_isButtonPressed(sfMouseLeft) && chargeTimer >= 1)
+			else if (player.invFrame > 1)
 			{
-				UpdateAnim(_dt, player.anims[HAND]);
-				player.turnFrame = 0.3f;
-				if (player.anims[HAND]->frameNum == 1)
+				player.invFrame -= _dt;
+			}
+
+			//Effect
+			{
+				if (GetEffect(STAMP))
 				{
+					if (player.invFrame < 0)
+					{
+						player.anims[HAND]->rate = 1 / 8.0f;
+					}
+					else
+					{
+						player.anims[HAND]->rate = 1 / 32.0f;
+					}
+				}
+			}
+
+			//Turn frame
+			if (player.turnFrame > 0)
+			{
+				player.turnFrame -= _dt;
+			}
+
+			if (rollTimer < 0)
+			{
+				player.speed = 500;
+			}
+			else
+			{
+				rollTimer -= _dt;
+				player.speed -= 20;
+			}
+
+			//Roll
+			if (rollTimer > 0)
+			{
+				rollTimer -= _dt;
+				player.speed -= 10;
+			}
+			else
+			{
+				player.speed = 500;
+			}
+			if (rollCooldown > 0)
+			{
+				rollCooldown -= _dt;
+			}
+
+			//Animations
+			if (player.hurtFrame > 0)
+			{
+				player.hurtFrame -= _dt;
+			}
+			else
+			{
+				if (rollTimer < 0 && IsFinishedAnim(player.anims[ROLL]))
+				{
+					if (player.velocity.x == 0 && player.velocity.y == 0)
+					{
+						UpdateAnim(_dt, player.anims[IDLE]);
+					}
+					else
+					{
+						UpdateAnim(_dt, player.anims[WALK]);
+					}
+				}
+				else
+				{
+					UpdateAnim(_dt, player.anims[ROLL]);
+				}
+			}
+
+			if (GetEffect(BATTERY))
+			{
+				sfSprite_setColor(player.spriteHand, (sfColor) { 255, 255 - (int)(chargeTimer * 200), 255 - (int)(chargeTimer * 200), 255 });
+				if (sfMouse_isButtonPressed(sfMouseLeft) && chargeTimer < 1)
+				{
+					player.anims[HAND]->frameNum = 0;
+					if (GetEffect(STAMP) && player.invFrame > 0)
+					{
+						chargeTimer += _dt * 12;
+					}
+					else
+					{
+						chargeTimer += _dt * 3;
+					}
+				}
+				else if (!sfMouse_isButtonPressed(sfMouseLeft) && chargeTimer >= 1)
+				{
+					UpdateAnim(_dt, player.anims[HAND]);
+					player.turnFrame = 0.3f;
+					if (player.anims[HAND]->frameNum == 1)
+					{
+						chargeTimer = 0;
+					}
+				}
+				else if (!sfMouse_isButtonPressed(sfMouseLeft))
+				{
+					player.anims[HAND]->frameNum = 0;
 					chargeTimer = 0;
 				}
 			}
-			else if (!sfMouse_isButtonPressed(sfMouseLeft))
+			else
 			{
-				player.anims[HAND]->frameNum = 0;
-				chargeTimer = 0;
+				if (sfMouse_isButtonPressed(sfMouseLeft) || player.anims[HAND]->frameNum != 0)
+				{
+					UpdateAnim(_dt, player.anims[HAND]);
+					player.turnFrame = 0.3f;
+				}
+				if (sfMouse_isButtonPressed(sfMouseLeft) && player.anims[HAND]->frameNum == 0)
+				{
+					player.anims[HAND]->frameNum = 1;
+				}
+			}
+
+			//Rope
+			if (GetEffect(COWBOY_HAT))
+			{
+				sfSprite_setPosition(rope, pos);
+				sfSprite_setRotation(rope, LookToDirection(enemyPos, pos));
+				if (GetDistanceVector2f(enemyPos, pos) < 300 && ropeActive)
+				{
+					sfSprite_setTextureRect(rope, (sfIntRect) { 0, 0, (int)GetDistanceVector2f(enemyPos, pos), 10 });
+				}
+				else
+				{
+					ropeActive = sfFalse;
+					sfSprite_setTextureRect(rope, (sfIntRect) { 0, 0, 0, 10 });
+					RopeEnemy(9999);
+				}
 			}
 		}
 		else
 		{
-			if (sfMouse_isButtonPressed(sfMouseLeft) || player.anims[HAND]->frameNum != 0)
-			{
-				UpdateAnim(_dt, player.anims[HAND]);
-				player.turnFrame = 0.3f;
-			}
-			if (sfMouse_isButtonPressed(sfMouseLeft) && player.anims[HAND]->frameNum == 0)
-			{
-				player.anims[HAND]->frameNum = 1;
-			}
-		}
-
-		//Rope
-		if (GetEffect(COWBOY_HAT))
-		{
-			sfSprite_setPosition(rope, pos);
-			sfSprite_setRotation(rope, LookToDirection(enemyPos, pos));
-			if (GetDistanceVector2f(enemyPos, pos) < 300 && ropeActive)
-			{
-				sfSprite_setTextureRect(rope, (sfIntRect) { 0, 0, (int)GetDistanceVector2f(enemyPos, pos), 10 });
-			}
-			else
-			{
-				ropeActive = sfFalse;
-				sfSprite_setTextureRect(rope, (sfIntRect) { 0, 0, 0, 10 });
-				RopeEnemy(9999);
-			}
+			startTimer -= _dt;
 		}
 	}
 	else
 	{
-		startTimer -= _dt;
+		UpdateAnim(_dt, player.anims[DEATH]);
 	}
 
 	//Movements
@@ -609,7 +621,7 @@ sfFloatRect GetPlayerHitbox(void)
 
 sfVector2f GetMousePos(void)
 {
-	return mousePos;
+	return mousePosPlayer;
 }
 
 int GetArtifactCount(void)
@@ -625,4 +637,9 @@ sfBool GetEffect(int _artifact)
 float GetRoll(void)
 {
 	return rollTimer;
+}
+
+sfBool DeathFinished(void)
+{
+	return IsFinishedAnim(player.anims[DEATH]);
 }

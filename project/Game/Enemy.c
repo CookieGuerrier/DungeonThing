@@ -680,7 +680,9 @@ void EnemyShoot(int _ID, float _dt)
 		{
 			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 400, sfTrue, sfFalse);
 			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) + 40, 400, sfTrue, sfFalse);
+			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) + 60, 400, sfTrue, sfFalse);
 			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) - 40, 400, sfTrue, sfFalse);
+			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) - 60, 400, sfTrue, sfFalse);
 			enemy[_ID].isShooting = sfFalse;
 			float ran = (float)(rand() % 11 - 5);
 			enemy[_ID].fireRate = 3.2f + (ran / 10);
@@ -690,7 +692,7 @@ void EnemyShoot(int _ID, float _dt)
 		pos = sfSprite_getPosition(enemy[_ID].sprite);
 		if (enemy[_ID].fireRate <= 0)
 		{
-			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 16 - 10), 600, sfTrue, sfFalse);
+			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 16 - 10), 800, sfTrue, sfFalse);
 			enemy[_ID].isShooting = sfFalse;
 			enemy[_ID].fireRate = 0.3f;
 		}

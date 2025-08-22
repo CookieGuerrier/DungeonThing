@@ -92,6 +92,10 @@ void UpdateCamera(sfRenderWindow* _window, float _dt)
 void DrawVeil(sfRenderWindow* _window)
 {
 	sfRenderWindow_drawRectangleShape(_window, veil, NULL);
+}
+
+void DrawCursor(sfRenderWindow* _window)
+{
 	sfRenderWindow_drawSprite(_window, cursor.sprite, NULL);
 }
 

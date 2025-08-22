@@ -3,12 +3,10 @@
 Bullet bullet[300];
 int bulletCount;
 sfTexture* textureBullet;
-int hitCount;
 
 void LoadBullet(void)
 {
 	bulletCount = 0;
-	hitCount = 0;
 	textureBullet = sfTexture_createFromFile("Assets/Texture/Player/bullet.png", NULL);
 }
 
@@ -47,25 +45,13 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 							{
 								bullet[i].dmg += abs(bullet[i].speed / 1000) - 1;
 							}
-							if (GetEffect(CONTRACT))
+							if (GetEffect(COWBOY_HAT))
 							{
-								if (hitCount >= 20)
-								{
-									GainLife(1);
-									hitCount = 0;
-								}
-								else if (GetEnemyHurtFrame(y) <= 0)
-								{
-									hitCount++;
-								}
+								RopeEnemy(y);
 							}
 							if (GetEffect(PASSPORT))
 							{
 								bullet[i].dmg = 1;
-							}
-							if (GetEffect(COWBOY_HAT))
-							{
-								RopeEnemy(y);
 							}
 
 							//Collis
@@ -90,18 +76,6 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 					if (GetEffect(CHRONO))
 					{
 						bullet[i].dmg += abs(bullet[i].speed / 1000) - 1;
-					}
-					if (GetEffect(CONTRACT))
-					{
-						if (hitCount >= 20)
-						{
-							GainLife(1);
-							hitCount = 0;
-						}
-						else if (GetBossHurtFrame() <= 0)
-						{
-							hitCount++;
-						}
 					}
 					if (GetEffect(COWBOY_HAT))
 					{

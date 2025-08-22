@@ -13,6 +13,7 @@ typedef struct Cursor
 void LoadCamera(sfRenderWindow* _window);
 void UpdateCamera(sfRenderWindow* _window, float _dt);
 void DrawVeil(sfRenderWindow* _window);
+void DrawCursor(sfRenderWindow* _window);
 void DestroyCamera(void);
 
 void MoveCamera(sfVector2f _pos, float _speed);
