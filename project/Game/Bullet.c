@@ -1,13 +1,16 @@
 #include "Bullet.h"
 
-Bullet bullet[300];
+Bullet bullet[600];
 int bulletCount;
 sfTexture* textureBullet;
+int bulletSound;
 
 void LoadBullet(void)
 {
 	bulletCount = 0;
 	textureBullet = sfTexture_createFromFile("Assets/Texture/Player/bullet.png", NULL);
+	bulletSound = GetSoundCount();
+	AddSound(S_BULLET);
 }
 
 void UpdateBullet(float _dt, sfRenderWindow* _window)
@@ -106,6 +109,8 @@ void UpdateBullet(float _dt, sfRenderWindow* _window)
 
 			if (BulletCollision(hitbox, &bullet[i].velocity) || GetBulletMap(hitbox) != GetCurrentMap())
 			{
+				if (!bullet[i].friendlyFire)
+					PlaySound(bulletSound);
 				if (bullet[i].bounce > 0)
 				{
 					bullet[i].bounce--;
@@ -153,11 +158,12 @@ void CleanupBullet(void)
 	}
 	sfTexture_destroy(textureBullet);
 	textureBullet = NULL;
+	DeleteSound(bulletSound);
 }
 
 void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire, sfBool _bigBullet)
 {
-	if (bulletCount < 300)
+	if (bulletCount < 600)
 	{
 		Bullet temp = { 0 };
 
@@ -169,6 +175,7 @@ void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire, sf
 		}
 		sfSprite_setPosition(temp.sprite, _pos);
 		sfSprite_setRotation(temp.sprite, _rot + 91);
+		temp.dmg = 10;
 
 		sfFloatRect hitbox = sfSprite_getGlobalBounds(temp.sprite);
 		sfSprite_setOrigin(temp.sprite, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
@@ -177,7 +184,6 @@ void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire, sf
 		float playerRadian = _rot * (float)(M_PI / 180);
 		temp.velocity.x = (float)(sin(playerRadian));
 		temp.velocity.y = (float)(-cos(playerRadian));
-		temp.dmg = 1;
 
 		temp.friendlyFire = _friendlyFire;
 		if (_friendlyFire)

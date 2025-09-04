@@ -27,7 +27,6 @@ void LoadPlayer(void)
 	//Stats
 	player.speed = 500;
 	player.life = 0;
-	player.gold = 150;
 	artifactCount = 0;
 	startTimer = 1;
 
@@ -76,6 +75,13 @@ void LoadPlayer(void)
 	sfSprite_setPosition(player.sprite, GetSpawnPoint());
 
 	player.anims[ROLL]->frameNum = player.anims[ROLL]->frameMax;
+
+	player.stepSound = GetSoundCount();
+	AddSound(S_STEP);
+	player.shootSound = GetSoundCount();
+	AddSound(S_SHOOT);
+	player.hurtSound= GetSoundCount();
+	AddSound(S_HURT);
 }
 
 void LoadPlayerAnims(void)
@@ -325,6 +331,24 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 					RopeEnemy(9999);
 				}
 			}
+
+			//Sound
+			if ((player.velocity.x != 0 || player.velocity.y != 0) && rollTimer < 0)
+			{
+				if (player.stepTimer <= 0)
+				{
+					PlaySound(player.stepSound);
+					player.stepTimer = 0.3f;
+				}
+				else
+				{
+					player.stepTimer -= _dt;
+				}
+			}
+			else
+			{
+				player.stepTimer = 0.2f;
+			}
 		}
 		else
 		{
@@ -347,11 +371,11 @@ void DrawPlayer(sfRenderWindow* _window, sfBool _debug)
 	sfRenderWindow_drawSprite(_window, player.spriteShadow, NULL);
 	sfRenderWindow_drawSprite(_window, player.sprite, NULL);
 
-	if (rollTimer <= 0)
+	if (rollTimer <= 0 && startTimer <= 0)
 	{
 		sfRenderWindow_drawSprite(_window, player.spriteHand, NULL);
 	}
-
+		
 	if (_debug)
 	{
 		sfRenderWindow_drawRectangleShape(_window, player.collider, NULL);
@@ -386,6 +410,10 @@ void CleanupPlayer(void)
 	textureRope = NULL;
 	sfRectangleShape_destroy(player.collider);
 	player.collider = NULL;
+
+	DeleteSound(player.stepSound);
+	DeleteSound(player.shootSound);
+	DeleteSound(player.hurtSound);
 }
 
 void PlayerMove(float _dt, sfRenderWindow* _window, sfKeyCode _key)
@@ -460,6 +488,7 @@ void PlayerShoot(float _dt)
 		sfVector2f pos = sfSprite_getPosition(player.spriteHand);
 		if (player.anims[HAND]->frameNum == 1 && player.fireRate)
 		{
+			PlaySound(player.shootSound);
 			//Tha shoot
 			AddBullet(pos, (LookToDirection(GetMousePos(), pos) + 90), 1000, sfFalse, sfFalse);
 			if (effects[SAW])
@@ -563,6 +592,7 @@ void LoseLife(int _life)
 			{
 				player.life--;
 				DeleteLife();
+				PlaySound(player.hurtSound);
 			}
 			player.invFrame = 1.2f;
 			sfSprite_setTextureRect(player.sprite, (sfIntRect) { 0, 80, 80, 80 });
@@ -597,6 +627,7 @@ void PlayerTransition(int _num)
 void SetPlayerPosition(void)
 {
 	sfSprite_setPosition(player.sprite, GetSpawnPoint());
+	startTimer = 1;
 }
 
 int GetHP(void)

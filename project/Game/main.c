@@ -3,6 +3,7 @@
 #include "Menu.h"
 #include "Game.h"
 #include "GameOver.h"
+#include "Sound.h"
 
 #pragma region Struct
 typedef struct MainData
@@ -169,6 +170,7 @@ void LoadMainData(MainData* const _mainData)
 	sfRenderWindow_setKeyRepeatEnabled(_mainData->renderWindow, sfFalse);
 
 	LoadCamera(_mainData->renderWindow);
+	LoadSound();
 }
 
 void CleanupMainData(MainData* const _mainData)
@@ -179,4 +181,5 @@ void CleanupMainData(MainData* const _mainData)
 	_mainData->renderWindow = NULL;
 
 	DestroyCamera();
+	CleanupSound();
 }

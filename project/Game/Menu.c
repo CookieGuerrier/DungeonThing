@@ -14,11 +14,8 @@ void KeyPressedMenu(sfRenderWindow* _renderWindow, sfKeyEvent _key)
 {
 	switch (_key.code)
 	{
-	case sfKeyX:
-		//TEMPORAIRE
-		sfRenderWindow_close(_renderWindow);
-		break;
 	case sfKeySpace:
+		PlaySound(1);
 		switch (GetSelection())
 		{
 		case 0:
@@ -35,6 +32,12 @@ void KeyPressedMenu(sfRenderWindow* _renderWindow, sfKeyEvent _key)
 	case sfKeyS:
 		SetSelection(1);
 		break;
+	case sfKeyUp:
+		SetSelection(-1);
+		break;
+	case sfKeyDown:
+		SetSelection(1);
+		break;
 	default:
 		break;
 	}
@@ -48,6 +51,7 @@ void MousePressedMenu(sfRenderWindow* _renderWindow, sfMouseButtonEvent _mouse)
 	{
 		if (IsMouseOnButtonMenuHUD())
 		{
+			PlaySound(1);
 			switch (GetSelection())
 			{
 			case 0:

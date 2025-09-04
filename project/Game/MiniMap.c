@@ -1,7 +1,7 @@
 #include "MiniMap.h"
 
 MiniMap mini[30];
-sfTexture* textureMiniMap[5];
+sfTexture* textureMiniMap[6];
 int miniCount;
 int current;
 
@@ -10,7 +10,8 @@ void LoadMiniMap(void)
 	miniCount = 0;
 	current = 0;
 	textureMiniMap[BATTLE] = sfTexture_createFromFile("Assets/Texture/MiniMap/battle.png", NULL);
-	textureMiniMap[EXIT] = sfTexture_createFromFile("Assets/Texture/MiniMap/end.png", NULL);
+	textureMiniMap[BOSS] = sfTexture_createFromFile("Assets/Texture/MiniMap/end.png", NULL);
+	textureMiniMap[EXIT] = sfTexture_createFromFile("Assets/Texture/MiniMap/exit.png", NULL);
 	textureMiniMap[SHOP] = sfTexture_createFromFile("Assets/Texture/MiniMap/shop.png", NULL);
 	textureMiniMap[START] = sfTexture_createFromFile("Assets/Texture/MiniMap/start.png", NULL);
 	textureMiniMap[SPECIAL] = sfTexture_createFromFile("Assets/Texture/MiniMap/special.png", NULL);

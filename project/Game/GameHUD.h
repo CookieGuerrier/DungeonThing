@@ -31,4 +31,6 @@ void DeleteLife(void);
 void UpdateText(sfText* const _text, int _value);
 void UpdateGold(int _value);
 void UpdateSlot(int _ID, sfTexture* _texture);
+
+void ResetYellowBar(void);
 #endif // !GAMEHUD_H

@@ -27,6 +27,7 @@ typedef enum MapType
 typedef enum ElementType
 {
 	BATTLE,
+	BOSS,
 	EXIT,
 	SHOP,
 	START,
@@ -45,6 +46,7 @@ typedef enum BattleType
 	LINES,
 	FOUR_SMALL_ROCKS,
 	MIDDLE_PIT,
+	COFFIN_PLAZA,
 	MAX_LEVEL
 }BattleType;
 

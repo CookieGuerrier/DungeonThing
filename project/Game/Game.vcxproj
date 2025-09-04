@@ -156,6 +156,7 @@
     <ClCompile Include="OverlayMap.c" />
     <ClCompile Include="Player.c" />
     <ClCompile Include="Shop.c" />
+    <ClCompile Include="Sound.c" />
     <ClCompile Include="Walls.c" />
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +180,7 @@
     <ClInclude Include="OverlayMap.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Shop.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="Walls.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -98,7 +98,8 @@ void LoadGameHUD(sfFont* font)
 
 	yellowBar = 942;
 	totalLength = 942;
-	maxBossHP[0] = 100;
+	maxBossHP[0] = 80;
+	maxBossHP[1] = 200;
 }
 
 void UpdateGameHUD(float _dt)
@@ -131,7 +132,7 @@ void UpdateGameHUD(float _dt)
 	sfSprite_setTextureRect(barSprite[2], (sfIntRect) { 0, 0, (int)dim, (int)hitbox.height });
 	if (yellowBar > dim)
 	{
-		yellowBar--;
+		yellowBar -= 0.5f;
 	}
 	sfSprite_setTextureRect(barSprite[1], (sfIntRect) { 0, 0, (int) yellowBar, (int)hitbox.height });
 }
@@ -236,4 +237,9 @@ void UpdateSlot(int _ID, sfTexture* _texture)
 	sfSprite_setTexture(slot[_ID].sprite, _texture, sfTrue);
 	sfFloatRect hitbox = sfSprite_getGlobalBounds(slot[_ID].sprite);
 	sfSprite_move(slot[_ID].sprite, (sfVector2f) { -(hitbox.width / 2), });
+}
+
+void ResetYellowBar(void)
+{
+	yellowBar = 942;
 }

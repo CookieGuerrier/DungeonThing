@@ -83,6 +83,11 @@ void UpdateCamera(sfRenderWindow* _window, float _dt)
 		newOpacity += opacitySpeed;
 		sfRectangleShape_setFillColor(veil, (sfColor) { 0, 0, 0, newOpacity });
 	}
+	// :(
+	if (newOpacity < 10)
+	{
+		sfRectangleShape_setFillColor(veil, (sfColor) { 0, 0, 0, 0 });
+	}
 
 	sfVector2i renderMouse = sfMouse_getPositionRenderWindow(_window);
 	sfVector2f posMouse = sfRenderWindow_mapPixelToCoords(_window, renderMouse, GetHUDView());

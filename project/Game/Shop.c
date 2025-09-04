@@ -6,6 +6,7 @@ sfText* description;
 ItemShop itemShop[6];
 int itemCount;
 int price[11];
+int shopSound;
 
 sfBool test;
 
@@ -44,6 +45,9 @@ void LoadShop(void)
 	sfText_setOutlineThickness(description, 1);
 	sfText_setCharacterSize(description, 35);
 	sfText_setString(description, "NULL");
+
+	shopSound = GetSoundCount();
+	AddSound(S_SHOP);
 }
 
 void UpdateShop(float _dt, sfRenderWindow* _window)
@@ -69,8 +73,9 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 
 			if (sfFloatRect_intersects(&hitbox, &pHitbox, NULL) && GetOpacity() == 0)
 			{
-				if (GetMoney() >= price[itemShop[i].type])
+				if (GetMoney() >= price[itemShop[i].type] || itemShop[i].free)
 				{
+					PlaySound(shopSound);
 					if (itemShop[i].type < 9)
 					{
 						if (GetArtifactCount() < 3 && !GetEffect(itemShop[i].type))
@@ -151,6 +156,7 @@ void CleanupShop(void)
 	}
 	sfText_destroy(description);
 	description = NULL;
+	DeleteSound(shopSound);
 }
 
 void AddItem(ShopType _type, sfVector2f _position, sfBool _free)

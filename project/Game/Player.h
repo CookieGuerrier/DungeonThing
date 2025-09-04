@@ -9,6 +9,7 @@
 #include "Bullet.h"
 #include "Camera.h"
 #include "Shop.h"
+#include "Sound.h"
 
 typedef enum TexturePlayer
 {
@@ -36,6 +37,11 @@ typedef struct Player
 	float invFrame;
 	float turnFrame;
 	float hurtFrame;
+
+	int stepSound;
+	float stepTimer;
+	int shootSound;
+	int hurtSound;
 }Player;
 
 void LoadPlayer(void);

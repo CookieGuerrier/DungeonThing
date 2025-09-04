@@ -12,6 +12,9 @@ int markerCount;
 int enemyRoped;
 float closestDis;
 
+int hurtSound;
+int deathSound;
+
 void LoadEnemy(void)
 {
 	int enemyRoped = 999;
@@ -21,11 +24,16 @@ void LoadEnemy(void)
 	enemyTexture[REA_SHOTGUN] = sfTexture_createFromFile("Assets/Texture/Enemy/rea_shotgun.png", NULL);
 	enemyTexture[REA_CLOTH] = sfTexture_createFromFile("Assets/Texture/Enemy/rea_cloth.png", NULL);
 	enemyTexture[SLIME] = sfTexture_createFromFile("Assets/Texture/Enemy/slime.png", NULL);
-	enemyTexture[BAT] = sfTexture_createFromFile("Assets/Texture/Enemy/bat.png", NULL);
+	enemyTexture[BAT] = sfTexture_createFromFile("Assets/Texture/Enemy/bat.png", NULL); 
 	enemyTexture[TORMENTED_SOUL] = sfTexture_createFromFile("Assets/Texture/Enemy/tormented_soul.png", NULL);
 	enemyTexture[BIG_CRAB] = sfTexture_createFromFile("Assets/Texture/Enemy/big_crab.png", NULL);
 	enemyTexture[TINY_CRAB] = sfTexture_createFromFile("Assets/Texture/Enemy/tiny_crab.png", NULL);
 	textureShadow = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
+
+	hurtSound = GetSoundCount();
+	AddSound(S_ENEMYHURT);
+	deathSound = GetSoundCount();
+	AddSound(S_ENEMYDEATH);
 
 	font = sfFont_createFromFile("Assets/Font/font.ttf");
 }
@@ -316,6 +324,8 @@ void CleanupEnemy(void)
 		DeleteMarker(i);
 		markerCount++;
 	}
+	DeleteSound(deathSound);
+	DeleteSound(hurtSound);
 }
 
 void AddEnemy(TypeEnemy _type, sfVector2f _pos, int _idMap)
@@ -679,10 +689,10 @@ void EnemyShoot(int _ID, float _dt)
 		if (enemy[_ID].fireRate <= 0)
 		{
 			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5), 400, sfTrue, sfFalse);
+			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) + 20, 400, sfTrue, sfFalse);
 			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) + 40, 400, sfTrue, sfFalse);
-			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) + 60, 400, sfTrue, sfFalse);
+			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) - 20, 400, sfTrue, sfFalse);
 			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) - 40, 400, sfTrue, sfFalse);
-			AddBullet(pos, LookToDirection(GetPlayerPos(), pos) + 90 + (rand() % 11 - 5) - 60, 400, sfTrue, sfFalse);
 			enemy[_ID].isShooting = sfFalse;
 			float ran = (float)(rand() % 11 - 5);
 			enemy[_ID].fireRate = 3.2f + (ran / 10);
@@ -728,7 +738,7 @@ void EnemyHurt(int _ID, int _dmg)
 		sfFloatRect hitbox = sfSprite_getGlobalBounds(enemy[_ID].sprite);
 		if (enemy[_ID].life > 0)
 		{
-			if (_ID == enemyRoped && GetDistanceVector2f(pos, GetPlayerPos()) < 300 && !GetEffect(PASSPORT))
+			if (_ID == enemyRoped && GetDistanceVector2f(pos, GetPlayerPos()) < 300 && !GetEffect(PASSPORT) && GetEffect(COWBOY_HAT))
 			{
 				_dmg *= 2;
 			}
@@ -763,6 +773,7 @@ void EnemyHurt(int _ID, int _dmg)
 			}
 			pos.y -= 50 + hitbox.height / 2;
 			AddMarker(pos, _dmg);
+			PlaySound(hurtSound);
 		}
 		else
 		{
@@ -794,6 +805,7 @@ void EnemyDeath(int _ID, float _dt)
 			break;
 		}
 		enemy[_ID].isDead = sfTrue;
+		PlaySound(deathSound);
 	}
 	if (enemy[_ID].color > 160)
 	{

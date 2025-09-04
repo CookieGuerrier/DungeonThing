@@ -17,6 +17,7 @@ typedef enum ObjectType
 	LONG_HOLE,
 	ROCK,
 	TORCH,
+	COFFIN,
 	EXIT_HOLE
 }ObjectType;
 

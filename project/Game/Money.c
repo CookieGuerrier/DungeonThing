@@ -3,11 +3,14 @@
 Nugget nugget[200];
 sfTexture* nuggetTexture;
 int nuggetCount;
+int moneySound;
 
 void LoadMoney(void)
 {
 	nuggetCount = 0;
 	nuggetTexture = sfTexture_createFromFile("Assets/Texture/Objects/nugget.png",NULL);
+	moneySound = GetSoundCount();
+	AddSound(S_MONEY);
 }
 
 void UpdateMoney(float _dt, sfRenderWindow* _window)
@@ -40,6 +43,7 @@ void UpdateMoney(float _dt, sfRenderWindow* _window)
 		if (sfFloatRect_intersects(&hitbox, &pHitbox, NULL))
 		{
 			GainGold(1);
+			PlaySound(moneySound);
 			DeleteNugget(i);
 		}
 	}

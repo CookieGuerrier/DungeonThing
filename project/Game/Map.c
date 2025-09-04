@@ -4,7 +4,7 @@ MapPiece map[30];
 sfTexture* mainTexture[MAX];
 int mapStart;
 
-sfBool placed[5];
+sfBool placed[6];
 int mapCount;
 
 int mapCurrent;
@@ -35,7 +35,7 @@ void LoadMap(sfRenderWindow* _window)
 	mainTexture[LRD] = sfTexture_createFromFile("Assets/Texture/Map/lrdText.png", NULL);
 	mainTexture[LRUD] = sfTexture_createFromFile("Assets/Texture/Map/lrudText.png", NULL);
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		placed[i] = sfFalse;
 	}
@@ -82,7 +82,7 @@ void UpdateMap(float _dt, sfRenderWindow* _window)
 					battle = sfTrue;
 				}
 			}
-			else if (map[mapCurrent].element == EXIT)
+			else if (map[mapCurrent].element == BOSS || map[mapCurrent].element == EXIT)
 			{
 				sfFloatRect hitbox = sfSprite_getGlobalBounds(map[mapCurrent].sprite);
 				if (GetPlayerPos().x < (hitbox.left + 300))
@@ -155,7 +155,7 @@ void UpdateMap(float _dt, sfRenderWindow* _window)
 		SetOpacityVeil(0, 5);
 		layerCount++;
 		GainLife(2);
-;		CreateLevel(1);
+		;		CreateLevel(1);
 		SetPlayerPosition();
 	}
 }
@@ -221,6 +221,7 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 
 	sfSprite_setTexture(temp.sprite, mainTexture[_type], sfTrue);
 	sfSprite_setPosition(temp.sprite, _pos);
+	sfFloatRect hitbox = sfSprite_getGlobalBounds(temp.sprite);
 
 	//Start
 	if (_type == L || _type == R || _type == D || _type == U)
@@ -239,7 +240,11 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		else if (!placed[EXIT])
 		{
 			placed[EXIT] = sfTrue;
-			element = EXIT;
+
+			if (layerCount % 2 == 0)
+				element = BOSS;
+			else
+				element = EXIT;
 		}
 		else if (!placed[SHOP])
 		{
@@ -307,7 +312,6 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 	}
 
 	//Walls
-	sfFloatRect hitbox = sfSprite_getGlobalBounds(temp.sprite);
 	//Up
 	if (_type == D || _type == LRD || _type == LR || _type == L || _type == R)
 	{
@@ -392,13 +396,14 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		AddItem(ran, (sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 + 20 }, sfTrue);
 		AddOverlay((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 }, 0);
 		break;
-	case EXIT:
-		switch (layerCount)
-		{
-		case 2:
+	case BOSS:
+		if (layerCount == 2)
 			AddBoss(NAKROM, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 }, mapCount);
-		}
-		AddObject((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 }, 0, EXIT_HOLE);
+		if (layerCount == 4)
+			AddBoss(OLD_GUARD, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 }, mapCount);
+		//if (layerCount == 6)
+	case EXIT:
+		AddObject((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 + 50 }, 0, EXIT_HOLE);
 		break;
 	default:
 		break;
@@ -463,6 +468,16 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 	{
 		AddObject((sfVector2f) { hitbox.left + hitbox.width / 2 + 100, hitbox.top + 35 }, 0, TORCH);
 		AddObject((sfVector2f) { hitbox.left + hitbox.width / 2 - 120, hitbox.top + 35 }, 0, TORCH);
+	}
+
+	//Ghost
+	if (_type != LRUD && temp.element == BATTLE)
+	{
+		int ran = rand() % 8;
+		if (ran == 0)
+		{
+			AddEnemy(TORMENTED_SOUL, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 }, mapCount);
+		}
 	}
 
 	map[mapCount] = temp;
@@ -666,13 +681,18 @@ void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 }, 0, BIG_HOLE);
 		EnemyPlacements(0, _hitbox);
 		break;
+	case COFFIN_PLAZA:
+		EnemyPlacements(0, _hitbox);
+		for (int i = 0; i < 10; i++)
+		{
+			for (size_t y = 0; y < 3; y++)
+			{
+				AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 + i * 150 - 680, _hitbox.top + _hitbox.height / 2 - 200 * y  + 200}, 0, COFFIN);
+			}
+		}
+		break;
 	default:
 		break;
-	}
-	ran = rand() % 8;
-	if (ran == 0)
-	{
-		AddEnemy(TORMENTED_SOUL, (sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 }, mapCount);
 	}
 	mapCreation = sfTrue;
 }
@@ -707,8 +727,10 @@ void EnemyPlacements(int _ID, sfFloatRect _hitbox)
 	int max = 0;
 
 	int numEnemy = 2;
-	if (numEnemy < 5)
-		numEnemy += (abs)(layerCount / 2);
+	if (layerCount >= 3)
+		numEnemy = 3;
+	if (layerCount >= 5)
+		numEnemy = 4;
 
 	//Positions
 	sfVector2f posSides[4] = { 0 };
@@ -805,6 +827,7 @@ void ClearLevel(void)
 void SetMapCreation(void)
 {
 	mapCreation = sfFalse;
+	ResetYellowBar();
 	SetOpacityVeil(255, 5);
 }
 

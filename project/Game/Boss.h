@@ -8,6 +8,7 @@
 typedef enum Boss
 {
 	NAKROM,
+	OLD_GUARD,
 	NONE
 }Boss;
 
@@ -16,7 +17,8 @@ typedef enum TextureBoss
 	IDLE_BOSS,
 	ATTACK_BOSS,
 	ATTACK2_BOSS,
-	DEATH_BOSS
+	DEATH_BOSS,
+	ATTACK_STARTUP
 }TextureBoss;
 
 typedef struct Nakrom
@@ -24,6 +26,7 @@ typedef struct Nakrom
 	int hp;
 	int color;
 	sfSprite* sprite;
+	sfSprite* shadow;
 	sfVector2f velocity;
 
 	sfRectangleShape* collider;
@@ -38,7 +41,32 @@ typedef struct Nakrom
 	int spawnMax;
 
 	float hurtFrame;
+	int summonSound;
 }Nakrom;
+
+typedef struct OldGuard
+{
+	int hp;
+	int color;
+	sfSprite* sprite;
+	sfSprite* shadow;
+	sfVector2f velocity;
+
+	sfRectangleShape* collider;
+	Anim** anims;
+
+	TextureBoss state;
+	float stateTimer;
+	float fireRate;
+	int attackType;
+	int previousAttack;
+	int rotShoot;
+	sfBool dash;
+
+	sfVector2f originalPoint;
+
+	float hurtFrame;
+}OldGuard;
 
 
 void LoadBoss(void);
