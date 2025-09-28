@@ -12,6 +12,7 @@ void LoadSound(void)
 	buffer[S_SHOOT] = sfSoundBuffer_createFromFile("Assets/Sounds/Player/shoot.ogg");
 	buffer[S_HURT] = sfSoundBuffer_createFromFile("Assets/Sounds/Player/hurt.ogg");
 	buffer[S_BULLET] = sfSoundBuffer_createFromFile("Assets/Sounds/Player/bullet.ogg");
+	buffer[S_DASH] = sfSoundBuffer_createFromFile("Assets/Sounds/Player/dash.wav");
 	buffer[S_SHOP] = sfSoundBuffer_createFromFile("Assets/Sounds/Player/shop.ogg");
 	buffer[S_MONEY] = sfSoundBuffer_createFromFile("Assets/Sounds/Player/money.ogg");
 	buffer[S_ENEMYDEATH] = sfSoundBuffer_createFromFile("Assets/Sounds/Enemy/death.ogg");
@@ -45,29 +46,39 @@ void AddSound(SoundType _type)
 	switch (_type)
 	{
 	case S_STEP:
-	case S_SHOOT:
 		sfSound_setVolume(temp.sound, 30);
 		break;
+	case S_SHOOT:
+		sfSound_setVolume(temp.sound, 25);
+		break;
 	case S_SHOP:
-	case S_NAKROMSUMMON:
 	case S_BULLET:
-		sfSound_setVolume(temp.sound, 50);
+		sfSound_setVolume(temp.sound, 40);
+		break;
+	case S_NAKROMSUMMON:
+		sfSound_setVolume(temp.sound, 20);
 		break;
 	case S_SELECTION:
 		if (soundCount == 1)
 			sfSound_setPitch(temp.sound, 0.84f);
-		sfSound_setVolume(temp.sound, 60);
+		sfSound_setVolume(temp.sound, 40);
 		break;
 	case S_ENEMYDEATH:
 	case S_ENEMYHURT:
-		sfSound_setVolume(temp.sound, 70);
+		sfSound_setVolume(temp.sound, 50);
+		break;
+	case S_MONEY:
+		sfSound_setVolume(temp.sound, 80);
+		break;
+	case S_DASH:
+		sfSound_setPitch(temp.sound, 0.8f);
 		break;
 	default:
 		break;
 	}
 	sound[soundCount] = temp;
 	soundCount++;
-} 
+}
 
 void DeleteSound(int _ID)
 {
@@ -88,11 +99,11 @@ void PlaySound(int _ID)
 {
 	if (sound[_ID].type == S_STEP)
 	{
-		sfSound_setPitch(sound[_ID].sound, 1 + (float) (rand() % 3 - 1) / 10);
+		sfSound_setPitch(sound[_ID].sound, 1 + (float)(rand() % 3 - 1) / 10);
 	}
 	if (sound[_ID].type == S_SHOOT)
 	{
-		sfSound_setPitch(sound[_ID].sound, 1.4f + (float) (rand() % 3 - 1) / 10);
+		sfSound_setPitch(sound[_ID].sound, 1.4f + (float)(rand() % 3 - 1) / 10);
 	}
 	sfSound_play(sound[_ID].sound);
 }

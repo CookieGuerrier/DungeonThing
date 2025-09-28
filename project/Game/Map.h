@@ -46,7 +46,6 @@ typedef enum BattleType
 	LINES,
 	FOUR_SMALL_ROCKS,
 	MIDDLE_PIT,
-	COFFIN_PLAZA,
 	MAX_LEVEL
 }BattleType;
 
@@ -71,6 +70,7 @@ void CleanupMap(void);
 void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _element);
 void DeleteMap(int _ID);
 void CreateLevel(int _pathLength);
+void CreateEndLevel(void);
 void ClearLevel(void);
 
 void CreateBattle(BattleType _type, sfFloatRect _hitbox);

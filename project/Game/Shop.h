@@ -4,6 +4,8 @@
 #include "Common.h"
 #include "Player.h"
 #include "GameHUD.h"
+#include "Game.h"
+#include "Music.h"
 
 typedef enum ShopType
 {
@@ -20,7 +22,8 @@ typedef enum ShopType
 
 	//Heal 
 	POTION,
-	BIG_POTION
+	BIG_POTION,
+	RUBY
 }ShopType;
 
 

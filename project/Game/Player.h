@@ -42,6 +42,7 @@ typedef struct Player
 	float stepTimer;
 	int shootSound;
 	int hurtSound;
+	int dashSound;
 }Player;
 
 void LoadPlayer(void);
@@ -74,4 +75,5 @@ int GetArtifactCount(void);
 sfBool GetEffect(int _artifact);
 float GetRoll(void);
 sfBool DeathFinished(void);
+void ColorPlayer(sfBool _isTrue);
 #endif // !PLAYER_H

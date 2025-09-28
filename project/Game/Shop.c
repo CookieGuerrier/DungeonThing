@@ -1,14 +1,12 @@
 #include "Shop.h"
 
-sfTexture* textureItems[11];
+sfTexture* textureItems[12];
 sfFont* font;
 sfText* description;
 ItemShop itemShop[6];
 int itemCount;
-int price[11];
+int price[12];
 int shopSound;
-
-sfBool test;
 
 void LoadShop(void)
 {
@@ -24,6 +22,7 @@ void LoadShop(void)
 	textureItems[BATTERY] = sfTexture_createFromFile("Assets/Texture/Shop Items/battery.png", NULL);
 	textureItems[PASSPORT] = sfTexture_createFromFile("Assets/Texture/Shop Items/passport.png", NULL);
 	textureItems[COWBOY_HAT] = sfTexture_createFromFile("Assets/Texture/Shop Items/cowboy_hat.png", NULL);
+	textureItems[RUBY] = sfTexture_createFromFile("Assets/Texture/Shop Items/ruby.png", NULL);
 	font = sfFont_createFromFile("Assets/Font/font.ttf");
 
 	//Price
@@ -38,6 +37,7 @@ void LoadShop(void)
 	price[BATTERY] = 50;
 	price[PASSPORT] = 50;
 	price[COWBOY_HAT] = 50;
+	price[RUBY] = 0;
 
 	description = sfText_create();
 	sfText_setFont(description, font);
@@ -52,17 +52,6 @@ void LoadShop(void)
 
 void UpdateShop(float _dt, sfRenderWindow* _window)
 {
-	if (!test)
-	{
-		UpdateSlot(GetArtifactCount(), textureItems[SAW]);
-		SetArtifact(SAW);
-		UpdateSlot(GetArtifactCount(), textureItems[STAMP]);
-		SetArtifact(STAMP);
-		UpdateSlot(GetArtifactCount(), textureItems[BLUE_GEL]);
-		SetArtifact(BLUE_GEL);
-		test = sfTrue;
-	}
-
 	for (int i = 0; i < itemCount; i++)
 	{
 		ItemDescription();
@@ -75,11 +64,11 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 			{
 				if (GetMoney() >= price[itemShop[i].type] || itemShop[i].free)
 				{
-					PlaySound(shopSound);
 					if (itemShop[i].type < 9)
 					{
 						if (GetArtifactCount() < 3 && !GetEffect(itemShop[i].type))
 						{
+							PlaySound(shopSound);
 							itemShop[i].isActive = sfFalse;
 							if (!itemShop[i].free)
 								LoseGold(price[itemShop[i].type]);
@@ -89,6 +78,7 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 					}
 					else 
 					{
+						PlaySound(shopSound);
 						itemShop[i].isActive = sfFalse;
 						LoseGold(price[itemShop[i].type]);
 						switch (itemShop[i].type)
@@ -98,6 +88,10 @@ void UpdateShop(float _dt, sfRenderWindow* _window)
 							break;
 						case BIG_POTION:
 							GainLife(4);
+							break;
+						case RUBY:
+							PlayMusic(2);
+							SetGameEnd();
 							break;
 						default:
 							break;
@@ -142,7 +136,7 @@ void DrawShop(sfRenderWindow* _window, sfBool _debug)
 
 void CleanupShop(void)
 {
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 12; i++)
 	{
 		sfTexture_destroy(textureItems[i]);
 		textureItems[i] = NULL;
@@ -265,6 +259,9 @@ void ItemDescription(void)
 			break;
 		case COWBOY_HAT:
 			sfText_setString(description, "COWBOY HAT\nHitting an enemy close enough will attach a rope to them\nRoped enemies won't be able to move and receive double damage");
+			break;
+		case RUBY:
+			sfText_setString(description, "");
 			break;
 		}
 		sfFloatRect hitbox = sfText_getGlobalBounds(description);

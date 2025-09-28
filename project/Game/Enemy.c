@@ -278,10 +278,6 @@ void DrawEnemy(sfRenderWindow* _window, sfBool _debug)
 			sfRenderWindow_drawSprite(_window, enemy[i].spriteShadow, NULL);
 		}
 		sfRenderWindow_drawSprite(_window, enemy[i].sprite, NULL);
-		if (_debug)
-		{
-			sfRenderWindow_drawRectangleShape(_window, enemy[i].collider, NULL);
-		}
 	}
 }
 

@@ -6,10 +6,11 @@ sfSprite* background;
 int selection;
 int pastSelection;
 sfFont* font;
-Buttons button[4];
+Buttons button[2];
 sfTexture* selectionText;
 Selection select[2];
 sfVector2f mousePos;
+sfText* title;
 
 int leafCount;
 Leaf leaf[20];
@@ -26,7 +27,7 @@ void LoadMenuHUD(void)
 	background = sfSprite_create();
 	sfSprite_setTexture(background, backgroundText, sfTrue);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		button[i].text = sfText_create();
 		sfText_setFont(button[i].text, font);
@@ -37,24 +38,23 @@ void LoadMenuHUD(void)
 	sfText_setString(button[0].text, "New Game");
 	sfFloatRect hitbox = sfText_getGlobalBounds(button[0].text);
 	sfText_setOrigin(button[0].text, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
-	sfText_setPosition(button[0].text, (sfVector2f) { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 });
+	sfText_setPosition(button[0].text, (sfVector2f) { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 50 });
 
-	sfText_setString(button[1].text, "Continue");
+	sfText_setString(button[1].text, "Quit");
 	hitbox = sfText_getGlobalBounds(button[1].text);
 	sfText_setOrigin(button[1].text, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
-	sfText_setPosition(button[1].text, (sfVector2f) { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 100 });
-	sfText_setColor(button[1].text, (sfColor) { 255, 255, 255, 120 });
-
-	sfText_setString(button[2].text, "Options");
-	hitbox = sfText_getGlobalBounds(button[2].text);
-	sfText_setOrigin(button[2].text, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
-	sfText_setPosition(button[2].text, (sfVector2f) { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 200 });
-	sfText_setColor(button[2].text, (sfColor) { 255, 255, 255, 120 });
-
-	sfText_setString(button[3].text, "Quit");
-	hitbox = sfText_getGlobalBounds(button[3].text);
-	sfText_setOrigin(button[3].text, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
-	sfText_setPosition(button[3].text, (sfVector2f) { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 300 });
+	sfText_setPosition(button[1].text, (sfVector2f) { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 150 });
+	
+	//Title
+	title = sfText_create();
+	sfText_setFont(title, font);
+	sfText_setOutlineColor(title, sfBlack);
+	sfText_setOutlineThickness(title, 6);
+	sfText_setCharacterSize(title, 250);
+	sfText_setString(title, "THE LOST RUBY");
+	hitbox = sfText_getGlobalBounds(title);
+	sfText_setOrigin(title, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
+	sfText_setPosition(title, (sfVector2f) { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 250 });
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -79,7 +79,7 @@ void UpdateMenuHUD(float _dt, sfRenderWindow* _window)
 
 	sfVector2i renderMouse = sfMouse_getPositionRenderWindow(_window);
 	mousePos = sfRenderWindow_mapPixelToCoords(_window, renderMouse, GetView());
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		sfFloatRect hit = sfText_getGlobalBounds(button[i].text);
 		if (sfFloatRect_contains(&hit, mousePos.x, mousePos.y))
@@ -155,7 +155,7 @@ void UpdateMenuHUD(float _dt, sfRenderWindow* _window)
 void DrawMenuHUD(sfRenderWindow* _window)
 {
 	sfRenderWindow_drawSprite(_window, background, NULL);
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		sfRenderWindow_drawText(_window, button[i].text, NULL);
 	}
@@ -167,13 +167,14 @@ void DrawMenuHUD(sfRenderWindow* _window)
 	{
 		sfRenderWindow_drawRectangleShape(_window, leaf[i].sprite, NULL);
 	}
+	sfRenderWindow_drawText(_window, title, NULL);
 }
 
 void CleanupMenuHUD(void)
 {
 	sfSprite_destroy(background);
 	background = NULL;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		sfText_destroy(button[i].text);
 		button[i].text = NULL;
@@ -188,11 +189,13 @@ void CleanupMenuHUD(void)
 		DeleteLeaf(i);
 		leafCount++;
 	}
+	sfText_destroy(title);
+	title = NULL;
 }
 
 void SetSelection(int _sel)
 {
-	if (selection + _sel >= 0 && selection + _sel <= 3 && !IsMouseOnButtonMenuHUD())
+	if (selection + _sel >= 0 && selection + _sel < 2 && !IsMouseOnButtonMenuHUD())
 	{
 		selection += _sel;
 	}

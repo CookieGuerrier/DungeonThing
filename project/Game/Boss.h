@@ -9,6 +9,7 @@ typedef enum Boss
 {
 	NAKROM,
 	OLD_GUARD,
+	EMPRESS,
 	NONE
 }Boss;
 
@@ -68,6 +69,27 @@ typedef struct OldGuard
 	float hurtFrame;
 }OldGuard;
 
+typedef struct Empress
+{
+	int hp;
+	int color;
+	sfSprite* sprite;
+	sfSprite* shadow;
+	sfVector2f velocity;
+
+	sfRectangleShape* collider;
+	Anim** anims;
+
+	TextureBoss state;
+	float stateTimer;
+	float fireRate;
+	int attackType;
+	int bigAttack;
+	sfBool attack0;
+	float midRate;
+
+	float hurtFrame;
+}Empress;
 
 void LoadBoss(void);
 void UpdateBoss(float _dt, sfRenderWindow* _window);

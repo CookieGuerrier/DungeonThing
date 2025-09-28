@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "GameOver.h"
 #include "Sound.h"
+#include "Music.h"
 
 #pragma region Struct
 typedef struct MainData
@@ -122,6 +123,7 @@ void Update(MainData* const _mainData)
 	default:
 		break;
 	}
+	UpdateMusic(dt);
 	UpdateCamera(_mainData->renderWindow, dt);
 }
 
@@ -165,11 +167,12 @@ void LoadMainData(MainData* const _mainData)
 {
 	_mainData->clock = sfClock_create();
 	sfVideoMode videoMode = { SCREEN_WIDTH, SCREEN_HEIGHT, BPP };
-	_mainData->renderWindow = sfRenderWindow_create(videoMode, "Game", sfFullscreen, NULL);
+	_mainData->renderWindow = sfRenderWindow_create(videoMode, "The Lost Ruby", sfFullscreen, NULL);
 	sfRenderWindow_setFramerateLimit(_mainData->renderWindow, 60);
 	sfRenderWindow_setKeyRepeatEnabled(_mainData->renderWindow, sfFalse);
 
 	LoadCamera(_mainData->renderWindow);
+	LoadMusic();
 	LoadSound();
 }
 
@@ -181,5 +184,6 @@ void CleanupMainData(MainData* const _mainData)
 	_mainData->renderWindow = NULL;
 
 	DestroyCamera();
+	DestroyMusic();
 	CleanupSound();
 }

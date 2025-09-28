@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Music.h"
 
 sfBool debugMode;
 sfBool pauseState;
@@ -7,12 +8,13 @@ sfBool gameOverState;
 sfVector2f mousePosGame;
 sfFont* font;
 Selection select[2];
-Buttons button[4];
+Buttons button[2];
 sfTexture* selectionText;
 int selection;
 int pastSelection;
 
 sfBool toMenu;
+sfBool gameEnd;
 
 void LoadGame(sfRenderWindow* _window)
 {
@@ -21,7 +23,9 @@ void LoadGame(sfRenderWindow* _window)
 	gameOverState = sfFalse;
 	toMenu = sfFalse;
 	selection = 0;
+	gameEnd = sfFalse;
 	SetOpacityVeil(0, 5);
+	PlayMusic(1);
 	LoadWall();
 	LoadObject();
 	LoadMoney();
@@ -48,7 +52,7 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _key)
 
 	case sfKeyEscape:
 	{
-		if (!gameOverState)
+		if (!gameOverState && gameEnd == sfFalse)
 		{
 			if (!pauseState)
 			{
@@ -68,10 +72,10 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _key)
 			PlaySound(1);
 			switch (GetSelection())
 			{
-			case 2:
+			case 0:
 				toMenu = sfTrue;
 				break;
-			case 3:
+			case 1:
 				sfRenderWindow_close(_renderWindow);
 				break;
 			}
@@ -114,6 +118,7 @@ void KeyPressedGame(sfRenderWindow* _renderWindow, sfKeyEvent _key)
 		{
 			debugMode = sfTrue;
 		}
+		ColorPlayer(debugMode);
 		break;
 	default:
 		break;
@@ -133,10 +138,10 @@ void MousePressedGame(sfRenderWindow* _renderWindow, sfMouseButtonEvent _mouse)
 				PlaySound(1);
 				switch (GetSelection())
 				{
-				case 2:
+				case 0:
 					toMenu = sfTrue;
 					break;
-				case 3:
+				case 1:
 					sfRenderWindow_close(_renderWindow);
 					break;
 				}
@@ -162,37 +167,47 @@ void UpdateGame(float _dt, sfRenderWindow* _window)
 	}
 	else
 	{
-		if (!pauseState)
+		if (gameEnd == sfFalse)
 		{
-			if (!gameOverState)
+			if (!pauseState)
 			{
-				if (GetHP() > 0)
+				if (!gameOverState)
 				{
-					UpdateWall(_dt, _window);
-					UpdateObject(_dt, _window);
-					UpdateMap(_dt, _window);
-					UpdateMoney(_dt, _window);
-					UpdateShop(_dt, _window);
+					if (GetHP() > 0)
+					{
+						UpdateWall(_dt, _window);
+						UpdateObject(_dt, _window);
+						UpdateMap(_dt, _window);
+						UpdateMoney(_dt, _window);
+						UpdateShop(_dt, _window);
 
-					UpdateBullet(_dt, _window);
-					UpdateEnemy(_dt, _window);
-					UpdateMiniMap(_window, _dt);
+						UpdateBullet(_dt, _window);
+						UpdateEnemy(_dt, _window);
+						UpdateMiniMap(_window, _dt);
 
-					UpdateBoss(_dt, _window);
+						UpdateBoss(_dt, _window);
 
-					UpdateGameHUD(_dt);
+						UpdateGameHUD(_dt);
+					}
 				}
+				else
+				{
+					IsMouseOnButtonGame();
+					UpdateGameOverMenu(_dt, _window);
+				}
+				UpdatePlayer(_dt, _window);
 			}
 			else
 			{
-				IsMouseOnButtonGame();
-				UpdateGameOverMenu(_dt, _window);
+				UpdatePauseMenu(_dt, _window);
 			}
-			UpdatePlayer(_dt, _window);
 		}
 		else
 		{
-			UpdatePauseMenu(_dt, _window);
+			if (EndMusic() == sfStopped)
+			{
+				toMenu = sfTrue;
+			}
 		}
 	}
 
@@ -200,7 +215,7 @@ void UpdateGame(float _dt, sfRenderWindow* _window)
 	{
 		SetOpacityVeil(100, 10);
 		gameOverState = sfTrue;
-		selection = 2;
+		selection = 0;
 	}
 }
 
@@ -216,8 +231,16 @@ void DrawGame(sfRenderWindow* _window)
 	DrawRope(_window);
 	DrawEnemy(_window, debugMode);
 	DrawMoney(_window, debugMode);
-	DrawBullet(_window, debugMode);
-	DrawBoss(_window, debugMode);
+	if (GetLayerCount() == 6)
+	{
+		DrawBoss(_window, debugMode);
+		DrawBullet(_window, debugMode);
+	}
+	else
+	{
+		DrawBullet(_window, debugMode);
+		DrawBoss(_window, debugMode);
+	}
 	DrawMarker(_window);
 	DrawPlayer(_window, debugMode);
 
@@ -265,7 +288,7 @@ void LoadPauseMenu(void)
 {
 	selectionText = sfTexture_createFromFile("Assets/Texture/HUD/hudMarker.png", NULL);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		button[i].text = sfText_create();
 		sfText_setFont(button[i].text, font);
@@ -273,27 +296,16 @@ void LoadPauseMenu(void)
 		sfText_setOutlineThickness(button[i].text, 2);
 		sfText_setCharacterSize(button[i].text, 50);
 	}
-	sfText_setString(button[0].text, "Save");
+
+	sfText_setString(button[0].text, "Menu");
 	sfFloatRect hitbox = sfText_getGlobalBounds(button[0].text);
 	sfText_setOrigin(button[0].text, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
-	sfText_setPosition(button[0].text, (sfVector2f) { SCREEN_WIDTH / 2 - 450, SCREEN_HEIGHT / 2 - 200 });
-	sfText_setColor(button[0].text, (sfColor) { 255, 255, 255, 120 });
+	sfText_setPosition(button[0].text, (sfVector2f) { SCREEN_WIDTH / 2 - 450, SCREEN_HEIGHT / 2 - 100 });
 
-	sfText_setString(button[1].text, "Options");
+	sfText_setString(button[1].text, "Quit");
 	hitbox = sfText_getGlobalBounds(button[1].text);
 	sfText_setOrigin(button[1].text, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
-	sfText_setPosition(button[1].text, (sfVector2f) { SCREEN_WIDTH / 2 - 450, SCREEN_HEIGHT / 2 - 100 });
-	sfText_setColor(button[1].text, (sfColor) { 255, 255, 255, 120 });
-
-	sfText_setString(button[2].text, "Menu");
-	hitbox = sfText_getGlobalBounds(button[2].text);
-	sfText_setOrigin(button[2].text, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
-	sfText_setPosition(button[2].text, (sfVector2f) { SCREEN_WIDTH / 2 - 450, SCREEN_HEIGHT / 2 });
-
-	sfText_setString(button[3].text, "Quit");
-	hitbox = sfText_getGlobalBounds(button[3].text);
-	sfText_setOrigin(button[3].text, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
-	sfText_setPosition(button[3].text, (sfVector2f) { SCREEN_WIDTH / 2 - 450, SCREEN_HEIGHT / 2 + 100 });
+	sfText_setPosition(button[1].text, (sfVector2f) { SCREEN_WIDTH / 2 - 450, SCREEN_HEIGHT / 2 });
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -315,7 +327,7 @@ void UpdatePauseMenu(float _dt, sfRenderWindow* _window)
 	sfVector2i renderMouse = sfMouse_getPositionRenderWindow(_window);
 	mousePosGame = sfRenderWindow_mapPixelToCoords(_window, renderMouse, GetHUDView());
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		sfFloatRect hit = sfText_getGlobalBounds(button[i].text);
 		if (sfFloatRect_contains(&hit, mousePosGame.x, mousePosGame.y))
@@ -334,7 +346,7 @@ void UpdatePauseMenu(float _dt, sfRenderWindow* _window)
 
 void DrawPauseMenu(sfRenderWindow* _window)
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		sfRenderWindow_drawText(_window, button[i].text, NULL);
 	}
@@ -346,7 +358,7 @@ void DrawPauseMenu(sfRenderWindow* _window)
 
 void CleanupPauseMenu(void)
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		sfText_destroy(button[i].text);
 		button[i].text = NULL;
@@ -367,7 +379,7 @@ void UpdateGameOverMenu(float _dt, sfRenderWindow* _window)
 
 	sfVector2i renderMouse = sfMouse_getPositionRenderWindow(_window);
 	mousePosGame = sfRenderWindow_mapPixelToCoords(_window, renderMouse, GetHUDView());
-	for (int i = 2; i < 4; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		sfFloatRect hit = sfText_getGlobalBounds(button[i].text);
 		if (sfFloatRect_contains(&hit, mousePosGame.x , mousePosGame.y ))
@@ -386,7 +398,7 @@ void UpdateGameOverMenu(float _dt, sfRenderWindow* _window)
 
 void DrawGameOverMenu(sfRenderWindow* _window)
 {
-	for (int i = 2; i < 4; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		sfRenderWindow_drawText(_window, button[i].text, NULL);
 	}
@@ -398,12 +410,11 @@ void DrawGameOverMenu(sfRenderWindow* _window)
 
 void SetSelectionGameOver(int _sel)
 {
-	if (selection + _sel >= 2 && selection + _sel <= 3 && !IsMouseOnButtonGame())
+	if (selection + _sel >= 0 && selection + _sel < 2 && !IsMouseOnButtonGame())
 	{
 		selection += _sel;
 	}
 }
-
 
 sfBool IsMouseOnButtonGame(void)
 {
@@ -413,4 +424,9 @@ sfBool IsMouseOnButtonGame(void)
 		return sfTrue;	
 	}
 	return sfFalse;
+}
+
+void SetGameEnd(void)
+{
+	gameEnd = sfTrue;
 }

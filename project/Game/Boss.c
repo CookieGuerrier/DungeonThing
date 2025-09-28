@@ -3,6 +3,7 @@
 Boss activeBoss;
 Nakrom nakrom;
 OldGuard oldGuard;
+Empress empress;
 sfTexture* bossTexture[3];
 sfTexture* shadowBoss;
 int id;
@@ -12,6 +13,7 @@ void LoadBoss(void)
 	activeBoss = NONE;
 	bossTexture[0] = sfTexture_createFromFile("Assets/Texture/Enemy/nakrom_the_ancient.png", NULL);
 	bossTexture[1] = sfTexture_createFromFile("Assets/Texture/Enemy/old_guard.png", NULL);
+	bossTexture[2] = sfTexture_createFromFile("Assets/Texture/Enemy/empress.png", NULL);
 	shadowBoss = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
 }
 
@@ -221,7 +223,7 @@ void UpdateBoss(float _dt, sfRenderWindow* _window)
 						oldGuard.state = ATTACK2_BOSS;
 						oldGuard.rotShoot = (int)LookToDirection(GetPlayerPos(), pos);
 						oldGuard.stateTimer = 5;
-						if (oldGuard.hp < 50 )
+						if (oldGuard.hp < 50)
 							oldGuard.anims[ATTACK_STARTUP]->rate = 1 / 12.0f;
 						if (oldGuard.hp < 150 && oldGuard.hp > 50)
 							oldGuard.stateTimer /= 2;
@@ -330,7 +332,173 @@ void UpdateBoss(float _dt, sfRenderWindow* _window)
 				}
 				break;
 			}
+			break;
+		case EMPRESS:
+			pos = sfSprite_getPosition(empress.sprite);
+			hitbox = sfSprite_getGlobalBounds(empress.sprite);
+			sfRectangleShape_setPosition(empress.collider, (sfVector2f) { pos.x, pos.y - 50 });
+			UpdateAnim(_dt, empress.anims[empress.state]);
 
+			if (empress.hp > 0)
+			{
+				if (empress.hurtFrame > 0)
+				{
+					empress.hurtFrame -= _dt;
+				}
+
+				if (empress.hp < 120)
+				{
+					if (empress.midRate <= 0)
+					{
+						if (empress.hp < 60)
+							empress.midRate = 0.4f;
+						else
+							empress.midRate = 0.8f;
+
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, LookToDirection((sfVector2f) { pos.x + 125, pos.y - 100 }, GetPlayerPos()) - 90, 600, sfTrue, sfTrue);
+					}
+					else
+						empress.midRate -= _dt;
+				}
+			}
+			else
+			{
+				//Death
+				empress.state = DEATH_BOSS;
+				if (empress.color > 2.5f)
+				{
+					empress.color -= 5 / 2;
+					sfSprite_setColor(empress.sprite, (sfColor) { 255, 255, 255, empress.color });
+				}
+			}
+
+			switch (empress.state)
+			{
+			case IDLE_BOSS:
+				if (empress.stateTimer <= 0)
+				{
+					empress.stateTimer = 3;
+					ResetAnim(empress.anims[ATTACK_STARTUP]);
+					if (empress.bigAttack > 1)
+						empress.state = ATTACK_STARTUP;
+					else
+					{
+						empress.state = ATTACK2_BOSS;
+						if (empress.attackType < 2)
+							empress.attackType++;
+						else
+							empress.attackType = 0;
+					}
+				}
+				else
+					empress.stateTimer -= _dt;
+				break;
+			case ATTACK_BOSS:
+				if (empress.fireRate <= 0)
+				{
+					empress.fireRate = 1.f;
+					for (int i = 0; i < 360; i += 6)
+					{
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)i, 300, sfTrue, sfFalse);
+					}
+				}
+				else
+					empress.fireRate -= _dt;
+				if (empress.stateTimer <= 0)
+				{
+					empress.stateTimer = 3;
+					empress.state = IDLE_BOSS;
+				}
+				else
+					empress.stateTimer -= _dt;
+				break;
+			case ATTACK2_BOSS:
+				switch (empress.attackType)
+				{
+				case 0:
+					if (oldGuard.fireRate <= 0)
+					{
+						oldGuard.fireRate = 0.5f;
+						if (empress.attack0)
+						{
+							for (int i = 0; i < 360; i += 30)
+							{
+								AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)i, 250, sfTrue, sfTrue);
+							}
+							empress.attack0 = sfFalse;
+						}
+						else
+						{
+							for (int i = 0; i < 360; i += 30)
+							{
+								AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)i + 15, 250, sfTrue, sfTrue);
+							}
+							empress.attack0 = sfTrue;
+						}
+					}
+					else
+						oldGuard.fireRate -= _dt;
+					break;
+				case 1:
+					if (oldGuard.fireRate <= 0)
+					{
+						oldGuard.fireRate = 0.02f;
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)rand() + 360, 250, sfTrue, sfFalse);
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)rand() + 360, 250, sfTrue, sfFalse);
+					}
+					else
+						oldGuard.fireRate -= _dt;
+					break;
+				case 2:
+					if (oldGuard.fireRate <= 0)
+					{
+						oldGuard.rotShoot += 3;
+						oldGuard.fireRate = 0.005f;
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)oldGuard.rotShoot + rand() % 10 - 5, 500, sfTrue, sfFalse);
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)oldGuard.rotShoot + rand() % 10 - 5, 500, sfTrue, sfFalse);
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)oldGuard.rotShoot + rand() % 10 - 5, 500, sfTrue, sfFalse);
+
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)oldGuard.rotShoot + 90 + rand() % 10 - 5, 500, sfTrue, sfFalse);
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)oldGuard.rotShoot + 90 + rand() % 10 - 5, 500, sfTrue, sfFalse);
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)oldGuard.rotShoot + 90 + rand() % 10 - 5, 500, sfTrue, sfFalse);
+
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)oldGuard.rotShoot + 180 + rand() % 10 - 5, 500, sfTrue, sfFalse);
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)oldGuard.rotShoot + 180 + rand() % 10 - 5, 500, sfTrue, sfFalse);
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)oldGuard.rotShoot + 180 + rand() % 10 - 5, 500, sfTrue, sfFalse);
+
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)oldGuard.rotShoot + 270 + rand() % 10 - 5, 500, sfTrue, sfFalse);
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)oldGuard.rotShoot + 270 + rand() % 10 - 5, 500, sfTrue, sfFalse);
+						AddBullet((sfVector2f) { pos.x + 125, pos.y - 100 }, (float)oldGuard.rotShoot + 270 + rand() % 10 - 5, 500, sfTrue, sfFalse);
+
+					}
+					else
+						oldGuard.fireRate -= _dt;
+					break;
+				default:
+					break;
+				}
+
+				if (empress.stateTimer <= 0)
+				{
+					empress.stateTimer = 3;
+					empress.bigAttack++;
+					empress.state = IDLE_BOSS;
+				}
+				else
+					empress.stateTimer -= _dt;
+				break;
+			case DEATH_BOSS:
+				if (empress.anims[DEATH_BOSS]->frameNum < 3)
+					AddNugget(hitbox, 1);
+				break;
+			case ATTACK_STARTUP:
+				if (IsFinishedAnim(empress.anims[ATTACK_STARTUP]))
+				{
+					empress.state = ATTACK_BOSS;
+					empress.bigAttack = 0;
+				}
+				break;
+			}
 			break;
 		}
 	}
@@ -342,15 +510,14 @@ void DrawBoss(sfRenderWindow* _window, sfBool _debug)
 	{
 	case NAKROM:
 		sfRenderWindow_drawSprite(_window, nakrom.sprite, NULL);
-		if (_debug)
-			sfRenderWindow_drawRectangleShape(_window, nakrom.collider, NULL);
 		sfRenderWindow_drawSprite(_window, nakrom.shadow, NULL);
 		break;
 	case OLD_GUARD:
 		sfRenderWindow_drawSprite(_window, oldGuard.sprite, NULL);
-		if (_debug)
-			sfRenderWindow_drawRectangleShape(_window, oldGuard.collider, NULL);
 		sfRenderWindow_drawSprite(_window, oldGuard.shadow, NULL);
+		break;
+	case EMPRESS:
+		sfRenderWindow_drawSprite(_window, empress.sprite, NULL);
 		break;
 	}
 }
@@ -477,7 +644,58 @@ void AddBoss(Boss _boss, sfVector2f _position, int _id)
 			oldGuard.anims[ATTACK_STARTUP]->events = malloc(sizeof(AnimEvent));
 		}
 		break;
+
+	case EMPRESS:
+		empress.hp = 250;
+		empress.color = 255;
+		empress.stateTimer = 3;
+
+		empress.sprite = sfSprite_create();
+		sfSprite_setTexture(empress.sprite, bossTexture[2], sfTrue);
+		hitbox = sfSprite_getGlobalBounds(empress.sprite);
+		sfSprite_setOrigin(empress.sprite, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
+		sfSprite_setPosition(empress.sprite, _position);
+
+		empress.collider = sfRectangleShape_create();
+		sfRectangleShape_setOutlineThickness(empress.collider, 3);
+		sfRectangleShape_setOutlineColor(empress.collider, sfRed);
+		sfRectangleShape_setFillColor(empress.collider, (sfColor) { 0, 0, 0, 0 });
+		sfRectangleShape_setSize(empress.collider, (sfVector2f) { 150, 200 });
+		hitbox = sfRectangleShape_getGlobalBounds(empress.collider);
+		sfRectangleShape_setOrigin(empress.collider, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });
+		empress.anims = calloc(5, sizeof(Anim*));
+
+		if (empress.anims != NULL)
+		{
+			sfVector2u size = sfTexture_getSize(bossTexture[2]);
+			sfIntRect first = { 0, 0, size.x / 6, size.y / 6 };
+			empress.anims[IDLE_BOSS] = CreateAnim(bossTexture[2], first, 6, 1 / 6.0f, empress.sprite, (sfVector2f) { (float)size.x / 12.f, (float)size.y / 10.f }, sfTrue);
+			empress.anims[IDLE_BOSS]->aimOffset = (sfVector2f){ 0 };
+			empress.anims[IDLE_BOSS]->events = malloc(sizeof(AnimEvent));
+
+			first = (sfIntRect){ 0, 335 * 3, size.x / 6, size.y / 6 };
+			empress.anims[ATTACK_BOSS] = CreateAnim(bossTexture[2], first, 4, 1 / 6.0f, empress.sprite, (sfVector2f) { (float)size.x / 12.f, (float)size.y / 10.f }, sfTrue);
+			empress.anims[ATTACK_BOSS]->aimOffset = (sfVector2f){ 0 };
+			empress.anims[ATTACK_BOSS]->events = malloc(sizeof(AnimEvent));
+
+			first = (sfIntRect){ 0, 335 * 4, size.x / 6, size.y / 6 };
+			empress.anims[ATTACK2_BOSS] = CreateAnim(bossTexture[2], first, 5, 1 / 6.0f, empress.sprite, (sfVector2f) { (float)size.x / 12.f, (float)size.y / 10.f }, sfTrue);
+			empress.anims[ATTACK2_BOSS]->aimOffset = (sfVector2f){ 0 };
+			empress.anims[ATTACK2_BOSS]->events = malloc(sizeof(AnimEvent));
+
+			first = (sfIntRect){ 0, 335 * 5, size.x / 6, size.y / 6 };
+			empress.anims[DEATH_BOSS] = CreateAnim(bossTexture[2], first, 5, 1 / 6.0f, empress.sprite, (sfVector2f) { (float)size.x / 12.f, (float)size.y / 10.f }, sfFalse);
+			empress.anims[DEATH_BOSS]->aimOffset = (sfVector2f){ 0 };
+			empress.anims[DEATH_BOSS]->events = malloc(sizeof(AnimEvent));
+
+			first = (sfIntRect){ 0, 335 * 2, size.x / 6, size.y / 6 };
+			empress.anims[ATTACK_STARTUP] = CreateAnim(bossTexture[2], first, 4, 1 / 6.0f, empress.sprite, (sfVector2f) { (float)size.x / 12.f, (float)size.y / 10.f }, sfFalse);
+			empress.anims[ATTACK_STARTUP]->aimOffset = (sfVector2f){ 0 };
+			empress.anims[ATTACK_STARTUP]->events = malloc(sizeof(AnimEvent));
+		}
+		break;
 	}
+
 }
 
 void DeleteBoss(void)
@@ -501,13 +719,18 @@ void DeleteBoss(void)
 		sfRectangleShape_destroy(oldGuard.collider);
 		oldGuard.collider = NULL;
 		break;
+	case EMPRESS:
+		sfSprite_destroy(empress.sprite);
+		empress.sprite = NULL;
+		sfRectangleShape_destroy(empress.collider);
+		empress.collider = NULL;
+		break;
 	}
 	activeBoss = NONE;
 }
 
 void HurtBoss(int _dmg)
 {
-
 	sfVector2f pos = { 0 };
 	sfFloatRect hitbox = { 0 };
 	switch (activeBoss)
@@ -540,7 +763,23 @@ void HurtBoss(int _dmg)
 			if (_dmg > 0)
 			{
 				oldGuard.hp -= _dmg;
-				oldGuard.hurtFrame = 0.10f;
+				oldGuard.hurtFrame = 0.20f;
+			}
+		}
+		break;
+	case EMPRESS:
+		if (empress.hurtFrame <= 0)
+		{
+			pos = sfSprite_getPosition(empress.sprite);
+			hitbox = sfSprite_getGlobalBounds(empress.sprite);
+			if (GetEffect(COWBOY_HAT) && GetDistanceVector2f(pos, GetPlayerPos()) < 300 && !GetEffect(PASSPORT))
+			{
+				_dmg *= 2;
+			}
+			if (_dmg > 0)
+			{
+				empress.hp -= _dmg;
+				empress.hurtFrame = 0.20f;
 			}
 		}
 		break;
@@ -556,8 +795,13 @@ void RopeBoss(void)
 	{
 	case NAKROM:
 		pos = sfRectangleShape_getPosition(nakrom.collider);
+		break;
 	case OLD_GUARD:
 		pos = sfRectangleShape_getPosition(oldGuard.collider);
+		break;
+	case EMPRESS:
+		pos = sfRectangleShape_getPosition(empress.collider);
+		break;
 	}
 
 	SetRope(pos);
@@ -574,6 +818,9 @@ sfFloatRect GetBossHitbox(void)
 	case OLD_GUARD:
 		return sfSprite_getGlobalBounds(oldGuard.sprite);
 		break;
+	case EMPRESS:
+		return sfRectangleShape_getGlobalBounds(empress.collider);
+		break;
 	}
 	return (sfFloatRect) { 0 };
 }
@@ -588,6 +835,9 @@ sfBool GetBossDead(void)
 	case OLD_GUARD:
 		return oldGuard.hp <= 0;
 		break;
+	case EMPRESS:
+		return empress.hp <= 0;
+		break;
 	}
 	return sfFalse;
 }
@@ -601,6 +851,9 @@ int GetBossHP(void)
 		break;
 	case OLD_GUARD:
 		return oldGuard.hp;
+		break;
+	case EMPRESS:
+		return empress.hp;
 		break;
 	}
 	return 0;
@@ -620,6 +873,9 @@ float GetBossHurtFrame(void)
 		break;
 	case OLD_GUARD:
 		return oldGuard.hurtFrame;
+		break;
+	case EMPRESS:
+		return empress.hurtFrame;
 		break;
 	}
 	return 0;

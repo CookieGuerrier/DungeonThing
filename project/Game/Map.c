@@ -16,7 +16,7 @@ float battleDelay;
 
 sfBool mapCreation;
 int layerCount;
-
+	
 void LoadMap(sfRenderWindow* _window)
 {
 	mapCreation = sfFalse;
@@ -153,10 +153,18 @@ void UpdateMap(float _dt, sfRenderWindow* _window)
 	{
 		ClearLevel();
 		SetOpacityVeil(0, 5);
-		layerCount++;
 		GainLife(2);
-		;		CreateLevel(1);
-		SetPlayerPosition();
+		layerCount++;
+		if (layerCount < 7)
+		{
+			CreateLevel(1);
+			SetPlayerPosition();
+		}
+		else
+		{
+			CreateEndLevel();
+			SetPlayerPosition();
+		}
 	}
 }
 
@@ -226,30 +234,33 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 	//Start
 	if (_type == L || _type == R || _type == D || _type == U)
 	{
-		if (!placed[START])
+		if (layerCount < 7)
 		{
-			placed[START] = sfTrue;
-			element = START;
-		}
-		//Shop
-		else if (!placed[SPECIAL])
-		{
-			placed[SPECIAL] = sfTrue;
-			element = SPECIAL;
-		}
-		else if (!placed[EXIT])
-		{
-			placed[EXIT] = sfTrue;
+			if (!placed[START])
+			{
+				placed[START] = sfTrue;
+				element = START;
+			}
+			//Shop
+			else if (!placed[SPECIAL])
+			{
+				placed[SPECIAL] = sfTrue;
+				element = SPECIAL;
+			}
+			else if (!placed[EXIT])
+			{
+				placed[EXIT] = sfTrue;
 
-			if (layerCount % 2 == 0)
-				element = BOSS;
-			else
-				element = EXIT;
-		}
-		else if (!placed[SHOP])
-		{
-			placed[SHOP] = sfTrue;
-			element = SHOP;
+				if (layerCount % 2 == 0)
+					element = BOSS;
+				else
+					element = EXIT;
+			}
+			else if (!placed[SHOP])
+			{
+				placed[SHOP] = sfTrue;
+				element = SHOP;
+			}
 		}
 	}
 
@@ -370,12 +381,13 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		MoveCamera((sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 }, 2);
 		PositionMini(mapCount);
 		mapStart = mapCount;
-		AddOverlay((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 }, 1);
+		if (layerCount == 1)
+			AddOverlay((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 }, 1);
 		break;
 	case SHOP:
 		AddObject((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 - 150 }, 0, STATUE);
 		//Heal
-		ran = rand() % 1 + POTION;
+		ran = rand() % 2 + POTION;
 		AddItem(ran, (sfVector2f) { _pos.x + hitbox.width / 2 - 250, _pos.y + hitbox.height / 2 + 20 }, sfFalse);
 		//Ran
 		ran = rand() % 9;
@@ -398,12 +410,24 @@ void AddMap(MapType _type, sfVector2f _pos, MapType _source, ElementType _elemen
 		break;
 	case BOSS:
 		if (layerCount == 2)
+		{
 			AddBoss(NAKROM, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 }, mapCount);
+			AddOverlay((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 }, 2);
+		}
 		if (layerCount == 4)
+		{
 			AddBoss(OLD_GUARD, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 }, mapCount);
-		//if (layerCount == 6)
+			AddOverlay((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 }, 3);
+		}
+		if (layerCount == 6)
+		{
+			AddBoss(EMPRESS, (sfVector2f) { hitbox.left + hitbox.width / 2, hitbox.top + hitbox.height / 2 }, mapCount);
+		}
 	case EXIT:
-		AddObject((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 + 50 }, 0, EXIT_HOLE);
+		if (layerCount == 4)
+			AddObject((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 + 50 }, 0, EXIT_HOLE);
+		else if (layerCount < 7)
+			AddObject((sfVector2f) { _pos.x + hitbox.width / 2, _pos.y + hitbox.height / 2 }, 0, EXIT_HOLE);
 		break;
 	default:
 		break;
@@ -580,6 +604,19 @@ void CreateLevel(int _pathLength)
 
 }
 
+void CreateEndLevel(void)
+{
+	StopMusic();
+	AddMap(R, (sfVector2f) { 1500, 1500 }, MAX, START);
+	sfFloatRect pos = sfSprite_getGlobalBounds(map[0].sprite);
+	AddMap(LR, (sfVector2f) { pos.left + pos.width, pos.top }, MAX, 7);
+	pos = sfSprite_getGlobalBounds(map[1].sprite);
+	AddMap(L, (sfVector2f) { pos.left + pos.width, pos.top }, MAX, EXIT);
+	pos = sfSprite_getGlobalBounds(map[2].sprite);
+	AddItem(RUBY, (sfVector2f) { pos.left + pos.width / 2, pos.top + pos.height / 2 }, sfTrue);
+	mapCreation = sfTrue;
+}
+
 void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 {
 	int ran = 0;
@@ -680,16 +717,6 @@ void CreateBattle(BattleType _type, sfFloatRect _hitbox)
 	case MIDDLE_PIT:
 		AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2, _hitbox.top + _hitbox.height / 2 }, 0, BIG_HOLE);
 		EnemyPlacements(0, _hitbox);
-		break;
-	case COFFIN_PLAZA:
-		EnemyPlacements(0, _hitbox);
-		for (int i = 0; i < 10; i++)
-		{
-			for (size_t y = 0; y < 3; y++)
-			{
-				AddObject((sfVector2f) { _hitbox.left + _hitbox.width / 2 + i * 150 - 680, _hitbox.top + _hitbox.height / 2 - 200 * y  + 200}, 0, COFFIN);
-			}
-		}
 		break;
 	default:
 		break;
@@ -818,7 +845,7 @@ void ClearLevel(void)
 	mapCount = 0;
 	mapStart = 0;
 	battleDelay = 0.5f;
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		placed[i] = sfFalse;
 	}

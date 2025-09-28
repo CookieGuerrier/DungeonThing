@@ -21,6 +21,7 @@ sfBool ropeActive;
 float startTimer;
 
 sfRectangleShape* temp;
+sfBool deb;
 
 void LoadPlayer(void)
 {
@@ -58,7 +59,6 @@ void LoadPlayer(void)
 	{
 		effects[i] = sfFalse;
 	}
-
 	//Collider
 	player.collider = sfRectangleShape_create();
 	sfRectangleShape_setSize(player.collider, (sfVector2f) { 40, 40 });
@@ -81,7 +81,9 @@ void LoadPlayer(void)
 	player.shootSound = GetSoundCount();
 	AddSound(S_SHOOT);
 	player.hurtSound= GetSoundCount();
-	AddSound(S_HURT);
+	AddSound(S_HURT);	
+	player.dashSound= GetSoundCount();
+	AddSound(S_DASH);
 }
 
 void LoadPlayerAnims(void)
@@ -274,6 +276,7 @@ void UpdatePlayer(float _dt, sfRenderWindow* _window)
 
 			if (GetEffect(BATTERY))
 			{
+				sfSprite_setTextureRect(player.spriteHand, (sfIntRect) { 0, 0, 48, 38 });
 				sfSprite_setColor(player.spriteHand, (sfColor) { 255, 255 - (int)(chargeTimer * 200), 255 - (int)(chargeTimer * 200), 255 });
 				if (sfMouse_isButtonPressed(sfMouseLeft) && chargeTimer < 1)
 				{
@@ -370,15 +373,10 @@ void DrawPlayer(sfRenderWindow* _window, sfBool _debug)
 {
 	sfRenderWindow_drawSprite(_window, player.spriteShadow, NULL);
 	sfRenderWindow_drawSprite(_window, player.sprite, NULL);
-
+	deb = _debug;
 	if (rollTimer <= 0 && startTimer <= 0)
 	{
 		sfRenderWindow_drawSprite(_window, player.spriteHand, NULL);
-	}
-		
-	if (_debug)
-	{
-		sfRenderWindow_drawRectangleShape(_window, player.collider, NULL);
 	}
 }
 
@@ -414,6 +412,7 @@ void CleanupPlayer(void)
 	DeleteSound(player.stepSound);
 	DeleteSound(player.shootSound);
 	DeleteSound(player.hurtSound);
+	DeleteSound(player.dashSound);
 }
 
 void PlayerMove(float _dt, sfRenderWindow* _window, sfKeyCode _key)
@@ -519,8 +518,9 @@ void PlayerRoll(void)
 	if (rollTimer <= 0 && rollCooldown <= 0 && startTimer <= 0 && (player.velocity.y != 0 || player.velocity.x != 0))
 	{
 		rollTimer = 1;
-		rollCooldown = 1.05f;
-		player.speed += 500;
+		rollCooldown = 0.5f;
+		player.speed = 1000;
+		PlaySound(player.dashSound);
 		ResetAnim(player.anims[ROLL]);
 	}
 }
@@ -584,7 +584,7 @@ void SetRope(sfVector2f _dis)
 
 void LoseLife(int _life)
 {
-	if (player.invFrame <= 0)
+	if (player.invFrame <= 0 && deb == sfFalse)
 	{
 		for (int i = 0; i < _life; i++)
 		{
@@ -673,4 +673,16 @@ float GetRoll(void)
 sfBool DeathFinished(void)
 {
 	return IsFinishedAnim(player.anims[DEATH]);
+}
+
+void ColorPlayer(sfBool _isTrue)
+{
+	if (_isTrue)
+	{
+		sfSprite_setColor(player.sprite, (sfColor) { 255, 200,255,255 });
+	}
+	else
+	{
+		sfSprite_setColor(player.sprite, (sfColor) { 255, 255, 255, 255 });
+	}
 }

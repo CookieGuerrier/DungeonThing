@@ -40,4 +40,6 @@ void DrawGameOverMenu(sfRenderWindow* _window);
 void SetSelectionGameOver(int _sel);
 sfBool IsMouseOnButtonGame(void);
 
+void SetGameEnd(void);
+
 #endif // !GAME_H

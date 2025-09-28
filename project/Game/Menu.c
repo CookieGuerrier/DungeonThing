@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include "Music.h"
 
 MenuData menuData;
 sfBool toGame;
@@ -7,6 +8,7 @@ void LoadMenu(void)
 {
 	LoadMenuHUD();
 	SetOpacityVeil(0, 5);
+	PlayMusic(0);
 	toGame = sfFalse;
 }
 
@@ -21,7 +23,7 @@ void KeyPressedMenu(sfRenderWindow* _renderWindow, sfKeyEvent _key)
 		case 0:
 			toGame = sfTrue;
 			break;
-		case 3:
+		case 1:
 			sfRenderWindow_close(_renderWindow);
 			break;
 		}
@@ -57,7 +59,7 @@ void MousePressedMenu(sfRenderWindow* _renderWindow, sfMouseButtonEvent _mouse)
 			case 0:
 				toGame = sfTrue;
 				break;
-			case 3:
+			case 1:
 				sfRenderWindow_close(_renderWindow);
 				break;
 			}

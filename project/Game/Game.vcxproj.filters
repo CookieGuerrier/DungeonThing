@@ -108,6 +108,9 @@
     <ClCompile Include="Sound.c">
       <Filter>Fichiers sources\Misc</Filter>
     </ClCompile>
+    <ClCompile Include="Music.c">
+      <Filter>Fichiers sources\Misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -174,6 +177,9 @@
       <Filter>Fichiers d%27en-tête\Entity</Filter>
     </ClInclude>
     <ClInclude Include="Sound.h">
+      <Filter>Fichiers d%27en-tête\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Music.h">
       <Filter>Fichiers d%27en-tête\Misc</Filter>
     </ClInclude>
   </ItemGroup>

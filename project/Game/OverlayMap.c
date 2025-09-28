@@ -1,6 +1,6 @@
 #include "OverlayMap.h"
 
-sfTexture* textureOverlay[3];
+sfTexture* textureOverlay[4];
 Overlay overlay[30];
 int overlayCount;
 
@@ -9,6 +9,8 @@ void LoadOverlay(void)
 	overlayCount = 0;
 	textureOverlay[0] = sfTexture_createFromFile("Assets/Texture/Map/specialArtifact.png",NULL);
 	textureOverlay[1] = sfTexture_createFromFile("Assets/Texture/Map/tutoStart.png",NULL);
+	textureOverlay[2] = sfTexture_createFromFile("Assets/Texture/Map/nakromOverlay.png",NULL);
+	textureOverlay[3] = sfTexture_createFromFile("Assets/Texture/Map/guardOverlay.png",NULL);
 }
 
 void DrawOverlay(sfRenderWindow* _window, sfBool _debugMode)
@@ -26,7 +28,7 @@ void CleanupOverlay(void)
 		DeleteOverlay(i);
 		overlayCount++;
 	}
-	for (int i = 0; i < 2 ; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		sfTexture_destroy(textureOverlay[i]);
 		textureOverlay[i] = NULL;
@@ -59,7 +61,7 @@ void DeleteOverlay(int _ID)
 		overlay[i] = overlay[i + 1];
 		overlay[i + 1] = temp;
 	}
-
+		
 	overlayCount--;
 }
 

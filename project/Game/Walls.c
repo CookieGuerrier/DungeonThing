@@ -14,13 +14,6 @@ void UpdateWall(float _dt, sfRenderWindow* _window)
 
 void DrawWall(sfRenderWindow* _window, sfBool _debugMode)
 {
-	if (_debugMode)
-	{
-		for (int i = 0; i < wallCount; i++)
-		{
-			sfRenderWindow_drawRectangleShape(_window, wall[i].collider, NULL);
-		}
-	}
 }
 
 void CleanupWall(void)

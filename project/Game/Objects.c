@@ -25,7 +25,6 @@ void LoadObject(void)
 	textureObject[ROCK] = sfTexture_createFromFile("Assets/Texture/Objects/rock.png", NULL);
 	textureObject[TORCH] = sfTexture_createFromFile("Assets/Texture/Objects/torch.png", NULL);
 	textureObject[EXIT_HOLE] = sfTexture_createFromFile("Assets/Texture/Objects/exit.png", NULL);
-	textureObject[COFFIN] = sfTexture_createFromFile("Assets/Texture/Objects/coffin.png", NULL);
 	textureShadow = sfTexture_createFromFile("Assets/Texture/Player/shadow.png", NULL);
 
 	AddObject((sfVector2f) { 0, 0 }, 0, WALL_BATTLERL);
@@ -130,9 +129,6 @@ void AddObject(sfVector2f _pos, float _rot, ObjectType _type)
 			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width, hitbox.height }, sfTrue, objectCount);
 			break;
 		case LONG_HOLE:
-			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width, hitbox.height }, sfTrue, objectCount);
-			break;
-		case COFFIN:
 			AddWall((sfVector2f) { _pos.x - hitbox.width / 2, _pos.y - hitbox.height / 2 }, 0, (sfVector2f) { hitbox.width, hitbox.height }, sfTrue, objectCount);
 			break;
 		case ROCK:

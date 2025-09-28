@@ -55,7 +55,10 @@ void AddMiniMap(sfVector2f _position, int _type)
 		MiniMap temp = { 0 };
 
 		temp.sprite = sfSprite_create(); 
-		sfSprite_setTexture(temp.sprite, textureMiniMap[_type], sfTrue);
+		if (_type <= SPECIAL)
+			sfSprite_setTexture(temp.sprite, textureMiniMap[_type], sfTrue);
+		else
+			sfSprite_setTexture(temp.sprite, textureMiniMap[0], sfTrue);
 
 		sfFloatRect hitbox = sfSprite_getGlobalBounds(temp.sprite);
 		sfSprite_setOrigin(temp.sprite, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });

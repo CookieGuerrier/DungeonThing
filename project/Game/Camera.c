@@ -51,15 +51,6 @@ void UpdateCamera(sfRenderWindow* _window, float _dt)
 	sfView_setCenter(view, move);
 	sfRenderWindow_setView(_window, view);
 
-	if (sfKeyboard_isKeyPressed(sfKeyM))
-	{
-		sfView_setSize(view, (sfVector2f) { SCREEN_WIDTH * 10, SCREEN_HEIGHT * 10 });
-	}
-	if (sfKeyboard_isKeyPressed(sfKeyL))
-	{
-		sfView_setSize(view, (sfVector2f) { SCREEN_WIDTH, SCREEN_HEIGHT });
-	}
-
 	if (damage)
 	{
 		if (sfView_getRotation(view) != 1.f)

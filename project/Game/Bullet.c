@@ -175,7 +175,7 @@ void AddBullet(sfVector2f _pos, float _rot, int _speed, sfBool _friendlyFire, sf
 		}
 		sfSprite_setPosition(temp.sprite, _pos);
 		sfSprite_setRotation(temp.sprite, _rot + 91);
-		temp.dmg = 10;
+		temp.dmg = 1;
 
 		sfFloatRect hitbox = sfSprite_getGlobalBounds(temp.sprite);
 		sfSprite_setOrigin(temp.sprite, (sfVector2f) { hitbox.width / 2, hitbox.height / 2 });

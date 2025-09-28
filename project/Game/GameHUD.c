@@ -100,6 +100,7 @@ void LoadGameHUD(sfFont* font)
 	totalLength = 942;
 	maxBossHP[0] = 80;
 	maxBossHP[1] = 200;
+	maxBossHP[2] = 250;
 }
 
 void UpdateGameHUD(float _dt)
