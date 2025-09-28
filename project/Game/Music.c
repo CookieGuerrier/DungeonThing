@@ -8,14 +8,9 @@ int currentMusic;
 void LoadMusic(void)
 {
 	currentVolume = 60;
-	music[0].music = sfMusic_createFromFile("Assets/Music/mainMenu.wav");
-	music[1].music = sfMusic_createFromFile("Assets/Music/battleTheme.wav");
-
-	if (!sfMusic_createFromFile("Assets/Music/battleTheme.wav"))
-	{
-		printf("AAAA");
-	}
-	music[2].music = sfMusic_createFromFile("Assets/Music/victory.wav");
+	music[0].music = sfMusic_createFromFile("Assets/Music/mainMenu.ogg");
+	music[1].music = sfMusic_createFromFile("Assets/Music/battleTheme.ogg");
+	music[2].music = sfMusic_createFromFile("Assets/Music/victory.ogg");
 	sfMusic_setVolume(music[1].music, 10);
 	sfMusic_setLoop(music[0].music, sfTrue);
 	sfMusic_setLoop(music[1].music, sfTrue);

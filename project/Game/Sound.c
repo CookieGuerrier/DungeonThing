@@ -12,7 +12,7 @@ void LoadSound(void)
 	buffer[S_SHOOT] = sfSoundBuffer_createFromFile("Assets/Sounds/Player/shoot.ogg");
 	buffer[S_HURT] = sfSoundBuffer_createFromFile("Assets/Sounds/Player/hurt.ogg");
 	buffer[S_BULLET] = sfSoundBuffer_createFromFile("Assets/Sounds/Player/bullet.ogg");
-	buffer[S_DASH] = sfSoundBuffer_createFromFile("Assets/Sounds/Player/dash.wav");
+	buffer[S_DASH] = sfSoundBuffer_createFromFile("Assets/Sounds/Player/dash.ogg");
 	buffer[S_SHOP] = sfSoundBuffer_createFromFile("Assets/Sounds/Player/shop.ogg");
 	buffer[S_MONEY] = sfSoundBuffer_createFromFile("Assets/Sounds/Player/money.ogg");
 	buffer[S_ENEMYDEATH] = sfSoundBuffer_createFromFile("Assets/Sounds/Enemy/death.ogg");
